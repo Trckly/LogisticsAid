@@ -1,0 +1,20 @@
+.card-container {
+  width: 100%;
+  cursor: pointer;
+}
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.assigned {
+  background: white;
+}
+.finished {
+  background: lightgreen;
+  cursor: default;
+}
+.outdated {
+  background: lightcoral;
+}

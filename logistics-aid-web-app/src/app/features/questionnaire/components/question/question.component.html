@@ -1,0 +1,105 @@
+<mat-card class="question-card">
+  <mat-card-title class="question-title">
+    <mat-label class="question-text"
+      >{{ question.text }} @if(question.required === true){<span
+        class="required-sign"
+        >*</span
+      >}</mat-label
+    >
+  </mat-card-title>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-content class="question-content">
+    <ng-container [ngSwitch]="getQuestionTypeValue()">
+      <!-- One choice -->
+      <ng-container *ngSwitchCase="'OneChoice'">
+        <mat-radio-group
+          class="radio-group"
+          (change)="onRadioSelectionChange($event)"
+        >
+          @if(isReview === false){ @for (option of question.answerOption; track
+          $index) {
+          <mat-radio-button class="radio-button" [value]="option.valueString">
+            <span class="button-title">{{ option.valueString }}</span>
+          </mat-radio-button>
+          }} @else {
+          <span>Answer: {{ observation.valueString }}</span>
+          }
+        </mat-radio-group>
+      </ng-container>
+
+      <!-- Multiple choice -->
+      <ng-container *ngSwitchCase="'MultipleChoice'">
+        <div class="checkbox-group">
+          @if(isReview === false){ @for (option of question.answerOption; track
+          $index) {
+          <mat-checkbox
+            class="checkbox-button"
+            [value]="option.valueString"
+            (change)="onCheckboxChange($event, option.valueString)"
+          >
+            <span class="button-title">{{ option.valueString }}</span>
+          </mat-checkbox>
+          } } @else {
+          <span>
+            Answer: {{ stringArrayJsonParse(observation.valueString) }}
+          </span>
+          }
+        </div>
+      </ng-container>
+
+      <!-- Text input -->
+      <ng-container *ngSwitchCase="'Text'">
+        @if(isReview === false){
+        <mat-form-field appearance="outline" class="answer-form-field">
+          <mat-label>Answer</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="answerText"
+            (blur)="onTextareaBlur()"
+          ></textarea>
+        </mat-form-field>
+        } @else{
+        <span>Answer: {{ observation.valueString }}</span>
+        }
+      </ng-container>
+
+      <!-- File upload -->
+      <ng-container *ngSwitchCase="'File'">
+        @if(isReview === false){
+        <app-file-upload></app-file-upload>
+        } @else {
+        <span>Answer: {{ observation.valueString }}</span>
+        }
+      </ng-container>
+    </ng-container>
+  </mat-card-content>
+  <!-- @if(conditional===true) {
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Conditions: {{ question.enableWhen.length }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    @for (condition of question.enableWhen; track $index) {
+    <app-question-condition
+      [condition]="condition"
+      [conditionCount]="question.enableWhen.length"
+      (callSave)="saveToSessionStorage()"
+      (callRemove)="removeCondition(condition)"
+    ></app-question-condition>
+    }
+
+    <button
+      mat-flat-button
+      class="add-cond-button"
+      (click)="onAddConditionClicked()"
+    >
+      <mat-icon>add</mat-icon>
+      <span>Add condition</span>
+    </button>
+  </mat-expansion-panel>
+
+  } -->
+</mat-card>
