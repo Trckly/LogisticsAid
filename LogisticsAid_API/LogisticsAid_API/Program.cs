@@ -1,11 +1,6 @@
 using System.Text;
 using LogisticsAid_API.Context;
-using LogisticsAid_API.DTOs;
-using LogisticsAid_API.Entities;
-using LogisticsAid_API.Profiles;
-using LogisticsAid_API.Repositories;
-using LogisticsAid_API.Repositories.Interfaces;
-using LogisticsAid_API.Services;
+using LogisticsAid_API.Entities.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,23 +15,23 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<PasswordService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<DoctorService>();
-builder.Services.AddScoped<QuestionnaireService>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<AdminService>();
-builder.Services.AddScoped<ClinicalImpressionService>();
-builder.Services.AddScoped<ObservationService>();
-builder.Services.AddScoped<IObservationRepository, ObservationRepository>();    
-builder.Services.AddScoped<IClinicalImpressionRepository, ClinicalImpressionRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
-builder.Services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
-builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+// builder.Services.AddScoped<PasswordService>();
+// builder.Services.AddScoped<UserService>();
+// builder.Services.AddScoped<DoctorService>();
+// builder.Services.AddScoped<QuestionnaireService>();
+// builder.Services.AddScoped<AuthService>();
+// builder.Services.AddScoped<AdminService>();
+// builder.Services.AddScoped<ClinicalImpressionService>();
+// builder.Services.AddScoped<ObservationService>();
+// builder.Services.AddScoped<IObservationRepository, ObservationRepository>();    
+// builder.Services.AddScoped<IClinicalImpressionRepository, ClinicalImpressionRepository>();
+// builder.Services.AddScoped<IUserRepository, UserRepository>();
+// builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+// builder.Services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
+// builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+// builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+//
+// builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddCors(options =>
 {
@@ -92,7 +87,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddDbContext<LogisticsAidDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DevConnection"), 
-        o => o.MapEnum<EGender>("gender").MapEnum<EUserType>("user_type"));
+        o => o.MapEnum<EGender>("gender").MapEnum<ERoutePointType>("route_point_type"));
 });
 
 var app = builder.Build();

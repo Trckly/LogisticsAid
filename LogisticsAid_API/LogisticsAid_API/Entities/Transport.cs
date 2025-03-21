@@ -21,4 +21,14 @@ public class Transport
     [Column("trailer_licence_plate")]
     [MaxLength(8)]
     public required string TrailerLicencePlate { get; set; }
+    
+    [Required]
+    [Column("company_name")]
+    [MaxLength(50)]
+    public required string CompanyName { get; set; }
+    
+    // -----Navigation properties-----
+    
+    [ForeignKey(nameof(CompanyName))]
+    public required Company Company { get; set; }  
 }

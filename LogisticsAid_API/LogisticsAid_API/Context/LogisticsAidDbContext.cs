@@ -1,22 +1,21 @@
 ﻿using LogisticsAid_API.Entities;
-using LogisticsAid_API.Entities.Auxiliary;
 using Microsoft.EntityFrameworkCore;
-
 namespace LogisticsAid_API.Context;
 
 public sealed class LogisticsAidDbContext : DbContext
 {
-    public DbSet<UserModel> Users { get; set; }
-    public DbSet<DoctorModel> Doctors { get; set; }
-    public DbSet<PatientModel> Patients { get; set; }
-    public DbSet<QuestionnaireModel> Questionnaires { get; set; }
-    public DbSet<TemplateModel> Templates { get; set; }
-    public DbSet<PatientQuestionnaire> PatientQuestionnaire { get; set; }
-    public DbSet<DoctorPatient> DoctorPatients { get; set; }
-    public DbSet<ClinicalImpressionModel> ClinicalImpressions { get; set; }
-    public DbSet<ObservationModel> Observations { get; set; }
-    public DbSet<FileModel> Files { get; set; }
-    
+    public DbSet<ContactInfo> ContactInfos { get; set; }
+    public DbSet<Logistician> Logisticians { get; set; }
+    public DbSet<Carrier> Carriers { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Driver> Drivers { get; set; }
+    public DbSet<Company> Companies { get; set; }
+    public DbSet<Transport> Transport { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<RoutePoint> RoutePoints { get; set; }
+
+
     public LogisticsAidDbContext()
     {
         Database.EnsureCreated();
@@ -30,102 +29,121 @@ public sealed class LogisticsAidDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.HasDefaultSchema("public");
         modelBuilder.HasPostgresExtension("uuid-ossp");
-        
-        // UserModel
-        modelBuilder.Entity<UserModel>(entity =>
+
+        modelBuilder.Entity<ContactInfo>(entity =>
         {
-            entity
-                .HasOne(u => u.Doctor)
-                .WithOne(d => d.User)
-                .HasForeignKey<DoctorModel>(d => d.UserEmail)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            entity
-                .HasOne(u => u.Patient)
-                .WithOne(d => d.User)
-                .HasForeignKey<PatientModel>(d => d.UserEmail)
-                .IsRequired(false)
+            entity.HasIndex(ci => ci.Phone)
+                .IsUnique();
+        });
+
+
+        modelBuilder.Entity<Logistician>(entity =>
+        {
+            entity.HasOne(l => l.Contact)
+                .WithMany()
+                .HasForeignKey(l => l.ContactId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // PatientModel Many to Many with QuestionnaireModel
-        modelBuilder.Entity<PatientModel>(entity =>
-        {
-            entity
-                .HasMany(p => p.Questionnaires)
-                .WithMany(q => q.Patients)
-                .UsingEntity<PatientQuestionnaire>(
-                    r => r
-                        .HasOne<QuestionnaireModel>(pq => pq.Questionnaire)
-                        .WithMany(q => q.PatientQuestionnaires)
-                        .HasForeignKey(pq => pq.QuestionnaireId)
-                        .OnDelete(DeleteBehavior.Cascade),
-                    l => l
-                        .HasOne<PatientModel>(pq => pq.Patient)
-                        .WithMany(p => p.PatientQuestionnaires)
-                        .HasForeignKey(pq => pq.PatientId)
-                        .OnDelete(DeleteBehavior.Cascade));
 
-        });
-
-        // DoctorModel Many to Many with PatientModel
-        modelBuilder.Entity<DoctorModel>(entity =>
+        modelBuilder.Entity<Carrier>(entity =>
         {
-            entity
-                .HasMany(d => d.Patients)
-                .WithMany(p => p.Doctors)
-                .UsingEntity<DoctorPatient>(
-                    r => r
-                        .HasOne<PatientModel>(dp => dp.Patient)
-                        .WithMany(p => p.DoctorPatients)
-                        .HasForeignKey(dp => dp.PatientId)
-                        .OnDelete(DeleteBehavior.Cascade),
-                    l => l
-                        .HasOne<DoctorModel>(dp => dp.Doctor)
-                        .WithMany(p => p.DoctorPatients)
-                        .HasForeignKey(dp => dp.DoctorId)
-                        .OnDelete(DeleteBehavior.Cascade));
-        });
-
-        // QuestionnaireModel
-        modelBuilder.Entity<QuestionnaireModel>(entity =>
-        {
-            entity
-                .HasOne(q => q.Owner)
-                .WithMany(o => o.Questionnaires)
-                .HasForeignKey(q => q.OwnerId)
+            entity.HasOne(c => c.Contact)
+                .WithMany()
+                .HasForeignKey(l => l.ContactId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-        });
-
-        // ClinicalImpressionModel
-        modelBuilder.Entity<ClinicalImpressionModel>(entity =>
-        {
-            entity
-                .HasOne(ci => ci.Questionnaire)
-                .WithMany(q => q.ClinicalImpressions)
-                .HasForeignKey(ci => ci.QuestionnaireId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            entity
-                .HasOne(ci => ci.Patient)
-                .WithMany(p => p.ClinicalImpressions)
-                .HasForeignKey(ci => ci.PatientId)
+            entity.HasOne(c => c.Company)
+                .WithMany()
+                .HasForeignKey(l => l.CompanyName)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<ObservationModel>(entity =>
+        modelBuilder.Entity<Customer>(entity =>
         {
-            entity
-                .HasOne(o => o.ClinicalImpression)
-                .WithMany(c => c.Observations)
-                .HasForeignKey(o => o.ClinicalImpressionId)
+            entity.HasOne(c => c.Contact)
+                .WithMany()
+                .HasForeignKey(c => c.ContactId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(c => c.Company)
+                .WithMany()
+                .HasForeignKey(c => c.CompanyName)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Driver>(entity =>
+        {
+            entity.HasOne(d => d.Contact)
+                .WithMany()
+                .HasForeignKey(d => d.ContactId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.Company)
+                .WithMany()
+                .HasForeignKey(d => d.CompanyName)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Company>(entity => { });
+
+        modelBuilder.Entity<Transport>(entity =>
+        {
+            entity.HasOne(t => t.Company)
+                .WithMany()
+                .HasForeignKey(t => t.CompanyName)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Address>(entity => { });
+
+        modelBuilder.Entity<RoutePoint>(entity =>
+        {
+            entity.HasOne(rp => rp.Address)
+                .WithMany()
+                .HasForeignKey(rp => rp.AddressId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(rp => rp.ContactInfo)
+                .WithMany()
+                .HasForeignKey(rp => rp.ContactInfoId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasOne(t => t.Logistician)
+                .WithOne()
+                .HasForeignKey<Order>(t => t.LogisticianId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(t => t.Carrier)
+                .WithOne()
+                .HasForeignKey<Order>(t => t.CarrierId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(t => t.Customer)
+                .WithOne()
+                .HasForeignKey<Order>(t => t.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(t => t.Driver)
+                .WithOne()
+                .HasForeignKey<Order>(t => t.DriverId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(t => t.Transport)
+                .WithOne()
+                .HasForeignKey<Order>(t => t.TransportId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(o => o.RoutePoints)
+                .WithOne(rp => rp.Order)
+                .HasForeignKey(rp => rp.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }
-    
 }
