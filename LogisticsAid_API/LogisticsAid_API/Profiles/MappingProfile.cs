@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using HealthQ_API.DTOs;
-using HealthQ_API.Entities;
+using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Entities;
 
-namespace HealthQ_API.Profiles;
+namespace LogisticsAid_API.Profiles;
 
 public class MappingProfile : Profile
 {

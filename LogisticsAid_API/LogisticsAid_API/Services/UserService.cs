@@ -1,14 +1,13 @@
 ﻿using System.Globalization;
 using AutoMapper;
-using HealthQ_API.Context;
-using HealthQ_API.DTOs;
-using HealthQ_API.Entities;
-using HealthQ_API.Repositories;
-using HealthQ_API.Repositories.Interfaces;
+using LogisticsAid_API.Repositories;
+using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Services;
+namespace LogisticsAid_API.Services;
 
 public class UserService
 {

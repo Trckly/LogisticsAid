@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HealthQ_API.Entities;
+namespace LogisticsAid_API.Entities;
 
 [Table("observations", Schema = "public")]
 public class ObservationModel

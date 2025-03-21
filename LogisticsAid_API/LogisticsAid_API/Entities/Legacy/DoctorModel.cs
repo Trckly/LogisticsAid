@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using HealthQ_API.Entities.Auxiliary;
+using LogisticsAid_API.Entities.Auxiliary;
 
-namespace HealthQ_API.Entities;
+namespace LogisticsAid_API.Entities;
 
 [Table("doctors", Schema = "public")]
 public class DoctorModel

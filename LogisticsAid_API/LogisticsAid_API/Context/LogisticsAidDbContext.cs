@@ -1,11 +1,10 @@
-﻿using HealthQ_API.Entities;
-using HealthQ_API.Entities.Auxiliary;
-using Hl7.Fhir.Model;
+﻿using LogisticsAid_API.Entities;
+using LogisticsAid_API.Entities.Auxiliary;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Context;
+namespace LogisticsAid_API.Context;
 
-public sealed class HealthqDbContext : DbContext
+public sealed class LogisticsAidDbContext : DbContext
 {
     public DbSet<UserModel> Users { get; set; }
     public DbSet<DoctorModel> Doctors { get; set; }
@@ -18,12 +17,12 @@ public sealed class HealthqDbContext : DbContext
     public DbSet<ObservationModel> Observations { get; set; }
     public DbSet<FileModel> Files { get; set; }
     
-    public HealthqDbContext()
+    public LogisticsAidDbContext()
     {
         Database.EnsureCreated();
     }
 
-    public HealthqDbContext(DbContextOptions<HealthqDbContext> options) : base(options)
+    public LogisticsAidDbContext(DbContextOptions<LogisticsAidDbContext> options) : base(options)
     {
         Database.EnsureCreated();
     }

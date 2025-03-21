@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using HealthQ_API.Entities.Auxiliary;
+using LogisticsAid_API.Entities.Auxiliary;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Entities;
+namespace LogisticsAid_API.Entities;
 
 [Table("questionnaires", Schema = "public")]
 

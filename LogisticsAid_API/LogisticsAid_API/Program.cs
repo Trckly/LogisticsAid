@@ -1,11 +1,11 @@
 using System.Text;
-using HealthQ_API.Context;
-using HealthQ_API.DTOs;
-using HealthQ_API.Entities;
-using HealthQ_API.Profiles;
-using HealthQ_API.Repositories;
-using HealthQ_API.Repositories.Interfaces;
-using HealthQ_API.Services;
+using LogisticsAid_API.Context;
+using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.Profiles;
+using LogisticsAid_API.Repositories;
+using LogisticsAid_API.Repositories.Interfaces;
+using LogisticsAid_API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -89,7 +89,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddDbContext<HealthqDbContext>(options =>
+builder.Services.AddDbContext<LogisticsAidDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DevConnection"), 
         o => o.MapEnum<EGender>("gender").MapEnum<EUserType>("user_type"));

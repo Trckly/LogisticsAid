@@ -1,18 +1,18 @@
-﻿using HealthQ_API.Context;
-using HealthQ_API.Entities;
-using HealthQ_API.Entities.Auxiliary;
-using HealthQ_API.Repositories.Interfaces;
-using Hl7.Fhir.Model;
+﻿using Hl7.Fhir.Model;
+using LogisticsAid_API.Context;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.Entities.Auxiliary;
+using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Task = System.Threading.Tasks.Task;
 
-namespace HealthQ_API.Repositories;
+namespace LogisticsAid_API.Repositories;
 
 public class QuestionnaireRepository : IQuestionnaireRepository
 {
-    private readonly HealthqDbContext _context;
+    private readonly LogisticsAidDbContext _context;
 
-    public QuestionnaireRepository(HealthqDbContext context)
+    public QuestionnaireRepository(LogisticsAidDbContext context)
     {
         _context = context;
     }

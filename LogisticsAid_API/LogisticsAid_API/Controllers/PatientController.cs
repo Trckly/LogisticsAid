@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
-using HealthQ_API.Services;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
+using LogisticsAid_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HealthQ_API.Controllers;
+namespace LogisticsAid_API.Controllers;
 
 [Authorize]
 [Route("[controller]/[action]")]

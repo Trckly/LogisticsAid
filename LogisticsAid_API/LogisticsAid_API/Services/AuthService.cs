@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
-namespace HealthQ_API.Services;
+namespace LogisticsAid_API.Services;
 
 public class AuthService
 {

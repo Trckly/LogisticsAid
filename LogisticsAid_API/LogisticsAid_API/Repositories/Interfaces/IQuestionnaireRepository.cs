@@ -1,8 +1,8 @@
-﻿using HealthQ_API.Entities;
-using HealthQ_API.Entities.Auxiliary;
+﻿using LogisticsAid_API.Entities;
+using LogisticsAid_API.Entities.Auxiliary;
 using Task = System.Threading.Tasks.Task;
 
-namespace HealthQ_API.Repositories.Interfaces;
+namespace LogisticsAid_API.Repositories.Interfaces;
 
 public interface IQuestionnaireRepository
 {

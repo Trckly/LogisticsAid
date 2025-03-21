@@ -1,13 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
-using HealthQ_API.DTOs;
-using HealthQ_API.Entities;
-using HealthQ_API.Services;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HealthQ_API.Controllers;
+namespace LogisticsAid_API.Controllers;
 
 [Authorize]
 [Route("[controller]/[action]")]

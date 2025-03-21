@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
-using HealthQ_API.Entities;
+using LogisticsAid_API.Entities;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace HealthQ_API.Services;
+namespace LogisticsAid_API.Services;
 
 public class PasswordService
 {

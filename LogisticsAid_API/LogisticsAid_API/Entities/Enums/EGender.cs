@@ -1,4 +1,4 @@
-﻿namespace HealthQ_API.Entities;
+﻿namespace LogisticsAid_API.Entities;
 
 public enum EGender
 {

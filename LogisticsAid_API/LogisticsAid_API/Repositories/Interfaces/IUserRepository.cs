@@ -1,6 +1,6 @@
-﻿using HealthQ_API.Entities;
+﻿using LogisticsAid_API.Entities;
 
-namespace HealthQ_API.Repositories.Interfaces;
+namespace LogisticsAid_API.Repositories.Interfaces;
 
 public interface IUserRepository
 {

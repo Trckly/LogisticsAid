@@ -1,15 +1,15 @@
-﻿using HealthQ_API.Context;
-using HealthQ_API.Entities;
-using HealthQ_API.Repositories.Interfaces;
+﻿using LogisticsAid_API.Context;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Repositories;
+namespace LogisticsAid_API.Repositories;
 
 public class ObservationRepository : IObservationRepository
 {
-    private HealthqDbContext _context;
+    private LogisticsAidDbContext _context;
 
-    public ObservationRepository(HealthqDbContext context)
+    public ObservationRepository(LogisticsAidDbContext context)
     {
         _context = context;
     }

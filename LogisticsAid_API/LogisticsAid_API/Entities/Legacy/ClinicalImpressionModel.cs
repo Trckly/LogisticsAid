@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using HealthQ_API.Entities.Auxiliary;
+using LogisticsAid_API.Entities.Auxiliary;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Entities;
+namespace LogisticsAid_API.Entities;
 
 [Table("clinical_impressions", Schema = "public")]
 

@@ -1,8 +1,8 @@
-﻿using HealthQ_API.DTOs;
-using HealthQ_API.Repositories;
-using HealthQ_API.Repositories.Interfaces;
+﻿using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Repositories;
+using LogisticsAid_API.Repositories.Interfaces;
 
-namespace HealthQ_API.Services;
+namespace LogisticsAid_API.Services;
 
 public class AdminService
 {

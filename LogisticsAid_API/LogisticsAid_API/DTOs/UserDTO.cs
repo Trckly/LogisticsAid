@@ -1,4 +1,4 @@
-﻿namespace HealthQ_API.DTOs;
+﻿namespace LogisticsAid_API.DTOs;
 
 public class UserDTO
 {

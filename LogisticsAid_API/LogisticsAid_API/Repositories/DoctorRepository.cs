@@ -1,15 +1,15 @@
-﻿using HealthQ_API.Context;
-using HealthQ_API.Entities;
-using HealthQ_API.Repositories.Interfaces;
+﻿using LogisticsAid_API.Context;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Repositories;
+namespace LogisticsAid_API.Repositories;
 
 public class DoctorRepository : IDoctorRepository
 {
-    private readonly HealthqDbContext _context;
+    private readonly LogisticsAidDbContext _context;
 
-    public DoctorRepository(HealthqDbContext context)
+    public DoctorRepository(LogisticsAidDbContext context)
     {
         _context = context;
     }
