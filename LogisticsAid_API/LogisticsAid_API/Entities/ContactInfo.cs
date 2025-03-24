@@ -31,7 +31,7 @@ public class ContactInfo
     // -----Optional-----
     
     [Column("birth_date")]
-    public DateOnly? BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
     
     [Column("email")]
     [MaxLength(254)]

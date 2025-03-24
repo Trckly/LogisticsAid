@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import {
@@ -6,6 +6,7 @@ import {
   MatLabel,
   MatSuffix,
 } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { MatAnchor, MatButton, MatIconButton } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -24,7 +25,7 @@ import { UserRoleEnum } from '../../../../shared/enums/user-role-enum';
 import { NgForOf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { User } from '../../user.model';
-import { routes } from '../../../../app.routes';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-register',
@@ -52,11 +53,12 @@ import { routes } from '../../../../app.routes';
     NgForOf,
     MatIconButton,
     MatIcon,
+    MatSlideToggleModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   EGender = Object.entries(GenderEnum);
   EUserRole = Object.entries(UserRoleEnum);
   readonly _currentDate = new Date();
@@ -69,21 +71,22 @@ export class RegisterComponent {
     private router: Router,
     public route: ActivatedRoute
   ) {
-    service.formData.userType = UserRoleEnum.Patient;
-    service.formData.password = "123456";
-    service.formData.firstName = "John";
-    service.formData.lastName = "Doe";
-    service.formData.email = "john@doe.com";
-    service.formData.gender = GenderEnum.Male;
-    service.formData.birthDate = new Date(2005, 1, 6, 0, 0, 0, 0);
-    service.formData.username = "CoolJohn";
-    service.formData.phoneNumber = "0674527417";
+    service.formData.password = 'embryo';
+    service.formData.firstName = 'Danylo';
+    service.formData.lastName = 'Shlomiak';
+    service.formData.email = 'danylo@example.com';
+    service.formData.birthDate = new Date(2005, 2, 4);
+    service.formData.phone = '+380676847525';
+    service.formData.hasAdminPrivileges = true;
   }
+
+  ngOnInit(): void {}
 
   changeButtonVisibility(event: MouseEvent) {
     this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
   }
+
   isPasswordMatch(
     event: FocusEvent,
     password: NgModel,
@@ -98,15 +101,18 @@ export class RegisterComponent {
     }
     event.stopPropagation();
   }
+
   onSubmit(form: NgForm) {
     this.service.formSubmitted = true;
     if (form.valid) {
+      this.service.formData.id = uuidv4();
+      // this.service.formData.birthDate = this.birthDate.toISOString();
       this.service.register().subscribe({
         next: (data) => {
           console.log(data);
           this.service.formData = new User();
           sessionStorage.setItem('user', JSON.stringify(data));
-          this.router.navigate([`/${(data as User).userType}`]);
+          this.router.navigate([`/Logistician`]);
         },
         error: (error) => {
           console.log(error);

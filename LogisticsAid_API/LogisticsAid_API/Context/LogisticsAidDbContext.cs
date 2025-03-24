@@ -4,7 +4,7 @@ namespace LogisticsAid_API.Context;
 
 public sealed class LogisticsAidDbContext : DbContext
 {
-    public DbSet<ContactInfo> ContactInfos { get; set; }
+    public DbSet<ContactInfo> ContactInfo { get; set; }
     public DbSet<Logistician> Logisticians { get; set; }
     public DbSet<Carrier> Carriers { get; set; }
     public DbSet<Customer> Customers { get; set; }

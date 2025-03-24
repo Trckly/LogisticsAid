@@ -21,9 +21,9 @@ public class AuthService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(1),
-            Issuer = "https://healthq.com",
-            Audience = "https://healthq.com",
+            Expires = DateTime.UtcNow.AddHours(12),
+            Issuer = "https://logisticsaid.com",
+            Audience = "https://logisticsaid.com",
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
