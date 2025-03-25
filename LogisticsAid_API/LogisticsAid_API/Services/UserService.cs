@@ -1,112 +1,144 @@
 ﻿using System.Globalization;
 using AutoMapper;
-using HealthQ_API.Context;
-using HealthQ_API.DTOs;
-using HealthQ_API.Entities;
-using HealthQ_API.Repositories;
-using HealthQ_API.Repositories.Interfaces;
+using LogisticsAid_API.Repositories;
+using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthQ_API.Services;
+namespace LogisticsAid_API.Services;
 
 public class UserService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
+    private readonly ILogisticianRepository _logisticianRepository;
+    private readonly IContactInfoRepository _contactInfoRepository;
     private readonly PasswordService _passwordService;
-    private readonly IDoctorRepository _doctorRepository;
-    private readonly IPatientRepository _patientRepository;
+    private readonly IMapper _mapper;
 
     public UserService(
-        IUserRepository userRepository, 
-        IMapper mapper,
+        ILogisticianRepository logisticianRepository,
+        IContactInfoRepository contactInfoRepository,
         PasswordService passwordService,
-        IDoctorRepository doctorRepository,
-        IPatientRepository patientRepository)
+        IMapper mapper)
     {
-        _userRepository = userRepository;
-        _mapper = mapper;
+        _logisticianRepository = logisticianRepository;
+        _contactInfoRepository = contactInfoRepository;
         _passwordService = passwordService;
-        _doctorRepository = doctorRepository;
-        _patientRepository = patientRepository;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<UserDTO>> GetAllUsersAsync(CancellationToken ct)
     {
-        return (await _userRepository.GetAllUsersAsync(ct)).Select(userModel => _mapper.Map<UserDTO>(userModel))
-            .ToList();
+        var logisticians = await _logisticianRepository.GetAllLogisticianAsync(ct);
+        var contactInfo = await _contactInfoRepository.GetAllContactInfoAsync(ct);
+
+        // Convert to dictionaries for easy lookup
+        var contactInfoDict = contactInfo.ToDictionary(c => c.Id);
+
+        // Map logisticians and merge with contact info
+        var userDTOs = logisticians.Select(logistician =>
+        {
+            var userDto = _mapper.Map<UserDTO>(logistician);
+
+            if (contactInfoDict.TryGetValue(logistician.ContactId, out var contact))
+            {
+                _mapper.Map(contact, userDto);
+            }
+
+            return userDto;
+        }).ToList();
+
+        return userDTOs;
     }
 
-    public async Task<UserDTO?> GetUserByEmailAsync(string email, CancellationToken ct)
+    public async Task<UserDTO?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
-        var userModel = await _userRepository.GetUserAsync(email, ct);
-        if (userModel == null)
+        var logistician = await _logisticianRepository.GetLogisticianAsync(id, ct);
+        if (logistician == null)
             throw new NullReferenceException("User not found");
         
-        return _mapper.Map<UserDTO>(userModel);
+        var contactInfo = await _contactInfoRepository.GetContactInfoAsync(id, ct);
+        
+        var userDTO = _mapper.Map<UserDTO>(logistician);
+        return _mapper.Map(contactInfo, userDTO);
     }
 
     public async Task<UserDTO> CreateUserAsync(UserDTO user, CancellationToken ct)
     {
-        var userModel = await _userRepository.GetUserAsync(user.Email, ct);
-        if (userModel != null)
+        var logistician = await _logisticianRepository.GetLogisticianAsync(user.Id, ct);
+        if (logistician != null)
             throw new Exception("User already exists");
         
-        userModel = _mapper.Map<UserModel>(user);
-        
+        logistician = _mapper.Map<Logistician>(user);
+        var contactInfo = _mapper.Map<ContactInfo>(user);
+
         var (hash, salt) = _passwordService.HashPassword(user.Password!);
-        userModel.PasswordHash = hash;
-        userModel.PasswordSalt = salt;
+        logistician.PasswordHash = hash;
+        logistician.PasswordSalt = salt;
 
-        await _userRepository.CreateUserAsync(userModel, ct);
+        await _contactInfoRepository.CreateContactInfoAsync(contactInfo, ct);
+        await _logisticianRepository.CreateLogisticianAsync(logistician, ct);
 
-        if (userModel.UserType == EUserType.Patient)
-            await _patientRepository.CreatePatientAsync(new PatientModel { UserEmail = user.Email }, ct);
-        else if (userModel.UserType == EUserType.Doctor)
-        {
-            await _doctorRepository.CreateDoctorAsync(new DoctorModel { UserEmail = user.Email }, ct);
-        }
-        
         return user;
     }
 
-    public async Task<UserDTO> VerifyUserAsync(UserDTO user, CancellationToken ct)
+    public async Task<UserDTO> VerifyUserAsync(LoginDTO loginInfo, CancellationToken ct)
     {
-        var userModel = await _userRepository.GetUserAsync(user.Email, ct);
-        if (userModel == null)
+        var contactInfo = await _contactInfoRepository.GetContactInfoAsync(loginInfo.Email, ct);
+        if (contactInfo == null)
             throw new Exception("User doesn't exist");
+        
+        var logistician = await _logisticianRepository.GetLogisticianAsync(contactInfo.Id, ct);
+        if (logistician == null)
+            throw new Exception("Logistician doesn't exist");
 
-        if (!_passwordService.VerifyPasswordAsync(userModel, user.Password!, ct))
+        if (!_passwordService.VerifyPasswordAsync(logistician, loginInfo.Password, ct))
             throw new Exception("Password does not match");
         
-        return _mapper.Map<UserDTO>(userModel);
+        return _mapper.Map<UserDTO>(logistician);
     }
     
-    public async Task DeleteUserAsync(string email, CancellationToken ct)
+    public async Task<UserDTO> VerifyUserAsync(UserDTO user, CancellationToken ct)
     {
-        var user = await _userRepository.GetUserAsync(email, ct);
-        if (user == null)
+        var logistician = await _logisticianRepository.GetLogisticianAsync(user.Id, ct);
+        if (logistician == null)
+            throw new Exception("User doesn't exist");
+
+        if (!_passwordService.VerifyPasswordAsync(logistician, user.Password!, ct))
+            throw new Exception("Password does not match");
+        
+        return _mapper.Map<UserDTO>(logistician);
+    }
+    
+    public async Task DeleteUserAsync(Guid id, CancellationToken ct)
+    {
+        var logistician = await _logisticianRepository.GetLogisticianAsync(id, ct);
+        if (logistician == null)
             throw new NullReferenceException("User not found");
 
-        await _userRepository.DeleteUserAsync(email, ct);
+        await _contactInfoRepository.DeleteContactInfoAsync(id, ct);
+        await _logisticianRepository.DeleteLogisticianAsync(id, ct);
     }
 
     public async Task<UserDTO?> UpdateUserAsync(UserDTO user,CancellationToken ct)
     {
-        var userModel = await _userRepository.GetUserAsync(user.Email, ct);
-        if (userModel == null)
+        var logistician = await _logisticianRepository.GetLogisticianAsync(user.Id, ct);        
+        var contactInfo =  await _contactInfoRepository.GetContactInfoAsync(user.Id, ct);
+        if (logistician == null || contactInfo == null)
             throw new NullReferenceException("User not found");
+
         
-        userModel.Username = user.Username;
-        userModel.FirstName = user.FirstName;
-        userModel.LastName = user.LastName;
-        userModel.Gender = Enum.Parse<EGender>(user.Gender);
-        userModel.BirthDate = DateOnly.FromDateTime(user.BirthDate);
-        userModel.PhoneNumber = user.PhoneNumber;
-        userModel.UserType = Enum.Parse<EUserType>(user.UserType);
+        contactInfo.FirstName = user.FirstName;
+        contactInfo.LastName = user.LastName;
+        contactInfo.BirthDate = user.BirthDate;
+        contactInfo.Phone = user.Phone;
+        contactInfo.Email = user.Email;
         
-        await _userRepository.UpdateUserAsync(userModel, ct);
+        logistician.HasAdminPrivileges = user.HasAdminPrivileges;
+        
+        await _contactInfoRepository.UpdateContactInfoAsync(contactInfo, ct);
+        await _logisticianRepository.UpdateLogisticianAsync(logistician, ct);
         return user;
     }
 }

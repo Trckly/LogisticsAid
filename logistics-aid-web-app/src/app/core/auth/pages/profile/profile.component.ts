@@ -21,6 +21,7 @@ import { MatSelect } from '@angular/material/select';
 import { GenderEnum } from '../../../../shared/enums/gender-enum';
 import { UserRoleEnum } from '../../../../shared/enums/user-role-enum';
 import { NgForOf } from '@angular/common';
+import { User } from '../../user.model';
 
 @Component({
   selector: 'app-profile',
@@ -51,22 +52,19 @@ export class ProfileComponent {
   EUserRole = Object.entries(UserRoleEnum);
   readonly _currentDate = new Date();
 
-  constructor(
-    public service: AuthService,
-    private router: Router)
-  {
-    let user = sessionStorage.getItem('user');
-    if (user) {
-      service.formData.userType = JSON.parse(user).userType;
-      service.formData.firstName = JSON.parse(user).firstName;
-      service.formData.lastName = JSON.parse(user).lastName;
-      service.formData.email = JSON.parse(user).email;
-      service.formData.gender = JSON.parse(user).gender;
-      service.formData.birthDate = JSON.parse(user).birthDate;
-      service.formData.username = JSON.parse(user).username;
-      service.formData.phoneNumber = JSON.parse(user).phoneNumber;
-    }else{
-      console.log("User not found");
+  constructor(public service: AuthService, private router: Router) {
+    let userJson = sessionStorage.getItem('user');
+    if (userJson) {
+      let user: User = JSON.parse(userJson);
+
+      service.formData.firstName = user.firstName;
+      service.formData.lastName = user.lastName;
+      service.formData.email = user.email;
+      service.formData.birthDate = user.birthDate;
+      service.formData.phone = user.phone;
+      service.formData.hasAdminPrivileges = user.hasAdminPrivileges;
+    } else {
+      console.log('User not found');
     }
   }
 
@@ -85,9 +83,10 @@ export class ProfileComponent {
     }
   }
 
-  logout(){
-    this.service.logout()
+  logout() {
+    this.service
+      .logout()
       .then(() => this.router.navigate(['/login']))
-      .catch(err => console.log("Logout error:", err));
+      .catch((err) => console.log('Logout error:', err));
   }
 }

@@ -1,14 +1,14 @@
 ﻿using System.Security.Cryptography;
-using HealthQ_API.Entities;
+using LogisticsAid_API.Entities;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace HealthQ_API.Services;
+namespace LogisticsAid_API.Services;
 
 public class PasswordService
 {
-    public bool VerifyPasswordAsync(UserModel user, string password, CancellationToken ct)
+    public bool VerifyPasswordAsync(Logistician logistician, string password, CancellationToken ct)
     {
-        if (user.PasswordHash != HashPassword(password, user.PasswordSalt).Hash)
+        if (logistician.PasswordHash != HashPassword(password, logistician.PasswordSalt).Hash)
             return false;
         return true;
     }

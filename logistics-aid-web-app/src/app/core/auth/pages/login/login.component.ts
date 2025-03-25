@@ -11,7 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth.service';
-import {User} from '../../user.model';
+import { User } from '../../user.model';
 
 @Component({
   selector: 'app-login',
@@ -53,7 +53,7 @@ export class LoginComponent {
           console.log(data);
           this.service.formData = new User();
           sessionStorage.setItem('user', JSON.stringify(data));
-          this.router.navigate([`/${(data as User).userType}`])
+          this.router.navigate([`/Logistician`]);
         },
         error: (err) => {
           console.log(err);

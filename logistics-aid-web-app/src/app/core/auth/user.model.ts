@@ -1,11 +1,13 @@
 export class User {
-  email: string = "";
-  username: string = "";
-  password: string = "";
-  firstName: string = "";
-  lastName: string = "";
-  phoneNumber: string = "";
-  birthDate: Date = new Date();
-  gender: string = "";
-  userType: string = "";
+  // --- ContactInfo model on a server ---
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email?: string;
+  birthDate?: Date;
+
+  // --- Logistician model on a server ---
+  password: string;
+  hasAdminPrivileges: boolean;
 }

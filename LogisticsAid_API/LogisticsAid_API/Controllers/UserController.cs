@@ -1,13 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
-using HealthQ_API.DTOs;
-using HealthQ_API.Entities;
-using HealthQ_API.Services;
+using LogisticsAid_API.Entities;
+using LogisticsAid_API.DTOs;
+using LogisticsAid_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HealthQ_API.Controllers;
+namespace LogisticsAid_API.Controllers;
 
 [Authorize]
 [Route("[controller]/[action]")]
@@ -33,24 +33,24 @@ public class UserController : BaseController
             return Ok(users);
         });
 
-    [HttpGet]
-    public Task<ActionResult> GetUser(CancellationToken ct) =>
+    // [HttpGet]
+    // public Task<ActionResult> GetUser(CancellationToken ct) =>
+    //     ExecuteSafely(async () =>
+    //     {
+    //         var email = (User.Identity as ClaimsIdentity)!.FindFirst(ClaimTypes.Email)?.Value;
+    //         if (string.IsNullOrEmpty(email))
+    //             return Unauthorized();
+    //
+    //         var userDto = await _userService.GetUserByIdAsync(email, ct);
+    //
+    //         return Ok(userDto);
+    //     });
+
+    [HttpGet("{id}")]
+    public Task<ActionResult> GetById(string id, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var email = (User.Identity as ClaimsIdentity)!.FindFirst(ClaimTypes.Email)?.Value;
-            if (string.IsNullOrEmpty(email))
-                return Unauthorized();
-
-            var userDto = await _userService.GetUserByEmailAsync(email, ct);
-
-            return Ok(userDto);
-        });
-
-    [HttpGet("{email}")]
-    public Task<ActionResult> GetById(string email, CancellationToken ct) =>
-        ExecuteSafely(async () =>
-        {
-            var userDto = await _userService.GetUserByEmailAsync(email, ct);
+            var userDto = await _userService.GetUserByIdAsync(Guid.Parse(id), ct);
 
             return Ok(userDto);
         });
@@ -74,22 +74,45 @@ public class UserController : BaseController
         {
             var createdUser = await _userService.CreateUserAsync(user, ct);
 
-            var accessToken = _authService.GenerateToken(createdUser.Email);
-            var cookieOptions = _authService.GetCookieOptions(createdUser.Email);
+            var accessToken = _authService.GenerateToken(createdUser.Id.ToString());
+            var cookieOptions = _authService.GetCookieOptions(createdUser.Id.ToString());
             HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
 
             return Ok(createdUser);
         });
+    
+    // [AllowAnonymous]
+    // [HttpPost]
+    // public Task<ActionResult> Login([FromBody] dynamic credentials, CancellationToken ct) =>
+    //     ExecuteSafely(async () =>
+    //     {
+    //         try
+    //         {
+    //             string email = credentials.email;
+    //             string password = credentials.password;
+    //
+    //             var verifiedUser = await _userService.VerifyUserAsync(email, password, ct);
+    //
+    //             var accessToken = _authService.GenerateToken(verifiedUser.Id.ToString());
+    //             var cookieOptions = _authService.GetCookieOptions(verifiedUser.Id.ToString());
+    //             HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
+    //
+    //             return Ok(verifiedUser);
+    //         }
+    //         catch {
+    //             return BadRequest("Invalid request format");
+    //         }
+    //     });
 
     [AllowAnonymous]
     [HttpPost]
-    public Task<ActionResult> Login(UserDTO user, CancellationToken ct) =>
+    public Task<ActionResult> Login(LoginDTO loginInfo, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var verifiedUser = await _userService.VerifyUserAsync(user, ct);
+            var verifiedUser = await _userService.VerifyUserAsync(loginInfo, ct);
 
-            var accessToken = _authService.GenerateToken(verifiedUser.Email);
-            var cookieOptions = _authService.GetCookieOptions(verifiedUser.Email);
+            var accessToken = _authService.GenerateToken(verifiedUser.Id.ToString());
+            var cookieOptions = _authService.GetCookieOptions(verifiedUser.Id.ToString());
             HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
 
             return Ok(verifiedUser);
@@ -113,11 +136,11 @@ public class UserController : BaseController
     }
 
 
-    [HttpDelete("{email}")]
-    public Task<ActionResult> Delete(string email, CancellationToken ct) =>
+    [HttpDelete("{id}")]
+    public Task<ActionResult> Delete(string id, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            await _userService.DeleteUserAsync(email, ct);
+            await _userService.DeleteUserAsync(Guid.Parse(id), ct);
             return NoContent();
         });
 }

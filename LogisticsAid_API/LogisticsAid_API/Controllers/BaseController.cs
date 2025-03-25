@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HealthQ_API.Controllers;
+namespace LogisticsAid_API.Controllers;
 
 public abstract class BaseController : ControllerBase
 {
