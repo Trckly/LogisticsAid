@@ -56,9 +56,9 @@ builder.Services.AddAuthentication(x =>
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
+}).AddJwtBearer(options =>
 {
-    x.TokenValidationParameters = new TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = config["JwtSettings:Issuer"],
         ValidAudience = config["JwtSettings:Audience"],
@@ -71,7 +71,7 @@ builder.Services.AddAuthentication(x =>
     };
 
     // Extract token from the cookie
-    x.Events = new JwtBearerEvents
+    options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
         {

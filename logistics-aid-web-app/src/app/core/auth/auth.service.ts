@@ -57,7 +57,6 @@ export class AuthService {
       email: this.formData.email,
       password: this.formData.password,
     };
-    console.log('Credentials: ' + credentials);
 
     return this.http.post(this.url + '/Login', credentials, {
       withCredentials: true,
@@ -107,12 +106,17 @@ export class AuthService {
   }
 
   retrieveUsername() {
-    let user = sessionStorage.getItem('user');
-    if (user === null) {
+    const userJson = sessionStorage.getItem('user');
+    if (userJson === null) {
       this.username = 'Username';
       console.log('failed to get user from session storage');
     } else {
-      this.username = JSON.parse(user).username;
+      console.log('JSON: ' + userJson);
+
+      const user: User = JSON.parse(userJson);
+      console.log(user);
+
+      this.username = user.firstName + ' ' + user.lastName;
     }
   }
 }

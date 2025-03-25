@@ -1,0 +1,26 @@
+@use "@angular/material" as mat;
+
+.main-container {
+  width: 100%;
+  height: 95vh;
+}
+
+:root {
+  @include mat.sidenav-overrides(
+    (
+      container-background-color: orange,
+      container-text-color: red,
+    )
+  );
+}
+
+.sidenav {
+  padding: 20px;
+}
+
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}

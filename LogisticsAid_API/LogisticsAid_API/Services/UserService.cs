@@ -63,6 +63,22 @@ public class UserService
         var userDTO = _mapper.Map<UserDTO>(logistician);
         return _mapper.Map(contactInfo, userDTO);
     }
+    
+    public async Task<UserDTO?> GetUserByEmailAsync(string email, CancellationToken ct)
+    {
+        var contactInfo = await _contactInfoRepository.GetContactInfoAsync(email, ct);
+        if (contactInfo == null)
+            throw new NullReferenceException("User not found");
+        
+        var logistician = await _logisticianRepository.GetLogisticianAsync(contactInfo.Id, ct);
+        if (logistician == null)
+            throw new NullReferenceException("User not found");
+        
+        var userDTO = _mapper.Map<UserDTO>(contactInfo);
+        _mapper.Map(logistician, userDTO);
+        
+        return userDTO;
+    }
 
     public async Task<UserDTO> CreateUserAsync(UserDTO user, CancellationToken ct)
     {
@@ -96,7 +112,11 @@ public class UserService
         if (!_passwordService.VerifyPasswordAsync(logistician, loginInfo.Password, ct))
             throw new Exception("Password does not match");
         
-        return _mapper.Map<UserDTO>(logistician);
+        var userDTO = _mapper.Map<UserDTO>(contactInfo);
+        
+        _mapper.Map(contactInfo, userDTO);
+        
+        return userDTO;
     }
     
     public async Task<UserDTO> VerifyUserAsync(UserDTO user, CancellationToken ct)
