@@ -3,13 +3,13 @@
 .main-container {
   width: 100%;
   height: 95vh;
-}
 
-:root {
   @include mat.sidenav-overrides(
     (
-      container-background-color: orange,
-      container-text-color: red,
+      container-background-color: var(--mat-sys-secondary-container),
+      container-text-color: var(--mat-sys-on-secondary-container),
+      container-divider-color: var(--mat-sys-secondary),
+      container-shape: border-radius(0rem),
     )
   );
 }

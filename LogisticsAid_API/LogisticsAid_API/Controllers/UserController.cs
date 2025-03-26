@@ -41,7 +41,7 @@ public class UserController : BaseController
             if (claimsIdentity == null)
                 return Unauthorized("User identity is null");
 
-            var idClaim = claimsIdentity.FindFirst(JwtRegisteredClaimNames.Sub);
+            var idClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (idClaim == null)
                 return Unauthorized("User ID claim is missing");
 
