@@ -10,6 +10,7 @@
       container-text-color: var(--mat-sys-on-secondary-container),
       container-divider-color: var(--mat-sys-secondary),
       container-shape: border-radius(0rem),
+      container-width: 15vw,
     )
   );
 }
@@ -21,6 +22,16 @@
 .sidenav-content {
   display: flex;
   height: 100%;
-  align-items: center;
   justify-content: center;
+}
+
+.sidenav-toogle-button {
+  position: absolute;
+
+  z-index: 1;
+}
+
+button.active {
+  background-color: rgba(0, 0, 0, 0.5); /* Light gray background */
+  border-radius: 4px;
 }

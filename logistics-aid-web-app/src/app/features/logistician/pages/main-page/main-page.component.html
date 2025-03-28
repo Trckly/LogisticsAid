@@ -2,7 +2,12 @@
   <mat-drawer #drawer class="sidenav" mode="side">
     <mat-list>
       <mat-list-item>
-        <button type="button" mat-button>
+        <button
+          type="button"
+          mat-button
+          (click)="onLogisticiansClicked()"
+          routerLinkActive="active"
+        >
           <mat-icon>group</mat-icon>
           <span>Logisticians</span>
         </button>

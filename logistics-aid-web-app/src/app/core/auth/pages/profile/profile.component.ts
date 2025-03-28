@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import {
@@ -8,7 +8,7 @@ import {
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 import {
@@ -16,12 +16,12 @@ import {
   MatDatepickerModule,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
-import { GenderEnum } from '../../../../shared/enums/gender-enum';
-import { UserRoleEnum } from '../../../../shared/enums/user-role-enum';
-import { NgForOf } from '@angular/common';
-import { User } from '../../user.model';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { User } from '../../../../shared/models/user.model';
+import { UserService } from '../../../../shared/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -39,42 +39,53 @@ import { User } from '../../user.model';
     MatDatepickerToggle,
     MatSuffix,
     MatDatepickerModule,
-    MatSelect,
-    MatOption,
     MatCardHeader,
-    NgForOf,
+    MatGridList,
+    MatGridTile,
+    MatIconModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
-export class ProfileComponent {
-  EGender = Object.entries(GenderEnum);
-  EUserRole = Object.entries(UserRoleEnum);
+export class ProfileComponent implements OnInit {
   readonly _currentDate = new Date();
+  logistician: User;
+  currentUser: User;
+  isSelf: boolean;
 
-  constructor(public service: AuthService, private router: Router) {
-    let userJson = sessionStorage.getItem('user');
-    if (userJson) {
-      let user: User = JSON.parse(userJson);
+  constructor(
+    public authService: AuthService,
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-      service.formData.firstName = user.firstName;
-      service.formData.lastName = user.lastName;
-      service.formData.email = user.email;
-      service.formData.birthDate = user.birthDate;
-      service.formData.phone = user.phone;
-      service.formData.hasAdminPrivileges = user.hasAdminPrivileges;
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.logistician = JSON.parse(params['user']);
+    });
+
+    let correctDate = this.logistician.birthDate;
+    this.logistician.birthDate = new Date(correctDate);
+
+    this.userService.getCurrentUser().then((user) => {
+      this.currentUser = user;
+    });
+
+    if (this.logistician === this.currentUser || this.logistician == null) {
+      this.isSelf = true;
     } else {
-      console.log('User not found');
+      this.isSelf = false;
     }
   }
 
   onSubmit(form: NgForm) {
-    this.service.formSubmitted = true;
+    this.authService.formSubmitted = true;
     if (form.valid) {
-      this.service.updateUser().subscribe({
+      this.authService.updateUser(this.logistician).subscribe({
         next: (data) => {
-          console.log(data);
-          sessionStorage.setItem('user', JSON.stringify(data));
+          this.router.navigate(['..']);
         },
         error: (error) => {
           console.log(error);
@@ -83,10 +94,7 @@ export class ProfileComponent {
     }
   }
 
-  logout() {
-    this.service
-      .logout()
-      .then(() => this.router.navigate(['/login']))
-      .catch((err) => console.log('Logout error:', err));
+  onCancelClicked() {
+    this.router.navigate(['..']);
   }
 }

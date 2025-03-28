@@ -4,7 +4,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -20,4 +20,10 @@ import { RouterOutlet } from '@angular/router';
 })
 export class MainPageComponent {
   showFiller: boolean = false;
+
+  constructor(private router: Router, private route: ActivatedRoute) {}
+
+  onLogisticiansClicked() {
+    this.router.navigate(['Logistician', 'logisticians']);
+  }
 }

@@ -114,7 +114,7 @@ public class UserService
         
         var userDTO = _mapper.Map<UserDTO>(contactInfo);
         
-        _mapper.Map(contactInfo, userDTO);
+        _mapper.Map(logistician, userDTO);
         
         return userDTO;
     }

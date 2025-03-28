@@ -11,7 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth.service';
-import { User } from '../../user.model';
+import { User } from '../../../../shared/models/user.model';
 
 @Component({
   selector: 'app-login',

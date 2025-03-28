@@ -25,6 +25,11 @@ export const routes: Routes = [
     title: 'Main Page',
     children: [
       {
+        path: '',
+        redirectTo: 'logisticians',
+        pathMatch: 'full',
+      },
+      {
         path: 'logisticians',
         component: LogisticiansPageComponent,
         canActivate: [authGuard],
@@ -38,7 +43,7 @@ export const routes: Routes = [
     title: 'Login',
   },
   {
-    path: 'signup',
+    path: 'register',
     component: RegisterComponent,
     title: 'Register',
   },

@@ -18,13 +18,10 @@ import {
   MatDatepickerModule,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { GenderEnum } from '../../../../shared/enums/gender-enum';
 import { UserRoleEnum } from '../../../../shared/enums/user-role-enum';
-import { NgForOf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
-import { User } from '../../user.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -47,10 +44,7 @@ import { v4 as uuidv4 } from 'uuid';
     MatDatepickerToggle,
     MatSuffix,
     MatDatepickerModule,
-    MatSelect,
-    MatOption,
     MatCardHeader,
-    NgForOf,
     MatIconButton,
     MatIcon,
     MatSlideToggleModule,
@@ -106,12 +100,9 @@ export class RegisterComponent implements OnInit {
     this.service.formSubmitted = true;
     if (form.valid) {
       this.service.formData.id = uuidv4();
-      // this.service.formData.birthDate = this.birthDate.toISOString();
       this.service.register().subscribe({
         next: (data) => {
           console.log(data);
-          this.service.formData = new User();
-          sessionStorage.setItem('user', JSON.stringify(data));
           this.router.navigate([`/Logistician`]);
         },
         error: (error) => {

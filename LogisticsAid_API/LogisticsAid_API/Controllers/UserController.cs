@@ -26,7 +26,7 @@ public class UserController : BaseController
     }
 
     [HttpGet]
-    public Task<ActionResult> Get(CancellationToken ct) =>
+    public Task<ActionResult> GetUsers(CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
             var users = await _userService.GetAllUsersAsync(ct);
@@ -83,10 +83,10 @@ public class UserController : BaseController
         ExecuteSafely(async () =>
         {
             var createdUser = await _userService.CreateUserAsync(user, ct);
-
-            var accessToken = _authService.GenerateToken(createdUser);
-            var cookieOptions = _authService.GetCookieOptions();
-            HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
+            
+            // var accessToken = _authService.GenerateToken(createdUser);
+            // var cookieOptions = _authService.GetCookieOptions();
+            // HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
 
             return Ok(createdUser);
         });

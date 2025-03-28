@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { User } from './user.model';
+import { User } from '../../shared/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Login } from './login.model';
@@ -44,8 +44,8 @@ export class AuthService {
     });
   }
 
-  updateUser() {
-    return this.http.put(this.url + '/UpdateUser', this.formData, {
+  updateUser(user: User) {
+    return this.http.put(this.url + '/UpdateUser', user, {
       withCredentials: true,
     });
   }
@@ -111,12 +111,20 @@ export class AuthService {
       this.username = 'Username';
       console.log('failed to get user from session storage');
     } else {
-      console.log('JSON: ' + userJson);
-
       const user: User = JSON.parse(userJson);
-      console.log(user);
-
       this.username = user.firstName + ' ' + user.lastName;
     }
+  }
+
+  retrieveAdminPriviledges(): boolean | null {
+    const userJson = sessionStorage.getItem('user');
+    if (userJson === null) {
+      this.username = 'Username';
+      console.log('failed to get user from session storage');
+    } else {
+      const user: User = JSON.parse(userJson);
+      return user.hasAdminPrivileges;
+    }
+    return null;
   }
 }
