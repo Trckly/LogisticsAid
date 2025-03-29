@@ -1,1 +1,49 @@
-<p>logistician works!</p>
+<div class="logisticians-container">
+  <mat-card class="logistician-card">
+    <mat-card-title class="card-title">
+      <span>{{ logistician.firstName }} {{ logistician.lastName }}</span>
+      <span class="spacer"></span>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        [disabled]="
+          !currentUser?.hasAdminPrivileges || logistician.id === currentUser?.id
+        "
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-card-title>
+    <mat-card-subtitle class="card-subtitle">
+      <span>{{ logistician.email }}</span>
+    </mat-card-subtitle>
+    <mat-card-content class="card-content">
+      <mat-list>
+        <mat-list-item>
+          <span class="text-accent">Phone: </span>
+          <span>{{ logistician.phone }}</span>
+        </mat-list-item>
+        <mat-list-item>
+          <span class="text-accent">Birth date: </span>
+          <span>{{ utilService.getReadableDate(logistician.birthDate) }}</span>
+        </mat-list-item>
+        <mat-list-item>
+          <span class="text-accent">Role: </span>
+          <span>
+            {{ logistician.hasAdminPrivileges ? "Admin" : "Regular" }}
+          </span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onEditClicked(logistician)">
+      <mat-icon>edit</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="onDeleteClicked(logistician)">
+      <mat-icon>delete</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+</div>

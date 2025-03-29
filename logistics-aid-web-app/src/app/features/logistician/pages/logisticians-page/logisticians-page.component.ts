@@ -12,6 +12,7 @@ import { User } from '../../../../shared/models/user.model';
 import { UserService } from '../../../../shared/services/user.service';
 import { UtilService } from '../../../../shared/services/util.service';
 import { Router } from '@angular/router';
+import { LogisticianComponent } from '../../components/logistician/logistician.component';
 
 @Component({
   selector: 'app-logisticians-page',
@@ -25,6 +26,7 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatListModule,
     MatMenuModule,
+    LogisticianComponent,
   ],
   templateUrl: './logisticians-page.component.html',
   styleUrls: ['./logisticians-page.component.scss'],
@@ -45,8 +47,6 @@ export class LogisticiansPageComponent implements OnInit {
     this.retrieveAllUsers();
 
     this.userService.getCurrentUser().then((user) => {
-      console.log('Current user:', user);
-
       this.currentUser = user;
     });
   }
@@ -88,25 +88,7 @@ export class LogisticiansPageComponent implements OnInit {
     });
   }
 
-  onDeleteClicked(user: User) {
-    this.userService.deleteLogistician(user.id).subscribe({
-      next: (data) => {
-        console.log('User deleted successfully');
-        this.retrieveAllUsers();
-      },
-      error: (err) => {
-        console.error('Failed to delete user');
-      },
-    });
-  }
-
-  onEditClicked(user: User) {
-    this.router.navigate(['/profile'], {
-      queryParams: { user: JSON.stringify(user) },
-    });
-  }
-
-  getReadableBirthDate(date: Date): string {
-    return this.utilService.getReadableDate(date);
+  onUserDeleted() {
+    this.retrieveAllUsers();
   }
 }

@@ -118,10 +118,7 @@ export class AuthService {
 
   retrieveAdminPriviledges(): boolean | null {
     const userJson = sessionStorage.getItem('user');
-    if (userJson === null) {
-      this.username = 'Username';
-      console.log('failed to get user from session storage');
-    } else {
+    if (userJson != null) {
       const user: User = JSON.parse(userJson);
       return user.hasAdminPrivileges;
     }

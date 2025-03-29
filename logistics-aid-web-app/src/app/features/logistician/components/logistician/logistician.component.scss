@@ -1,0 +1,32 @@
+.logisticians-container {
+  display: flex;
+  flex-direction: column;
+  width: 75vw;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.logistician-card {
+  padding: 1rem;
+}
+
+.card-title {
+  display: flex;
+}
+
+.card-subtitle {
+  display: flex;
+  align-items: center;
+}
+
+.card-content {
+  display: flex;
+}
+
+.text-accent {
+  font-weight: 700;
+}
+
+.spacer {
+  flex-grow: 1;
+}
