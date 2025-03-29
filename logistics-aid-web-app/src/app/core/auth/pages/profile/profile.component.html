@@ -1,4 +1,4 @@
-<div class="registration-container">
+<div class="profile-container">
   <mat-card>
     <mat-card-header>
       <h1>Profile</h1>
@@ -7,74 +7,113 @@
       <form
         #form="ngForm"
         (submit)="onSubmit(form)"
-        [class.submitted]="service.formSubmitted"
+        [class.submitted]="authService.formSubmitted"
         novalidate
         autocomplete="off"
       >
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>FirstName</mat-label>
-          <input
-            matInput
-            name="firstName"
-            #firstName="ngModel"
-            [(ngModel)]="service.formData.firstName"
-            type="text"
-            required
-          />
-        </mat-form-field>
+        <mat-grid-list cols="2" rowHeight="4em" gutterSize="1.6em">
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                name="email"
+                #email="ngModel"
+                [(ngModel)]="logistician.email"
+                type="email"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>LastName</mat-label>
-          <input
-            matInput
-            name="lastName"
-            #lastName="ngModel"
-            [(ngModel)]="service.formData.lastName"
-            type="text"
-            required
-          />
-        </mat-form-field>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>First Name</mat-label>
+              <input
+                matInput
+                name="firstName"
+                #firstName="ngModel"
+                [(ngModel)]="logistician.firstName"
+                type="text"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Birth Date</mat-label>
-          <input
-            matInput
-            [max]="_currentDate"
-            [matDatepicker]="picker"
-            name="birthDate"
-            #birthDate="ngModel"
-            [(ngModel)]="service.formData.birthDate"
-            required
-          />
-          <mat-hint>mm/dd/yyyy</mat-hint>
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                name="lastName"
+                #lastName="ngModel"
+                [(ngModel)]="logistician.lastName"
+                type="text"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>PhoneNumber</mat-label>
-          <input
-            matInput
-            name="phoneNumber"
-            #phoneNumber="ngModel"
-            [(ngModel)]="service.formData.phone"
-            type="phone"
-            required
-          />
-        </mat-form-field>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Birth Date</mat-label>
+              <input
+                matInput
+                [max]="_currentDate"
+                [matDatepicker]="picker"
+                name="birthDate"
+                [(ngModel)]="logistician.birthDate"
+                required
+              />
+              <mat-hint>mm/dd/yyyy</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
 
-        <div class="submit-button-container">
-          <button mat-raised-button type="submit" class="submit-button">
-            Save changes
-          </button>
-        </div>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Phone Number</mat-label>
+              <input
+                matInput
+                name="phoneNumber"
+                #phoneNumber="ngModel"
+                [(ngModel)]="logistician.phone"
+                type="phone"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-slide-toggle
+              [(ngModel)]="logistician.hasAdminPrivileges"
+              name="admin"
+              [disabled]="!currentUser?.hasAdminPrivileges"
+            >
+              Admin
+            </mat-slide-toggle>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <div class="button-container">
+              <button
+                mat-raised-button
+                class="submit-button"
+                (click)="onCancelClicked()"
+              >
+                Cancel
+              </button>
+              <button mat-flat-button type="submit" class="submit-button">
+                Confirm
+              </button>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
       </form>
-      <div class="login-link">
-        <button mat-button (click)="logout()">Logout</button>
-      </div>
     </mat-card-content>
   </mat-card>
 </div>

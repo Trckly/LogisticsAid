@@ -4,9 +4,9 @@ mat-toolbar {
   z-index: 100;
 }
 mat-card-header h1 {
-  margin-top: 0
+  margin-top: 0;
 }
-.registration-container {
+.profile-container {
   padding-top: 7vh;
   display: flex;
   justify-content: center;
@@ -31,16 +31,25 @@ mat-card {
 
 mat-form-field {
   width: 100%;
-
 }
 
-mat-grid-tile{
+mat-grid-tile {
   padding: 10px 0 10px 0;
   width: 100%;
 }
 
-.submit-button-container{
+.submit-button-container {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.button-container button {
+  flex: 1;
 }

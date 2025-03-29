@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { User } from './user.model';
+import { User } from '../../shared/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Login } from './login.model';
@@ -44,8 +44,8 @@ export class AuthService {
     });
   }
 
-  updateUser() {
-    return this.http.put(this.url + '/UpdateUser', this.formData, {
+  updateUser(user: User) {
+    return this.http.put(this.url + '/UpdateUser', user, {
       withCredentials: true,
     });
   }
@@ -57,7 +57,6 @@ export class AuthService {
       email: this.formData.email,
       password: this.formData.password,
     };
-    console.log('Credentials: ' + credentials);
 
     return this.http.post(this.url + '/Login', credentials, {
       withCredentials: true,
@@ -107,12 +106,25 @@ export class AuthService {
   }
 
   retrieveUsername() {
-    let user = sessionStorage.getItem('user');
-    if (user === null) {
+    const userJson = sessionStorage.getItem('user');
+    if (userJson === null) {
       this.username = 'Username';
       console.log('failed to get user from session storage');
     } else {
-      this.username = JSON.parse(user).username;
+      const user: User = JSON.parse(userJson);
+      this.username = user.firstName + ' ' + user.lastName;
     }
+  }
+
+  retrieveAdminPriviledges(): boolean | null {
+    const userJson = sessionStorage.getItem('user');
+    if (userJson === null) {
+      this.username = 'Username';
+      console.log('failed to get user from session storage');
+    } else {
+      const user: User = JSON.parse(userJson);
+      return user.hasAdminPrivileges;
+    }
+    return null;
   }
 }

@@ -26,25 +26,35 @@ public class UserController : BaseController
     }
 
     [HttpGet]
-    public Task<ActionResult> Get(CancellationToken ct) =>
+    public Task<ActionResult> GetUsers(CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
             var users = await _userService.GetAllUsersAsync(ct);
             return Ok(users);
         });
 
-    // [HttpGet]
-    // public Task<ActionResult> GetUser(CancellationToken ct) =>
-    //     ExecuteSafely(async () =>
-    //     {
-    //         var email = (User.Identity as ClaimsIdentity)!.FindFirst(ClaimTypes.Email)?.Value;
-    //         if (string.IsNullOrEmpty(email))
-    //             return Unauthorized();
-    //
-    //         var userDto = await _userService.GetUserByIdAsync(email, ct);
-    //
-    //         return Ok(userDto);
-    //     });
+    [HttpGet]
+    public Task<ActionResult> GetUser(CancellationToken ct) =>
+        ExecuteSafely(async () =>
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity == null)
+                return Unauthorized("User identity is null");
+
+            var idClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim == null)
+                return Unauthorized("User ID claim is missing");
+
+            if (!Guid.TryParse(idClaim.Value, out var userId))
+                return Unauthorized("Invalid User ID format");
+
+            var userDto = await _userService.GetUserByIdAsync(userId, ct);
+            if (userDto == null)
+                return NotFound("User not found");
+
+            return Ok(userDto);
+        });
+
 
     [HttpGet("{id}")]
     public Task<ActionResult> GetById(string id, CancellationToken ct) =>
@@ -73,36 +83,13 @@ public class UserController : BaseController
         ExecuteSafely(async () =>
         {
             var createdUser = await _userService.CreateUserAsync(user, ct);
-
-            var accessToken = _authService.GenerateToken(createdUser.Id.ToString());
-            var cookieOptions = _authService.GetCookieOptions(createdUser.Id.ToString());
-            HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
+            
+            // var accessToken = _authService.GenerateToken(createdUser);
+            // var cookieOptions = _authService.GetCookieOptions();
+            // HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
 
             return Ok(createdUser);
         });
-    
-    // [AllowAnonymous]
-    // [HttpPost]
-    // public Task<ActionResult> Login([FromBody] dynamic credentials, CancellationToken ct) =>
-    //     ExecuteSafely(async () =>
-    //     {
-    //         try
-    //         {
-    //             string email = credentials.email;
-    //             string password = credentials.password;
-    //
-    //             var verifiedUser = await _userService.VerifyUserAsync(email, password, ct);
-    //
-    //             var accessToken = _authService.GenerateToken(verifiedUser.Id.ToString());
-    //             var cookieOptions = _authService.GetCookieOptions(verifiedUser.Id.ToString());
-    //             HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
-    //
-    //             return Ok(verifiedUser);
-    //         }
-    //         catch {
-    //             return BadRequest("Invalid request format");
-    //         }
-    //     });
 
     [AllowAnonymous]
     [HttpPost]
@@ -111,8 +98,8 @@ public class UserController : BaseController
         {
             var verifiedUser = await _userService.VerifyUserAsync(loginInfo, ct);
 
-            var accessToken = _authService.GenerateToken(verifiedUser.Id.ToString());
-            var cookieOptions = _authService.GetCookieOptions(verifiedUser.Id.ToString());
+            var accessToken = _authService.GenerateToken(verifiedUser);
+            var cookieOptions = _authService.GetCookieOptions();
             HttpContext.Response.Cookies.Append("auth_token", accessToken, cookieOptions);
 
             return Ok(verifiedUser);

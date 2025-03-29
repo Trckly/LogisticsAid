@@ -5,6 +5,7 @@ import { authGuard } from './core/auth/auth.guard';
 import { RedirectComponent } from './core/auth/redirect/redirect.component';
 import { ProfileComponent } from './core/auth/pages/profile/profile.component';
 import { MainPageComponent } from './features/logistician/pages/main-page/main-page.component';
+import { LogisticiansPageComponent } from './features/logistician/pages/logisticians-page/logisticians-page.component';
 
 export const routes: Routes = [
   {
@@ -22,7 +23,19 @@ export const routes: Routes = [
     component: MainPageComponent,
     canActivate: [authGuard],
     title: 'Main Page',
-    children: [],
+    children: [
+      {
+        path: '',
+        redirectTo: 'logisticians',
+        pathMatch: 'full',
+      },
+      {
+        path: 'logisticians',
+        component: LogisticiansPageComponent,
+        canActivate: [authGuard],
+        title: 'Logisticians',
+      },
+    ],
   },
   {
     path: 'login',
@@ -30,7 +43,7 @@ export const routes: Routes = [
     title: 'Login',
   },
   {
-    path: 'signup',
+    path: 'register',
     component: RegisterComponent,
     title: 'Register',
   },

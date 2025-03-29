@@ -1,1 +1,35 @@
-<p>main-page works!</p>
+<mat-drawer-container class="main-container" autosize>
+  <mat-drawer #drawer class="sidenav" mode="side">
+    <mat-list>
+      <mat-list-item>
+        <button
+          type="button"
+          mat-button
+          (click)="onLogisticiansClicked()"
+          routerLinkActive="active"
+        >
+          <mat-icon>group</mat-icon>
+          <span>Logisticians</span>
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <button type="button" mat-button>
+          <mat-icon>local_shipping</mat-icon>
+          <span>Trips</span>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+
+  <button
+    class="sidenav-toogle-button"
+    type="button"
+    mat-icon-button
+    (click)="drawer.toggle()"
+  >
+    <mat-icon> menu </mat-icon>
+  </button>
+  <div class="sidenav-content">
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>

@@ -7,7 +7,12 @@
     <button mat-mini-fab class="notification-button">
       <mat-icon class="button-icon">notifications</mat-icon>
     </button>
-    <button mat-fab extended class="account-button" [matMenuTriggerFor]="profileMenu">
+    <button
+      mat-fab
+      extended
+      class="account-button"
+      [matMenuTriggerFor]="profileMenu"
+    >
       <span>{{ this.authService.username }}</span>
       <mat-icon class="button-icon">account_circle</mat-icon>
     </button>
@@ -15,8 +20,14 @@
     <mat-menu #profileMenu="matMenu" class="profile-menu">
       <button mat-menu-item (click)="openProfileSettings()">
         <mat-icon>settings</mat-icon>
-        <span>Profile Settings</span>
+        <span>Settings</span>
       </button>
+      @if (this.authService.retrieveAdminPriviledges() === true){
+      <button mat-menu-item (click)="addLogistician()">
+        <mat-icon>person_add</mat-icon>
+        <span>Add Logistician</span>
+      </button>
+      }
       <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span>Log Out</span>

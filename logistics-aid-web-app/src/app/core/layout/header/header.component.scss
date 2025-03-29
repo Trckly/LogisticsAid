@@ -9,7 +9,7 @@
   color: var(--mat-sys-on-primary);
 }
 
-.button-container{
+.button-container {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -20,7 +20,6 @@
   align-items: center;
   background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
-  height: 7vh;
   padding: 0 16px;
 }
 
@@ -28,19 +27,19 @@
   color: var(--mat-sys-on-primary);
 }
 
-.main-page-button{
+.main-page-button {
   background-color: transparent;
   font-size: var(--mat-sys-headline-large-size);
 }
 
-.title{
+.title {
   color: var(--mat-sys-on-primary);
 }
 
 .account-button,
-.notification-button{
-  display: flex;               // Aligns icon and text horizontally
-  align-items: center;         // Vertically centers icon and text
+.notification-button {
+  display: flex; // Aligns icon and text horizontally
+  align-items: center; // Vertically centers icon and text
   justify-content: center; // Adds space between icon and text
   color: var(--mat-sys-on-primary);
   background-color: transparent;
@@ -53,7 +52,7 @@
 }
 
 .account-button:hover,
-.notification-button:hover{
+.notification-button:hover {
   background-color: var(--mat-sys-secondary-fixed-dim);
 }
 
