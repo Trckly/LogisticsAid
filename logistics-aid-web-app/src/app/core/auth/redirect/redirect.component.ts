@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-redirect',

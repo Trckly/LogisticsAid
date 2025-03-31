@@ -1,20 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../../shared/models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Login } from './login.model';
+import { ContactInfo } from '../../shared/models/contact-info.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
   public url: string = environment.apiBaseUrl + '/User';
   public formData: User = new User();
   public formSubmitted = false;
   public username = 'Username';
 
   constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {}
 
   checkAuthenticated(): Promise<boolean> {
     return new Promise((resolve) => {
@@ -89,8 +92,6 @@ export class AuthService {
         .get(this.url + '/GetUser', { withCredentials: true })
         .subscribe({
           next: (data) => {
-            sessionStorage.setItem('user', JSON.stringify(data));
-            // resolve((data as User).userType);
             resolve(data as User);
           },
           error: (err) => {
@@ -106,15 +107,17 @@ export class AuthService {
   }
 
   retrieveUsername() {
-    const userJson = sessionStorage.getItem('user');
-    if (userJson === null) {
-      this.username = 'Username';
-      console.log('failed to get user from session storage');
-    } else {
-      const user: User = JSON.parse(userJson);
-      this.username =
-        user.contactInfo.firstName + ' ' + user.contactInfo.firstName;
-    }
+    this.getUserWithToken().then((currentUser) => {
+      if (currentUser === null) {
+        this.username = 'Username';
+        console.log('failed to get user from token');
+      } else {
+        this.username =
+          currentUser.contactInfo.firstName +
+          ' ' +
+          currentUser.contactInfo.lastName;
+      }
+    });
   }
 
   retrieveAdminPriviledges(): boolean | null {

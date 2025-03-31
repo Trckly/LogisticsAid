@@ -15,13 +15,13 @@ public class AuthService
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(JwtRegisteredClaimNames.Sub, logistician.ContactInfoDTO.Id.ToString()), // Використовуємо Id
+            new(JwtRegisteredClaimNames.Sub, logistician.ContactInfo.Id.ToString()), // Використовуємо Id
             new("hasAdminPrivileges", logistician.HasAdminPrivileges.ToString()) // Додаємо інформацію про права
         };
 
-        if (!string.IsNullOrEmpty(logistician.ContactInfoDTO.Email))
+        if (!string.IsNullOrEmpty(logistician.ContactInfo.Email))
         {
-            claims.Add(new(JwtRegisteredClaimNames.Email, logistician.ContactInfoDTO.Email)); // Додаємо email, якщо є
+            claims.Add(new(JwtRegisteredClaimNames.Email, logistician.ContactInfo.Email)); // Додаємо email, якщо є
         }
 
         var tokenDescriptor = new SecurityTokenDescriptor

@@ -19,7 +19,7 @@
                 matInput
                 name="email"
                 #email="ngModel"
-                [(ngModel)]="service.formData.email"
+                [(ngModel)]="service.formData.contactInfo.email"
                 type="email"
                 required
               />
@@ -33,7 +33,7 @@
                 matInput
                 name="firstName"
                 #firstName="ngModel"
-                [(ngModel)]="service.formData.firstName"
+                [(ngModel)]="service.formData.contactInfo.firstName"
                 type="text"
                 required
               />
@@ -47,7 +47,7 @@
                 matInput
                 name="lastName"
                 #lastName="ngModel"
-                [(ngModel)]="service.formData.lastName"
+                [(ngModel)]="service.formData.contactInfo.lastName"
                 type="text"
                 required
               />
@@ -62,7 +62,7 @@
                 [max]="_currentDate"
                 [matDatepicker]="picker"
                 name="birthDate"
-                [(ngModel)]="service.formData.birthDate"
+                [(ngModel)]="service.formData.contactInfo.birthDate"
                 required
               />
               <mat-hint>mm/dd/yyyy</mat-hint>
@@ -81,7 +81,7 @@
                 matInput
                 name="phoneNumber"
                 #phoneNumber="ngModel"
-                [(ngModel)]="service.formData.phone"
+                [(ngModel)]="service.formData.contactInfo.phone"
                 type="phone"
                 required
               />

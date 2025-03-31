@@ -40,7 +40,7 @@ public class LogisticianService
             var contactInfoDto = _mapper.Map<ContactInfoDTO>(contactInfo);
             var logisticianDto = _mapper.Map<LogisticianDTO>(logistician);
             
-            logisticianDto.ContactInfoDTO = contactInfoDto;
+            logisticianDto.ContactInfo = contactInfoDto;
             
             logisticianDtoList.Add(logisticianDto);
         }
@@ -56,8 +56,10 @@ public class LogisticianService
         
         var contactInfo = await _contactInfoRepository.GetContactInfoAsync(id, ct);
         
-        var userDto = _mapper.Map<LogisticianDTO>(logistician);
-        return _mapper.Map(contactInfo, userDto);
+        var logisticianDto = _mapper.Map<LogisticianDTO>(logistician);
+        logisticianDto.ContactInfo = _mapper.Map<ContactInfoDTO>(contactInfo);
+        
+        return logisticianDto;
     }
     
     public async Task<LogisticianDTO?> GetUserByEmailAsync(string email, CancellationToken ct)
@@ -70,15 +72,15 @@ public class LogisticianService
         if (logistician == null)
             throw new NullReferenceException("User not found");
         
-        var userDto = _mapper.Map<LogisticianDTO>(contactInfo);
-        _mapper.Map(logistician, userDto);
+        var logisticianDto = _mapper.Map<LogisticianDTO>(logistician);
+        logisticianDto.ContactInfo = _mapper.Map<ContactInfoDTO>(contactInfo);
         
-        return userDto;
+        return logisticianDto;
     }
 
     public async Task<LogisticianDTO> CreateUserAsync(LogisticianDTO logisticianDto, CancellationToken ct)
     {
-        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfoDTO.Id, ct);
+        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Id, ct);
         if (logistician != null)
             throw new Exception("User already exists");
         
@@ -107,16 +109,15 @@ public class LogisticianService
         if (!_passwordService.VerifyPasswordAsync(logistician, loginInfo.Password, ct))
             throw new Exception("Password does not match");
         
-        var userDto = _mapper.Map<LogisticianDTO>(contactInfo);
+        var logisticianDto = _mapper.Map<LogisticianDTO>(logistician);
+        logisticianDto.ContactInfo = _mapper.Map<ContactInfoDTO>(contactInfo);
         
-        _mapper.Map(logistician, userDto);
-        
-        return userDto;
+        return logisticianDto;
     }
     
     public async Task<LogisticianDTO> VerifyUserAsync(LogisticianDTO logisticianDto, CancellationToken ct)
     {
-        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfoDTO.Id, ct);
+        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Id, ct);
         if (logistician == null)
             throw new Exception("User doesn't exist");
 
@@ -138,17 +139,17 @@ public class LogisticianService
 
     public async Task UpdateUserAsync(LogisticianDTO logisticianDto,CancellationToken ct)
     {
-        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfoDTO.Id, ct);        
-        var contactInfo =  await _contactInfoRepository.GetContactInfoAsync(logisticianDto.ContactInfoDTO.Id, ct);
+        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Id, ct);        
+        var contactInfo =  await _contactInfoRepository.GetContactInfoAsync(logisticianDto.ContactInfo.Id, ct);
         if (logistician == null || contactInfo == null)
             throw new NullReferenceException("User not found");
 
         
-        contactInfo.FirstName = logisticianDto.ContactInfoDTO.FirstName;
-        contactInfo.LastName = logisticianDto.ContactInfoDTO.LastName;
-        contactInfo.BirthDate = logisticianDto.ContactInfoDTO.BirthDate;
-        contactInfo.Phone = logisticianDto.ContactInfoDTO.Phone;
-        contactInfo.Email = logisticianDto.ContactInfoDTO.Email;
+        contactInfo.FirstName = logisticianDto.ContactInfo.FirstName;
+        contactInfo.LastName = logisticianDto.ContactInfo.LastName;
+        contactInfo.BirthDate = logisticianDto.ContactInfo.BirthDate;
+        contactInfo.Phone = logisticianDto.ContactInfo.Phone;
+        contactInfo.Email = logisticianDto.ContactInfo.Email;
         
         logistician.HasAdminPrivileges = logisticianDto.HasAdminPrivileges;
         

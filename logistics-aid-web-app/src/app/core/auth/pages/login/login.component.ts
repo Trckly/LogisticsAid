@@ -11,6 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth.service';
+import { ContactInfo } from '../../../../shared/models/contact-info.model';
 import { User } from '../../../../shared/models/user.model';
 
 @Component({
@@ -52,6 +53,7 @@ export class LoginComponent {
         next: (data) => {
           console.log(data);
           this.service.formData = new User();
+          this.service.formData.contactInfo = new ContactInfo();
           sessionStorage.setItem('user', JSON.stringify(data));
           this.router.navigate([`/Logistician`]);
         },

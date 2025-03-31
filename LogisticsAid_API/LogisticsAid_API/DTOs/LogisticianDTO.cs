@@ -2,7 +2,7 @@
 
 public class LogisticianDTO
 {
-    public required ContactInfoDTO ContactInfoDTO;
+    public required ContactInfoDTO ContactInfo { get; set; }
     
     public string? Password { get; set; }
     public required bool HasAdminPrivileges { get; set; }

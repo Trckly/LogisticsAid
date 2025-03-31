@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardModule,
+} from '@angular/material/card';
 import {
   MatFormFieldModule,
   MatLabel,
@@ -23,22 +28,15 @@ import { Router } from '@angular/router';
   selector: 'app-trip-config-page',
   imports: [
     MatToolbarModule,
-    MatCard,
-    MatCardContent,
     MatFormFieldModule,
-    MatLabel,
     MatInputModule,
-    MatButton,
     FormsModule,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
     MatDatepickerModule,
-    MatCardHeader,
-    MatGridList,
-    MatGridTile,
     MatIconModule,
     MatSlideToggleModule,
+    MatGridTile,
+    MatGridList,
+    MatCardModule,
   ],
   templateUrl: './trip-config-page.component.html',
   styleUrl: './trip-config-page.component.scss',
