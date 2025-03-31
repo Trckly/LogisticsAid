@@ -55,11 +55,6 @@ public sealed class LogisticsAidDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(l => l.ContactId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(c => c.Company)
-                .WithMany()
-                .HasForeignKey(l => l.CompanyName)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -67,11 +62,6 @@ public sealed class LogisticsAidDbContext : DbContext
             entity.HasOne(c => c.Contact)
                 .WithMany()
                 .HasForeignKey(c => c.ContactId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(c => c.Company)
-                .WithMany()
-                .HasForeignKey(c => c.CompanyName)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -82,20 +72,12 @@ public sealed class LogisticsAidDbContext : DbContext
                 .HasForeignKey(d => d.ContactId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(d => d.Company)
-                .WithMany()
-                .HasForeignKey(d => d.CompanyName)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Company>(entity => { });
 
         modelBuilder.Entity<Transport>(entity =>
         {
-            entity.HasOne(t => t.Company)
-                .WithMany()
-                .HasForeignKey(t => t.CompanyName)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Address>(entity => { });

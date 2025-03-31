@@ -21,7 +21,7 @@ public class ContactInfoRepository : IContactInfoRepository
 
     public async Task<ContactInfo?> GetContactInfoAsync(string email, CancellationToken ct)
     {
-        return await _context.ContactInfo.FirstOrDefaultAsync(x => x.Email == email, cancellationToken: ct);
+        return await _context.ContactInfo.FirstOrDefaultAsync(ci => ci.Email == email, cancellationToken: ct);
     }
 
     public async Task<IEnumerable<ContactInfo>> GetAllContactInfoAsync(CancellationToken ct)

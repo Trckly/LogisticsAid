@@ -28,7 +28,4 @@ public class Transport
     public required string CompanyName { get; set; }
     
     // -----Navigation properties-----
-    
-    [ForeignKey(nameof(CompanyName))]
-    public required Company Company { get; set; }  
 }

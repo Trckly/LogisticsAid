@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using AutoMapper;
+using LogisticsAid_API.Context;
 using LogisticsAid_API.Repositories;
 using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
@@ -15,17 +16,20 @@ public class LogisticianService
     private readonly IContactInfoRepository _contactInfoRepository;
     private readonly PasswordService _passwordService;
     private readonly IMapper _mapper;
+    private readonly LogisticsAidDbContext _context;
 
     public LogisticianService(
         ILogisticianRepository logisticianRepository,
         IContactInfoRepository contactInfoRepository,
         PasswordService passwordService,
-        IMapper mapper)
+        IMapper mapper,
+        LogisticsAidDbContext context)
     {
         _logisticianRepository = logisticianRepository;
         _contactInfoRepository = contactInfoRepository;
         _passwordService = passwordService;
         _mapper = mapper;
+        _context = context;
     }
 
     public async Task<IEnumerable<LogisticianDTO>> GetAllUsersAsync(CancellationToken ct)
@@ -83,18 +87,33 @@ public class LogisticianService
         var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Id, ct);
         if (logistician != null)
             throw new Exception("User already exists");
-        
+
         logistician = _mapper.Map<Logistician>(logisticianDto);
-        var contactInfo = _mapper.Map<ContactInfo>(logisticianDto);
+        var contactInfo = _mapper.Map<ContactInfo>(logisticianDto.ContactInfo);
+
+        logistician.Contact = contactInfo;
 
         var (hash, salt) = _passwordService.HashPassword(logisticianDto.Password!);
         logistician.PasswordHash = hash;
         logistician.PasswordSalt = salt;
 
-        await _contactInfoRepository.CreateContactInfoAsync(contactInfo, ct);
-        await _logisticianRepository.CreateLogisticianAsync(logistician, ct);
+        await using var transaction = await _context.Database.BeginTransactionAsync(ct);
+        try
+        {
+            await _contactInfoRepository.CreateContactInfoAsync(contactInfo, ct);
+            await _logisticianRepository.CreateLogisticianAsync(logistician, ct);
+
+            await transaction.CommitAsync(ct);
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync(ct);
+            throw;
+        }
+
         return logisticianDto;
     }
+
 
     public async Task<LogisticianDTO> VerifyUserAsync(LoginDTO loginInfo, CancellationToken ct)
     {

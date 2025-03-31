@@ -25,7 +25,4 @@ public class Driver
     
     [ForeignKey(nameof(ContactId))]
     public required ContactInfo Contact { get; set; }  
-    
-    [ForeignKey(nameof(CompanyName))]
-    public required Company Company { get; set; }  
 }
