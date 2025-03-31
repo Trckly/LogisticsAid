@@ -66,11 +66,11 @@ export class RegisterComponent implements OnInit {
     public route: ActivatedRoute
   ) {
     service.formData.password = 'embryo';
-    service.formData.firstName = 'Danylo';
-    service.formData.lastName = 'Shlomiak';
-    service.formData.email = 'danylo@example.com';
-    service.formData.birthDate = new Date(2005, 2, 4);
-    service.formData.phone = '+380676847525';
+    service.formData.contactInfo.firstName = 'Danylo';
+    service.formData.contactInfo.lastName = 'Shlomiak';
+    service.formData.contactInfo.email = 'danylo@example.com';
+    service.formData.contactInfo.birthDate = new Date(2005, 2, 4);
+    service.formData.contactInfo.phone = '+380676847525';
     service.formData.hasAdminPrivileges = true;
   }
 
@@ -99,7 +99,7 @@ export class RegisterComponent implements OnInit {
   onSubmit(form: NgForm) {
     this.service.formSubmitted = true;
     if (form.valid) {
-      this.service.formData.id = uuidv4();
+      this.service.formData.contactInfo.id = uuidv4();
       this.service.register().subscribe({
         next: (data) => {
           console.log(data);

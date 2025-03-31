@@ -34,7 +34,7 @@ export class LogisticianComponent {
   ) {}
 
   onDeleteClicked(user: User) {
-    this.userService.deleteLogistician(user.id).subscribe({
+    this.userService.deleteLogistician(user.contactInfo.id).subscribe({
       next: (data) => {
         this.userDeleted.emit();
       },

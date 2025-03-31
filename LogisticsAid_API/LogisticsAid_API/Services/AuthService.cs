@@ -7,7 +7,7 @@ namespace LogisticsAid_API.Services;
 
 public class AuthService
 {
-    public string GenerateToken(UserDTO user)
+    public string GenerateToken(LogisticianDTO logistician)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = "JwtKeyIGuessJwtKeyIGuessJwtKeyIGuessJwtKeyIGuess"u8.ToArray();
@@ -15,13 +15,13 @@ public class AuthService
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Використовуємо Id
-            new("hasAdminPrivileges", user.HasAdminPrivileges.ToString()) // Додаємо інформацію про права
+            new(JwtRegisteredClaimNames.Sub, logistician.ContactInfoDTO.Id.ToString()), // Використовуємо Id
+            new("hasAdminPrivileges", logistician.HasAdminPrivileges.ToString()) // Додаємо інформацію про права
         };
 
-        if (!string.IsNullOrEmpty(user.Email))
+        if (!string.IsNullOrEmpty(logistician.ContactInfoDTO.Email))
         {
-            claims.Add(new(JwtRegisteredClaimNames.Email, user.Email)); // Додаємо email, якщо є
+            claims.Add(new(JwtRegisteredClaimNames.Email, logistician.ContactInfoDTO.Email)); // Додаємо email, якщо є
         }
 
         var tokenDescriptor = new SecurityTokenDescriptor

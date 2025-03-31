@@ -14,14 +14,14 @@ namespace LogisticsAid_API.Controllers;
 [ApiController]
 public class UserController : BaseController
 {
-    private readonly UserService _userService;
+    private readonly LogisticianService _logisticianService;
     private readonly AuthService _authService;
 
     public UserController(
-        UserService userService,
+        LogisticianService logisticianService,
         AuthService authService)
     {
-        _userService = userService;
+        _logisticianService = logisticianService;
         _authService = authService;
     }
 
@@ -29,7 +29,7 @@ public class UserController : BaseController
     public Task<ActionResult> GetUsers(CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var users = await _userService.GetAllUsersAsync(ct);
+            var users = await _logisticianService.GetAllUsersAsync(ct);
             return Ok(users);
         });
 
@@ -48,7 +48,7 @@ public class UserController : BaseController
             if (!Guid.TryParse(idClaim.Value, out var userId))
                 return Unauthorized("Invalid User ID format");
 
-            var userDto = await _userService.GetUserByIdAsync(userId, ct);
+            var userDto = await _logisticianService.GetUserByIdAsync(userId, ct);
             if (userDto == null)
                 return NotFound("User not found");
 
@@ -60,7 +60,7 @@ public class UserController : BaseController
     public Task<ActionResult> GetById(string id, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var userDto = await _userService.GetUserByIdAsync(Guid.Parse(id), ct);
+            var userDto = await _logisticianService.GetUserByIdAsync(Guid.Parse(id), ct);
 
             return Ok(userDto);
         });
@@ -79,10 +79,10 @@ public class UserController : BaseController
 
     [AllowAnonymous]
     [HttpPost]
-    public Task<ActionResult> Register([FromBody] UserDTO user, CancellationToken ct) =>
+    public Task<ActionResult> Register([FromBody] LogisticianDTO logistician, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var createdUser = await _userService.CreateUserAsync(user, ct);
+            var createdUser = await _logisticianService.CreateUserAsync(logistician, ct);
             
             // var accessToken = _authService.GenerateToken(createdUser);
             // var cookieOptions = _authService.GetCookieOptions();
@@ -96,7 +96,7 @@ public class UserController : BaseController
     public Task<ActionResult> Login(LoginDTO loginInfo, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var verifiedUser = await _userService.VerifyUserAsync(loginInfo, ct);
+            var verifiedUser = await _logisticianService.VerifyUserAsync(loginInfo, ct);
 
             var accessToken = _authService.GenerateToken(verifiedUser);
             var cookieOptions = _authService.GetCookieOptions();
@@ -106,12 +106,12 @@ public class UserController : BaseController
         });
 
     [HttpPut]
-    public Task<ActionResult> UpdateUser([FromBody] UserDTO user, CancellationToken ct) =>
+    public Task<ActionResult> UpdateUser([FromBody] LogisticianDTO logistician, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var updatedUser = await _userService.UpdateUserAsync(user, ct);
+            await _logisticianService.UpdateUserAsync(logistician, ct);
 
-            return Ok(updatedUser);
+            return Ok();
         });
 
     [HttpDelete]
@@ -127,7 +127,7 @@ public class UserController : BaseController
     public Task<ActionResult> Delete(string id, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            await _userService.DeleteUserAsync(Guid.Parse(id), ct);
+            await _logisticianService.DeleteUserAsync(Guid.Parse(id), ct);
             return NoContent();
         });
 }

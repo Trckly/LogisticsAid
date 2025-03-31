@@ -1,8 +1,7 @@
-﻿namespace LogisticsAid_API.DTOs;
+namespace LogisticsAid_API.DTOs;
 
-public class UserDTO
+public class ContactInfoDTO
 {
-    // --- ContactInfo model ---
     public required Guid Id { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
@@ -10,8 +9,4 @@ public class UserDTO
     
     public string? Email { get; set; }
     public DateTime? BirthDate { get; set; }
-    
-    // --- Logistician model ---
-    public string? Password { get; set; }
-    public required bool HasAdminPrivileges { get; set; }
 }

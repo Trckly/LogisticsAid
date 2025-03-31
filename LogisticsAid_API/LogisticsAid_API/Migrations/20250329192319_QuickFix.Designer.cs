@@ -4,6 +4,7 @@ using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticsAid_API.Migrations
 {
     [DbContext(typeof(LogisticsAidDbContext))]
-    partial class LogisticsAidDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329192319_QuickFix")]
+    partial class QuickFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,12 +234,6 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("address_id");
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("company_name");
-
                     b.Property<Guid>("ContactInfoId")
                         .HasColumnType("uuid")
                         .HasColumnName("contact_info_id");
@@ -305,17 +302,9 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_created");
-
                     b.Property<Guid>("DriverId")
                         .HasColumnType("uuid")
                         .HasColumnName("driver_id");
-
-                    b.Property<DateTime>("LoadingDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("loading_date");
 
                     b.Property<Guid>("LogisticianId")
                         .HasColumnType("uuid")
@@ -334,10 +323,6 @@ namespace LogisticsAid_API.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)")
                         .HasColumnName("transport_id");
-
-                    b.Property<DateTime>("UnloadingDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("unloading_date");
 
                     b.HasKey("Id");
 

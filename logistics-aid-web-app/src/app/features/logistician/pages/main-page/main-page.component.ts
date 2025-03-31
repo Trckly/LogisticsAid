@@ -26,4 +26,8 @@ export class MainPageComponent {
   onLogisticiansClicked() {
     this.router.navigate(['Logistician', 'logisticians']);
   }
+
+  onTripsClicked() {
+    this.router.navigate(['Logistician', 'trips']);
+  }
 }

@@ -15,6 +15,11 @@ public class RoutePoint
     [Required]
     [Column("address_id")]
     public required Guid AddressId { get; set; }
+    
+    [Required]
+    [Column("company_name")]
+    [MaxLength(100)]
+    public required string CompanyName { get; set; }
 
     [Required]
     [Column("type")]
@@ -26,12 +31,12 @@ public class RoutePoint
     
     [Required]
     [Column("contact_info_id")]
-    public required Guid ContactInfoId { get; set; }
+    public Guid? ContactInfoId { get; set; }
 
     // -----Navigation properties-----
      
     [ForeignKey(nameof(OrderId))]
-    public required Order Order { get; set; }
+    public required Trip Trip { get; set; }
 
     [ForeignKey(nameof(AddressId))]
     public required Address Address { get; set; }

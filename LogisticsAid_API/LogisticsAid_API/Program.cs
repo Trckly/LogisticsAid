@@ -21,8 +21,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<PasswordService>();
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<LogisticianService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ContactInfoService>();
 // builder.Services.AddScoped<DoctorService>();
 // builder.Services.AddScoped<QuestionnaireService>();
 // builder.Services.AddScoped<AdminService>();

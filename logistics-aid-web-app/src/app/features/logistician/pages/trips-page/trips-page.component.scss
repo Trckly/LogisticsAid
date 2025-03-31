@@ -1,0 +1,37 @@
+.main-container {
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.search-field,
+.filter-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.add-trip-button {
+  position: fixed; /* Fix the button in the viewport */
+  bottom: 20px; /* Distance from the bottom */
+  right: 20px; /* Distance from the right */
+
+  width: 200px; /* Increase button width */
+  height: 60px; /* Increase button height */
+  font-size: 18px; /* Make text bigger */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 28px; /* Ensure the icon is large enough */
+    width: 28px; /* Explicitly set width */
+    height: 28px; /* Explicitly set height */
+  }
+
+  border-radius: 30px;
+}

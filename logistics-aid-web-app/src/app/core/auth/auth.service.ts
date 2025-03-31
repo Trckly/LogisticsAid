@@ -54,7 +54,7 @@ export class AuthService {
     console.log(JSON.stringify(this.formData));
 
     const credentials: Login = {
-      email: this.formData.email,
+      email: this.formData.contactInfo.email,
       password: this.formData.password,
     };
 
@@ -112,7 +112,8 @@ export class AuthService {
       console.log('failed to get user from session storage');
     } else {
       const user: User = JSON.parse(userJson);
-      this.username = user.firstName + ' ' + user.lastName;
+      this.username =
+        user.contactInfo.firstName + ' ' + user.contactInfo.firstName;
     }
   }
 

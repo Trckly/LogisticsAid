@@ -10,7 +10,7 @@
     </mat-form-field>
 
     <mat-form-field class="filter-field">
-      <mat-label>Filter by Role</mat-label>
+      <mat-label>Filter by something </mat-label>
       <mat-select
         [(value)]="selectedFilter"
         (selectionChange)="applyFilter($event)"
@@ -22,12 +22,14 @@
     </mat-form-field>
   </mat-toolbar>
 
-  @for (logistician of filteredLogisticians; track
-  logistician.contactInfo.email) {
-  <app-logistician
-    [logistician]="logistician"
-    [currentUser]="currentUser"
-    (userDeleted)="onUserDeleted()"
-  ></app-logistician>
+  @for(trip of trips; track $index){
+  <mat-card>
+    <mat-card-title>{{ trip }}</mat-card-title>
+  </mat-card>
   }
+
+  <button mat-flat-button class="add-trip-button" (click)="onAddTripClicked()">
+    <mat-icon>add</mat-icon>
+    <span>Add Trip</span>
+  </button>
 </div>

@@ -19,7 +19,7 @@
                 matInput
                 name="email"
                 #email="ngModel"
-                [(ngModel)]="logistician.email"
+                [(ngModel)]="logistician.contactInfo.email"
                 type="email"
                 required
               />
@@ -33,7 +33,7 @@
                 matInput
                 name="firstName"
                 #firstName="ngModel"
-                [(ngModel)]="logistician.firstName"
+                [(ngModel)]="logistician.contactInfo.firstName"
                 type="text"
                 required
               />
@@ -47,7 +47,7 @@
                 matInput
                 name="lastName"
                 #lastName="ngModel"
-                [(ngModel)]="logistician.lastName"
+                [(ngModel)]="logistician.contactInfo.lastName"
                 type="text"
                 required
               />
@@ -62,7 +62,7 @@
                 [max]="_currentDate"
                 [matDatepicker]="picker"
                 name="birthDate"
-                [(ngModel)]="logistician.birthDate"
+                [(ngModel)]="logistician.contactInfo.birthDate"
                 required
               />
               <mat-hint>mm/dd/yyyy</mat-hint>
@@ -81,7 +81,7 @@
                 matInput
                 name="phoneNumber"
                 #phoneNumber="ngModel"
-                [(ngModel)]="logistician.phone"
+                [(ngModel)]="logistician.contactInfo.phone"
                 type="phone"
                 required
               />

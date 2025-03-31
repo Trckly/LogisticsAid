@@ -66,8 +66,8 @@ export class ProfileComponent implements OnInit {
       this.logistician = JSON.parse(params['user']);
     });
 
-    let correctDate = this.logistician.birthDate;
-    this.logistician.birthDate = new Date(correctDate);
+    let correctDate = this.logistician.contactInfo.birthDate;
+    this.logistician.contactInfo.birthDate = new Date(correctDate);
 
     this.userService.getCurrentUser().then((user) => {
       this.currentUser = user;

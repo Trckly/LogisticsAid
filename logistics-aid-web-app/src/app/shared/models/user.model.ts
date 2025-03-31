@@ -1,11 +1,8 @@
+import { ContactInfo } from './contact-info.model';
+
 export class User {
   // --- ContactInfo model on a server ---
-  id: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email?: string;
-  birthDate?: Date;
+  contactInfo: ContactInfo;
 
   // --- Logistician model on a server ---
   password: string;

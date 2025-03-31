@@ -76,7 +76,7 @@ export class LogisticiansPageComponent implements OnInit {
 
     this.filteredLogisticians = this.logisticians.filter((logistician) => {
       const matchesSearch =
-        `${logistician.firstName} ${logistician.lastName} ${logistician.email}`
+        `${logistician.contactInfo.firstName} ${logistician.contactInfo.lastName} ${logistician.contactInfo.email}`
           .toLowerCase()
           .includes(searchText);
       const matchesFilter =

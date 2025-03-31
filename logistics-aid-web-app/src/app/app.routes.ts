@@ -6,6 +6,8 @@ import { RedirectComponent } from './core/auth/redirect/redirect.component';
 import { ProfileComponent } from './core/auth/pages/profile/profile.component';
 import { MainPageComponent } from './features/logistician/pages/main-page/main-page.component';
 import { LogisticiansPageComponent } from './features/logistician/pages/logisticians-page/logisticians-page.component';
+import { TripsPageComponent } from './features/logistician/pages/trips-page/trips-page.component';
+import { TripConfigPageComponent } from './features/logistician/pages/trip-config-page/trip-config-page.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +37,12 @@ export const routes: Routes = [
         canActivate: [authGuard],
         title: 'Logisticians',
       },
+      {
+        path: 'trips',
+        component: TripsPageComponent,
+        canActivate: [authGuard],
+        title: 'Trips',
+      },
     ],
   },
   {
@@ -52,5 +60,11 @@ export const routes: Routes = [
     component: ProfileComponent,
     canActivate: [authGuard],
     title: 'Profile',
+  },
+  {
+    path: 'trip-config',
+    component: TripConfigPageComponent,
+    canActivate: [authGuard],
+    title: 'Trip Configuration',
   },
 ];

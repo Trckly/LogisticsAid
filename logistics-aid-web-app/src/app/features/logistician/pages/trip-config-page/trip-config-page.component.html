@@ -1,0 +1,223 @@
+<!-- <div class="order-form-container">
+  <mat-card>
+    <mat-card-header>
+      <h1>Order Details</h1>
+    </mat-card-header>
+    <mat-card-content>
+      <form
+        #form="ngForm"
+        (submit)="onSubmit(form)"
+        novalidate
+        autocomplete="off"
+      >
+        <mat-grid-list cols="2" rowHeight="4em" gutterSize="1.6em">
+          <mat-grid-tile colspan="2">
+            <h2>Customer Information</h2>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input
+                matInput
+                name="customerFirstName"
+                [(ngModel)]="customerFirstName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                name="customerLastName"
+                [(ngModel)]="customerLastName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                name="customerPhone"
+                [(ngModel)]="order.customerPhone"
+                type="tel"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Company Name</mat-label>
+              <input
+                matInput
+                name="customerCompanyName"
+                [(ngModel)]="order.customerCompanyName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <h2>Carrier Information</h2>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input
+                matInput
+                name="carrierFirstName"
+                [(ngModel)]="order.carrierFirstName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                name="carrierLastName"
+                [(ngModel)]="order.carrierLastName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                name="carrierPhone"
+                [(ngModel)]="order.carrierPhone"
+                type="tel"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Company Name</mat-label>
+              <input
+                matInput
+                name="carrierCompanyName"
+                [(ngModel)]="order.carrierCompanyName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <h2>Loading Information</h2>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2">
+            <mat-form-field appearance="outline">
+              <mat-label>Loading Point</mat-label>
+              <input
+                matInput
+                name="loadingPoint"
+                [(ngModel)]="order.loadingPoint"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Loading Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="loadingPicker"
+                name="loadingDate"
+                [(ngModel)]="order.loadingDate"
+                required
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="loadingPicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #loadingPicker></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <h2>Unloading Information</h2>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2">
+            <mat-form-field appearance="outline">
+              <mat-label>Unloading Point</mat-label>
+              <input
+                matInput
+                name="unloadingPoint"
+                [(ngModel)]="order.unloadingPoint"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Unloading Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="unloadingPicker"
+                name="unloadingDate"
+                [(ngModel)]="order.unloadingDate"
+                required
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="unloadingPicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #unloadingPicker></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <h2>Vehicle & Driver Details</h2>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Vehicle Model</mat-label>
+              <input
+                matInput
+                name="vehicleModel"
+                [(ngModel)]="order.vehicleModel"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>License Plate</mat-label>
+              <input
+                matInput
+                name="vehicleLicensePlate"
+                [(ngModel)]="order.vehicleLicensePlate"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Trailer License Plate</mat-label>
+              <input
+                matInput
+                name="trailerLicensePlate"
+                [(ngModel)]="order.trailerLicensePlate"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <div class="button-container">
+              <button mat-raised-button (click)="onCancel()">Cancel</button>
+              <button mat-flat-button type="submit">Submit</button>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> -->

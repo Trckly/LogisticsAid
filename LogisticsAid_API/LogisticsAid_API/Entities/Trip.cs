@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LogisticsAid_API.Entities;
 
-[Table("orders", Schema = "public")]
-public class Order
+[Table("trips", Schema = "public")]
+public class Trip
 {
     [Key]
     [Required]
@@ -14,6 +14,18 @@ public class Order
     [Required]
     [Column("readable_id")]
     public required uint ReadableId { get; set; }
+    
+    [Required]
+    [Column("date_created")]
+    public required DateTime DateCreated { get; set; }
+    
+    [Required]
+    [Column("loading_date")]
+    public required DateTime LoadingDate { get; set; }
+    
+    [Required]
+    [Column("unloading_date")]
+    public required DateTime UnloadingDate { get; set; }
     
     [Required]
     [Column("logistician_id")]

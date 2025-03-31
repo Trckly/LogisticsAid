@@ -11,7 +11,7 @@ public sealed class LogisticsAidDbContext : DbContext
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Transport> Transport { get; set; }
-    public DbSet<Order> Orders { get; set; }
+    public DbSet<Trip> Orders { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<RoutePoint> RoutePoints { get; set; }
 
@@ -113,35 +113,35 @@ public sealed class LogisticsAidDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        modelBuilder.Entity<Order>(entity =>
+        modelBuilder.Entity<Trip>(entity =>
         {
             entity.HasOne(t => t.Logistician)
                 .WithOne()
-                .HasForeignKey<Order>(t => t.LogisticianId)
+                .HasForeignKey<Trip>(t => t.LogisticianId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(t => t.Carrier)
                 .WithOne()
-                .HasForeignKey<Order>(t => t.CarrierId)
+                .HasForeignKey<Trip>(t => t.CarrierId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(t => t.Customer)
                 .WithOne()
-                .HasForeignKey<Order>(t => t.CustomerId)
+                .HasForeignKey<Trip>(t => t.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(t => t.Driver)
                 .WithOne()
-                .HasForeignKey<Order>(t => t.DriverId)
+                .HasForeignKey<Trip>(t => t.DriverId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(t => t.Transport)
                 .WithOne()
-                .HasForeignKey<Order>(t => t.TransportId)
+                .HasForeignKey<Trip>(t => t.TransportId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(o => o.RoutePoints)
-                .WithOne(rp => rp.Order)
+                .WithOne(rp => rp.Trip)
                 .HasForeignKey(rp => rp.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
