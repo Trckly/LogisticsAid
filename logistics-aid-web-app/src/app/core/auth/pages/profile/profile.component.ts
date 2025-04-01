@@ -50,9 +50,8 @@ import { UserService } from '../../../../shared/services/user.service';
 })
 export class ProfileComponent implements OnInit {
   readonly _currentDate = new Date();
-  logistician: User;
-  currentUser: User;
-  isSelf: boolean;
+  logistician: User = new User();
+  currentUser: User = new User();
 
   constructor(
     public authService: AuthService,
@@ -63,7 +62,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.logistician = JSON.parse(params['user']);
+      this.logistician =
+        params['user'] === undefined ? new User() : JSON.parse(params['user']);
     });
 
     let correctDate = this.logistician.contactInfo.birthDate;
@@ -71,13 +71,13 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getCurrentUser().then((user) => {
       this.currentUser = user;
-    });
+      console.log('Current uer: ', this.currentUser);
 
-    if (this.logistician === this.currentUser || this.logistician == null) {
-      this.isSelf = true;
-    } else {
-      this.isSelf = false;
-    }
+      if (this.logistician.contactInfo.id === undefined) {
+        this.logistician = this.currentUser;
+        console.log('Logistician: ', this.logistician);
+      }
+    });
   }
 
   onSubmit(form: NgForm) {

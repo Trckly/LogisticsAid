@@ -34,8 +34,6 @@ import { Router } from '@angular/router';
     MatDatepickerModule,
     MatIconModule,
     MatSlideToggleModule,
-    MatGridTile,
-    MatGridList,
     MatCardModule,
   ],
   templateUrl: './trip-config-page.component.html',

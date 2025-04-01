@@ -120,7 +120,7 @@ export class AuthService implements OnInit {
     });
   }
 
-  retrieveAdminPriviledges(): boolean | null {
+  retrieveAdminPrivileges(): boolean | null {
     const userJson = sessionStorage.getItem('user');
     if (userJson != null) {
       const user: User = JSON.parse(userJson);
