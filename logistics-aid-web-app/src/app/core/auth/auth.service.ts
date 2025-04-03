@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { User } from '../../shared/models/user.model';
+import { Logistician } from '../../shared/models/logistician.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Login } from './login.model';
@@ -11,7 +11,7 @@ import { ContactInfo } from '../../shared/models/contact-info.model';
 })
 export class AuthService implements OnInit {
   public url: string = environment.apiBaseUrl + '/User';
-  public formData: User = new User();
+  public formData: Logistician = new Logistician();
   public formSubmitted = false;
   public username = 'Username';
 
@@ -47,7 +47,7 @@ export class AuthService implements OnInit {
     });
   }
 
-  updateUser(user: User) {
+  updateUser(user: Logistician) {
     return this.http.put(this.url + '/UpdateUser', user, {
       withCredentials: true,
     });
@@ -86,13 +86,13 @@ export class AuthService implements OnInit {
     });
   }
 
-  getUserWithToken(): Promise<User | null> {
+  getUserWithToken(): Promise<Logistician | null> {
     return new Promise((resolve) => {
       this.http
         .get(this.url + '/GetUser', { withCredentials: true })
         .subscribe({
           next: (data) => {
-            resolve(data as User);
+            resolve(data as Logistician);
           },
           error: (err) => {
             if (err.status === 401 && sessionStorage.getItem('user') != null) {
@@ -123,7 +123,7 @@ export class AuthService implements OnInit {
   retrieveAdminPrivileges(): boolean | null {
     const userJson = sessionStorage.getItem('user');
     if (userJson != null) {
-      const user: User = JSON.parse(userJson);
+      const user: Logistician = JSON.parse(userJson);
       return user.hasAdminPrivileges;
     }
     return null;

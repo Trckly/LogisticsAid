@@ -1,6 +1,6 @@
 import { ContactInfo } from './contact-info.model';
 
-export class User {
+export class Logistician {
   contactInfo: ContactInfo = new ContactInfo();
 
   password: string;

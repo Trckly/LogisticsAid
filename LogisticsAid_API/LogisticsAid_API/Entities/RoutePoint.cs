@@ -10,7 +10,7 @@ public class RoutePoint
     [Key]
     [Required]
     [Column("order_id")]
-    public required Guid OrderId { get; set; }
+    public required Guid TripId { get; set; }
 
     [Required]
     [Column("address_id")]
@@ -35,7 +35,7 @@ public class RoutePoint
 
     // -----Navigation properties-----
      
-    [ForeignKey(nameof(OrderId))]
+    [ForeignKey(nameof(TripId))]
     public required Trip Trip { get; set; }
 
     [ForeignKey(nameof(AddressId))]

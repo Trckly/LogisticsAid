@@ -20,7 +20,7 @@ import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { User } from '../../../../shared/models/user.model';
+import { Logistician } from '../../../../shared/models/logistician.model';
 import { UserService } from '../../../../shared/services/user.service';
 
 @Component({
@@ -50,8 +50,8 @@ import { UserService } from '../../../../shared/services/user.service';
 })
 export class ProfileComponent implements OnInit {
   readonly _currentDate = new Date();
-  logistician: User = new User();
-  currentUser: User = new User();
+  logistician: Logistician = new Logistician();
+  currentUser: Logistician = new Logistician();
 
   constructor(
     public authService: AuthService,
@@ -63,7 +63,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.logistician =
-        params['user'] === undefined ? new User() : JSON.parse(params['user']);
+        params['user'] === undefined
+          ? new Logistician()
+          : JSON.parse(params['user']);
     });
 
     let correctDate = this.logistician.contactInfo.birthDate;

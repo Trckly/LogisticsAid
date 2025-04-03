@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { User } from '../../../../shared/models/user.model';
+import { Logistician } from '../../../../shared/models/logistician.model';
 import { UserService } from '../../../../shared/services/user.service';
 import { UtilService } from '../../../../shared/services/util.service';
 import { Router } from '@angular/router';
@@ -22,8 +22,8 @@ import { Router } from '@angular/router';
   styleUrl: './logistician.component.scss',
 })
 export class LogisticianComponent {
-  @Input({ required: true }) currentUser: User;
-  @Input({ required: true }) logistician: User;
+  @Input({ required: true }) currentUser: Logistician;
+  @Input({ required: true }) logistician: Logistician;
 
   @Output() userDeleted = new EventEmitter();
 
@@ -33,7 +33,7 @@ export class LogisticianComponent {
     private router: Router
   ) {}
 
-  onDeleteClicked(user: User) {
+  onDeleteClicked(user: Logistician) {
     this.userService.deleteLogistician(user.contactInfo.id).subscribe({
       next: (data) => {
         this.userDeleted.emit();
@@ -44,7 +44,7 @@ export class LogisticianComponent {
     });
   }
 
-  onEditClicked(user: User) {
+  onEditClicked(user: Logistician) {
     this.router.navigate(['/profile'], {
       queryParams: { user: JSON.stringify(user) },
     });

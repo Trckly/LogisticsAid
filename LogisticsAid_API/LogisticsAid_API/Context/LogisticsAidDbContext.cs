@@ -124,7 +124,7 @@ public sealed class LogisticsAidDbContext : DbContext
 
             entity.HasMany(o => o.RoutePoints)
                 .WithOne(rp => rp.Trip)
-                .HasForeignKey(rp => rp.OrderId)
+                .HasForeignKey(rp => rp.TripId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

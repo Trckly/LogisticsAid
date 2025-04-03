@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
+import { Logistician } from '../models/logistician.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
@@ -27,7 +27,7 @@ export class UserService {
     });
   }
 
-  async getCurrentUser(): Promise<User> {
+  async getCurrentUser(): Promise<Logistician> {
     const user = await this.authService.getUserWithToken();
     if (user) {
       return user;

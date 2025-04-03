@@ -4,6 +4,7 @@ using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticsAid_API.Migrations
 {
     [DbContext(typeof(LogisticsAidDbContext))]
-    partial class LogisticsAidDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250401170744_RoutePointFix")]
+    partial class RoutePointFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,12 +292,6 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("CargoName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("cargo_name");
-
                     b.Property<Guid>("CarrierId")
                         .HasColumnType("uuid")
                         .HasColumnName("carrier_id");
@@ -323,10 +320,8 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("price");
 
-                    b.Property<string>("ReadableId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                    b.Property<long>("ReadableId")
+                        .HasColumnType("bigint")
                         .HasColumnName("readable_id");
 
                     b.Property<string>("TransportId")

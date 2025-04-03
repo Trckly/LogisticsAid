@@ -1,6 +1,6 @@
-<!-- <div class="order-form-container">
-  <mat-card>
-    <mat-card-header>
+<div class="order-form-container">
+  <mat-card class="form-card">
+    <mat-card-header class="card-header">
       <h1>Order Details</h1>
     </mat-card-header>
     <mat-card-content>
@@ -10,129 +10,242 @@
         novalidate
         autocomplete="off"
       >
-        <mat-grid-list cols="2" rowHeight="4em" gutterSize="1.6em">
-          <mat-grid-tile colspan="2">
-            <h2>Customer Information</h2>
+        <mat-grid-list cols="4" rowHeight="4.8em" gutterSize="0.2em">
+          <mat-grid-tile colspan="4">
+            <h2>Trip Details</h2>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>First Name</mat-label>
+            <label class="form-label">Trip id: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field
+              appearance="outline"
+              class="compact-input"
+              subscriptSizing="dynamic"
+            >
+              <input
+                matInput
+                name="readableId"
+                placeholder="Enter trip id..."
+                [(ngModel)]="trip.readableId"
+                required
+                #tripId="ngModel"
+              />
+              @if(tripId.invalid && tripId.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <label class="form-label">Price: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input
+                matInput
+                name="price"
+                placeholder="Enter price..."
+                [(ngModel)]="trip.price"
+                required
+                #price="ngModel"
+              />
+              @if(price.invalid && price.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <label class="form-label">Cargo name: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input
+                matInput
+                name="cargoName"
+                placeholder="Enter price..."
+                [(ngModel)]="trip.cargoName"
+                required
+                #cargoName="ngModel"
+              />
+              @if(cargoName.invalid && cargoName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="4">
+            <h2>Customer Information</h2>
+          </mat-grid-tile>
+          <mat-grid-tile class="form-label-tile">
+            <label class="form-label">Contact info:</label>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>First name</mat-label>
               <input
                 matInput
                 name="customerFirstName"
-                [(ngModel)]="customerFirstName"
+                [(ngModel)]="trip.customer.contact.firstName"
                 required
+                #customerFirstName="ngModel"
               />
+              @if(customerFirstName.invalid && customerFirstName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>Last Name</mat-label>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Last name</mat-label>
               <input
                 matInput
                 name="customerLastName"
-                [(ngModel)]="customerLastName"
+                [(ngModel)]="trip.customer.contact.lastName"
                 required
+                #customerLastName="ngModel"
               />
+              @if(customerLastName.invalid && customerLastName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Phone</mat-label>
               <input
                 matInput
                 name="customerPhone"
-                [(ngModel)]="order.customerPhone"
+                [(ngModel)]="trip.customer.contact.phone"
                 type="tel"
                 required
+                #customerPhone="ngModel"
               />
+              @if(customerPhone.invalid && customerPhone.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
-          <mat-grid-tile colspan="2">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Company Name</mat-label>
+          <mat-grid-tile class="form-label-tile">
+            <label class="form-label">Company name:</label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
               <input
                 matInput
                 name="customerCompanyName"
-                [(ngModel)]="order.customerCompanyName"
+                placeholder="Enter company name..."
+                [(ngModel)]="trip.customer.companyName"
                 required
+                #customerCompanyName="ngModel"
               />
+              @if(customerCompanyName.invalid && customerCompanyName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan="2">
+          <mat-grid-tile colspan="4">
             <h2>Carrier Information</h2>
           </mat-grid-tile>
+          <mat-grid-tile class="form-label-tile">
+            <label class="form-label">Contact info:</label>
+          </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>First Name</mat-label>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>First name</mat-label>
               <input
                 matInput
                 name="carrierFirstName"
-                [(ngModel)]="order.carrierFirstName"
+                [(ngModel)]="trip.carrier.contact.firstName"
                 required
+                #carrierFirstName="ngModel"
               />
+              @if(carrierFirstName.invalid && carrierFirstName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>Last Name</mat-label>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Last name</mat-label>
               <input
                 matInput
                 name="carrierLastName"
-                [(ngModel)]="order.carrierLastName"
+                [(ngModel)]="trip.carrier.contact.lastName"
                 required
+                #carrierLastName="ngModel"
               />
+              @if(carrierLastName.invalid && carrierLastName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Phone</mat-label>
               <input
                 matInput
                 name="carrierPhone"
-                [(ngModel)]="order.carrierPhone"
+                [(ngModel)]="trip.carrier.contact.phone"
                 type="tel"
                 required
+                #carrierPhone="ngModel"
               />
+              @if(carrierPhone.invalid && carrierPhone.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
-          <mat-grid-tile colspan="2">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Company Name</mat-label>
+          <mat-grid-tile class="form-label-tile">
+            <label class="form-label">Company name:</label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
               <input
                 matInput
                 name="carrierCompanyName"
-                [(ngModel)]="order.carrierCompanyName"
+                placeholder="Enter company name..."
+                [(ngModel)]="trip.carrier.companyName"
                 required
+                #carrierCompanyName="ngModel"
               />
+              @if(carrierCompanyName.invalid && carrierCompanyName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan="2">
-            <h2>Loading Information</h2>
+          <mat-grid-tile colspan="4">
+            <h2>Loading Information</h2> </mat-grid-tile
+          ><mat-grid-tile>
+            <label class="form-label">Loading date:</label>
           </mat-grid-tile>
-          <mat-grid-tile colspan="2">
-            <mat-form-field appearance="outline">
-              <mat-label>Loading Point</mat-label>
-              <input
-                matInput
-                name="loadingPoint"
-                [(ngModel)]="order.loadingPoint"
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>Loading Date</mat-label>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
                 [matDatepicker]="loadingPicker"
                 name="loadingDate"
-                [(ngModel)]="order.loadingDate"
+                placeholder="MM/DD/YYYY"
+                [(ngModel)]="trip.loadingDate"
                 required
+                #loadingDate="ngModel"
               />
+              @if(loadingDate.invalid && loadingDate.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
               <mat-datepicker-toggle
                 matSuffix
                 [for]="loadingPicker"
@@ -140,31 +253,60 @@
               <mat-datepicker #loadingPicker></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
-
-          <mat-grid-tile colspan="2">
-            <h2>Unloading Information</h2>
+          @for(routePoint of routePoints; track $index){
+          @if(isLoadingPoint(routePoint.type)){
+          <mat-grid-tile>
+            <label class="form-label">
+              Loading point {{ routePoint.sequence }}:
+            </label>
           </mat-grid-tile>
-          <mat-grid-tile colspan="2">
-            <mat-form-field appearance="outline">
-              <mat-label>Unloading Point</mat-label>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
-                name="unloadingPoint"
-                [(ngModel)]="order.unloadingPoint"
+                name="loadingPoint"
+                placeholder="Country, Province, City, Street, Number"
+                [(ngModel)]="routePoint.address.city"
                 required
+                #loadingPoint="ngModel"
               />
+              @if(loadingPoint.invalid && loadingPoint.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
+            <span class="single-spacer"></span>
+            @if(loadingPointsCount() === routePoint.sequence){
+            <button mat-icon-button (click)="addLoadingPoint()">
+              <mat-icon>add</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button (click)="removePoint(routePoint)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            }
+          </mat-grid-tile>
+          }}
+
+          <mat-grid-tile colspan="4">
+            <h2>Unloading Information</h2>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>Unloading Date</mat-label>
+            <label class="form-label">Unloading date:</label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
                 [matDatepicker]="unloadingPicker"
                 name="unloadingDate"
-                [(ngModel)]="order.unloadingDate"
+                placeholder="MM/DD/YYYY"
+                [(ngModel)]="trip.unloadingDate"
                 required
+                #unloadingDate="ngModel"
               />
+              @if(unloadingDate.invalid && unloadingDate.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
               <mat-datepicker-toggle
                 matSuffix
                 [for]="unloadingPicker"
@@ -172,45 +314,172 @@
               <mat-datepicker #unloadingPicker></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
+          @for(routePoint of routePoints; track $index){
+          @if(!isLoadingPoint(routePoint.type)){
+          <mat-grid-tile>
+            <label class="form-label">
+              Unloading point {{ routePoint.sequence }}:
+            </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input
+                matInput
+                name="unloadingPoint"
+                placeholder="Country, Province, City, Street, Number"
+                [(ngModel)]="routePoint.address.city"
+                required
+                #unloadingPoint="ngModel"
+              />
+              @if(unloadingPoint.invalid && unloadingPoint.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+            <span class="single-spacer"></span>
+            @if(unloadingPointsCount() === routePoint.sequence){
+            <button mat-icon-button (click)="addUnloadingPoint()">
+              <mat-icon>add</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button (click)="removePoint(routePoint)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            }
+          </mat-grid-tile>
+          }}
 
-          <mat-grid-tile colspan="2">
-            <h2>Vehicle & Driver Details</h2>
+          <mat-grid-tile colspan="4">
+            <h2>Driver Details</h2>
+          </mat-grid-tile>
+          <mat-grid-tile class="form-label-tile">
+            <label class="form-label">Contact info:</label>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>Vehicle Model</mat-label>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>First name</mat-label>
+              <input
+                matInput
+                name="driverFirstName"
+                [(ngModel)]="trip.driver.contact.firstName"
+                required
+                #driverFirstName="ngModel"
+              />
+              @if(driverFirstName.invalid && driverFirstName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Last name</mat-label>
+              <input
+                matInput
+                name="driverLastName"
+                [(ngModel)]="trip.driver.contact.lastName"
+                required
+                #driverLastName="ngModel"
+              />
+              @if(driverLastName.invalid && driverLastName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                name="driverPhone"
+                [(ngModel)]="trip.driver.contact.phone"
+                type="tel"
+                required
+                #driverPhone="ngModel"
+              />
+              @if(driverPhone.invalid && driverPhone.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <label class="form-label">Driver's license:</label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input
+                matInput
+                name="driverLicense"
+                placeholder="Enter driver's license..."
+                [(ngModel)]="trip.driver.companyName"
+                type="tel"
+                required
+                #driverLicense="ngModel"
+              />
+              @if(driverLicense.invalid && driverLicense.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="4">
+            <h2>Vehicle Details</h2>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <label class="form-label">Vehicle model: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
                 name="vehicleModel"
-                [(ngModel)]="order.vehicleModel"
+                placeholder="Enter vehicle model..."
+                [(ngModel)]="trip.transport.truckBrand"
                 required
+                #vehicleModel="ngModel"
               />
+              @if(vehicleModel.invalid && vehicleModel.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>License Plate</mat-label>
+            <label class="form-label">License plate: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
                 name="vehicleLicensePlate"
-                [(ngModel)]="order.vehicleLicensePlate"
+                placeholder="Enter vehicle license plate..."
+                [(ngModel)]="trip.transport.licencePlate"
                 required
+                #vehicleLicensePlate="ngModel"
               />
+              @if(vehicleLicensePlate.invalid && vehicleLicensePlate.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-form-field appearance="outline">
-              <mat-label>Trailer License Plate</mat-label>
+            <label class="form-label">Trailer license plate: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
                 name="trailerLicensePlate"
-                [(ngModel)]="order.trailerLicensePlate"
+                placeholder="Enter trailer license plate..."
+                [(ngModel)]="trip.transport.trailerLicencePlate"
                 required
+                #trailerLicensePlate="ngModel"
               />
+              @if(trailerLicensePlate.invalid && trailerLicensePlate.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan="2">
+          <mat-grid-tile colspan="4"></mat-grid-tile>
+          <mat-grid-tile colspan="4">
             <div class="button-container">
               <button mat-raised-button (click)="onCancel()">Cancel</button>
               <button mat-flat-button type="submit">Submit</button>
@@ -220,4 +489,4 @@
       </form>
     </mat-card-content>
   </mat-card>
-</div> -->
+</div>

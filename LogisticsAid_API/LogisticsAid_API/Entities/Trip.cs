@@ -13,7 +13,8 @@ public class Trip
     
     [Required]
     [Column("readable_id")]
-    public required uint ReadableId { get; set; }
+    [MaxLength(20)]
+    public required string ReadableId { get; set; }
     
     [Required]
     [Column("date_created")]
@@ -26,6 +27,11 @@ public class Trip
     [Required]
     [Column("unloading_date")]
     public required DateTime UnloadingDate { get; set; }
+    
+    [Required]
+    [Column("cargo_name")]
+    [MaxLength(50)]
+    public required string CargoName { get; set; }
     
     [Required]
     [Column("logistician_id")]

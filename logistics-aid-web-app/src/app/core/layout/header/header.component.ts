@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
-import { User } from '../../../shared/models/user.model';
+import { Logistician } from '../../../shared/models/logistician.model';
 
 @Component({
   selector: 'app-header',

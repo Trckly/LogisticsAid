@@ -1,0 +1,70 @@
+.order-form-container {
+  padding: 7vh 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.form-card {
+  //   width: 90vw;
+  //   min-width: 40rem;
+
+  width: 40rem;
+  padding: 20px;
+}
+
+.card-header h1 {
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-grid-tile {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+.button-container button {
+  flex: 1;
+  border-radius: 9999px;
+}
+
+.single-spacer {
+  width: 1rem;
+}
+
+.form-label {
+  display: flex;
+  justify-content: flex-start; /* Align text to the left */
+  font-weight: 500;
+}
+
+.form-label-tile {
+  display: flex;
+  align-items: center; /* Ensures vertical alignment */
+  justify-content: flex-start; /* Aligns text to the left */
+  text-align: left; /* Ensures text aligns properly */
+  padding-left: 10px; /* Optional: Adds spacing from the left */
+}

@@ -1,7 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using AutoMapper;
-using LogisticsAid_API.Entities;
+﻿using System.Security.Claims;
 using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Services;
 using Microsoft.AspNetCore.Authorization;

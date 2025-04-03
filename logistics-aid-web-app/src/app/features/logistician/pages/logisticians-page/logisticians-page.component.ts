@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { User } from '../../../../shared/models/user.model';
+import { Logistician } from '../../../../shared/models/logistician.model';
 import { UserService } from '../../../../shared/services/user.service';
 import { UtilService } from '../../../../shared/services/util.service';
 import { Router } from '@angular/router';
@@ -38,9 +38,9 @@ export class LogisticiansPageComponent implements OnInit {
     private router: Router
   ) {}
 
-  currentUser: User;
-  logisticians: User[] = [];
-  filteredLogisticians: User[] = [];
+  currentUser: Logistician;
+  logisticians: Logistician[] = [];
+  filteredLogisticians: Logistician[] = [];
   selectedFilter: string = '';
 
   ngOnInit(): void {

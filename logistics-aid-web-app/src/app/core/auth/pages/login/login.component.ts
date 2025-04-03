@@ -12,7 +12,7 @@ import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { ContactInfo } from '../../../../shared/models/contact-info.model';
-import { User } from '../../../../shared/models/user.model';
+import { Logistician } from '../../../../shared/models/logistician.model';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +52,7 @@ export class LoginComponent {
       this.service.login().subscribe({
         next: (data) => {
           console.log(data);
-          this.service.formData = new User();
+          this.service.formData = new Logistician();
           this.service.formData.contactInfo = new ContactInfo();
           sessionStorage.setItem('user', JSON.stringify(data));
           this.router.navigate([`/Logistician`]);
