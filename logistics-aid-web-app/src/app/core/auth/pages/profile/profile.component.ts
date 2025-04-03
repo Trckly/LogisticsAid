@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Logistician } from '../../../../shared/models/logistician.model';
-import { UserService } from '../../../../shared/services/user.service';
+import { LogisticianService } from '../../../../shared/services/logistician.service';
 
 @Component({
   selector: 'app-profile',
@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private userService: UserService,
+    private userService: LogisticianService,
     private router: Router,
     private route: ActivatedRoute
   ) {}

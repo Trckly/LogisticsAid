@@ -17,6 +17,12 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { Trip } from '../../../../shared/models/trip.model';
 import { RoutePoint } from '../../../../shared/models/route-point.model';
 import { ERoutePointType } from '../../../../shared/enums/route-point-type';
+import { Transport } from '../../../../shared/models/transport.model';
+
+class RoutePointExtended {
+  routePoint: RoutePoint = new RoutePoint();
+  compositeAdress: string = '';
+}
 
 @Component({
   selector: 'app-trip-config-page',
@@ -40,7 +46,7 @@ import { ERoutePointType } from '../../../../shared/enums/route-point-type';
 export class TripConfigPageComponent implements OnInit {
   trip: Trip = new Trip();
 
-  routePoints: RoutePoint[] = [];
+  routePointsExtended: RoutePointExtended[] = [];
 
   // UI
   gridCols: number = 2;
@@ -63,17 +69,44 @@ export class TripConfigPageComponent implements OnInit {
   ngOnInit(): void {
     this.onResize();
 
-    const initialLoadingPoint: RoutePoint = new RoutePoint();
-    initialLoadingPoint.sequence = 1;
-    initialLoadingPoint.trip = this.trip;
-    initialLoadingPoint.type = ERoutePointType.Loading;
+    const initialLoadingPoint: RoutePointExtended = new RoutePointExtended();
+    initialLoadingPoint.routePoint.sequence = 1;
+    initialLoadingPoint.routePoint.trip = this.trip;
+    initialLoadingPoint.routePoint.type = ERoutePointType.Loading;
+    initialLoadingPoint.compositeAdress =
+      'Україна, Львівська обл., м. Львів, вул. Наукова, 5а';
 
-    const initialUnloadingPoint: RoutePoint = new RoutePoint();
-    initialUnloadingPoint.sequence = 1;
-    initialUnloadingPoint.trip = this.trip;
-    initialUnloadingPoint.type = ERoutePointType.Unloading;
+    const initialUnloadingPoint: RoutePointExtended = new RoutePointExtended();
+    initialUnloadingPoint.routePoint.sequence = 1;
+    initialUnloadingPoint.routePoint.trip = this.trip;
+    initialUnloadingPoint.routePoint.type = ERoutePointType.Unloading;
+    initialUnloadingPoint.compositeAdress =
+      'Україна, Київська обл., м. Київ, вул. Хрещатик, 27';
 
-    this.routePoints.push(initialLoadingPoint, initialUnloadingPoint);
+    this.routePointsExtended.push(initialLoadingPoint, initialUnloadingPoint);
+
+    this.trip.readableId = '1111p';
+    this.trip.price = 25000;
+    this.trip.cargoName = 'метал';
+
+    this.trip.customer.contact.firstName = 'Андрій';
+    this.trip.customer.contact.lastName = 'Юшкевич';
+    this.trip.customer.contact.phone = '+380677653443';
+    this.trip.customer.companyName = 'Андрій Метал';
+
+    this.trip.carrier.contact.firstName = 'Володимир';
+    this.trip.carrier.contact.lastName = 'Шурко';
+    this.trip.carrier.contact.phone = '+380675676789';
+    this.trip.carrier.companyName = 'Вова Транс';
+
+    this.trip.driver.contact.firstName = 'Олег';
+    this.trip.driver.contact.lastName = 'Джамбо';
+    this.trip.driver.contact.phone = '+380670989898';
+    this.trip.driver.license = 'BXI123456';
+
+    this.trip.transport.licencePlate = 'AC4567BX';
+    this.trip.transport.trailerLicencePlate = 'AC5543XM';
+    this.trip.transport.truckBrand = 'MAN';
   }
 
   onSubmit(form: NgForm) {
@@ -91,46 +124,51 @@ export class TripConfigPageComponent implements OnInit {
   }
 
   loadingPointsCount(): number {
-    return this.routePoints.filter((rp) => rp.type === ERoutePointType.Loading)
-      .length;
+    return this.routePointsExtended.filter(
+      (rpe) => rpe.routePoint.type === ERoutePointType.Loading
+    ).length;
   }
 
   unloadingPointsCount(): number {
-    return this.routePoints.filter(
-      (rp) => rp.type === ERoutePointType.Unloading
+    return this.routePointsExtended.filter(
+      (rpe) => rpe.routePoint.type === ERoutePointType.Unloading
     ).length;
   }
 
   addLoadingPoint() {
-    const newLoadingPoint: RoutePoint = new RoutePoint();
-    newLoadingPoint.sequence = this.loadingPointsCount() + 1;
-    newLoadingPoint.trip = this.trip;
-    newLoadingPoint.type = ERoutePointType.Loading;
+    const newLoadingPoint: RoutePointExtended = new RoutePointExtended();
+    newLoadingPoint.routePoint = { ...new RoutePointExtended().routePoint }; // Ensure a new object
+    newLoadingPoint.routePoint.sequence = this.loadingPointsCount() + 1;
+    newLoadingPoint.routePoint.trip = this.trip;
+    newLoadingPoint.routePoint.type = ERoutePointType.Loading;
+    newLoadingPoint.compositeAdress = 'hfjdksagf';
 
-    this.routePoints.push(newLoadingPoint);
+    this.routePointsExtended = [...this.routePointsExtended, newLoadingPoint]; // Ensure immutability
   }
 
   addUnloadingPoint() {
-    const newUnloadingPoint: RoutePoint = new RoutePoint();
-    newUnloadingPoint.sequence = this.unloadingPointsCount() + 1;
-    newUnloadingPoint.trip = this.trip;
-    newUnloadingPoint.type = ERoutePointType.Unloading;
+    const newUnloadingPoint: RoutePointExtended = new RoutePointExtended();
+    newUnloadingPoint.routePoint = { ...new RoutePointExtended().routePoint }; // Ensure a new object
+    newUnloadingPoint.routePoint.sequence = this.unloadingPointsCount() + 1;
+    newUnloadingPoint.routePoint.trip = this.trip;
+    newUnloadingPoint.routePoint.type = ERoutePointType.Unloading;
+    newUnloadingPoint.compositeAdress = 'hfguidsaolhgufi';
 
-    this.routePoints.push(newUnloadingPoint);
+    this.routePointsExtended = [...this.routePointsExtended, newUnloadingPoint]; // Ensure immutability
   }
 
-  removePoint(routePointToRemove: RoutePoint) {
-    let type: ERoutePointType = routePointToRemove.type;
+  removePoint(routePointToRemove: RoutePointExtended) {
+    let type: ERoutePointType = routePointToRemove.routePoint.type;
 
-    const index = this.routePoints.indexOf(routePointToRemove);
+    const index = this.routePointsExtended.indexOf(routePointToRemove);
     if (index !== -1) {
-      this.routePoints.splice(index, 1);
+      this.routePointsExtended.splice(index, 1);
     }
 
     let sequenceCounter = 0;
-    for (let i = 0; i < this.routePoints.length; i++) {
-      if (this.routePoints[i].type === type) {
-        this.routePoints[i].sequence = ++sequenceCounter;
+    for (let i = 0; i < this.routePointsExtended.length; i++) {
+      if (this.routePointsExtended[i].routePoint.type === type) {
+        this.routePointsExtended[i].routePoint.sequence = ++sequenceCounter;
       }
     }
   }

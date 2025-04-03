@@ -253,20 +253,20 @@
               <mat-datepicker #loadingPicker></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
-          @for(routePoint of routePoints; track $index){
-          @if(isLoadingPoint(routePoint.type)){
+          @for(routePointExtended of routePointsExtended; track $index){
+          @if(isLoadingPoint(routePointExtended.routePoint.type)){
           <mat-grid-tile>
             <label class="form-label">
-              Loading point {{ routePoint.sequence }}:
+              Loading point {{ routePointExtended.routePoint.sequence }}:
             </label>
           </mat-grid-tile>
           <mat-grid-tile colspan="3">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
-                name="loadingPoint"
+                name="loadingPoint_{{ routePointExtended.routePoint.sequence }}"
                 placeholder="Country, Province, City, Street, Number"
-                [(ngModel)]="routePoint.address.city"
+                [(ngModel)]="routePointExtended.compositeAdress"
                 required
                 #loadingPoint="ngModel"
               />
@@ -275,17 +275,23 @@
               }
             </mat-form-field>
             <span class="single-spacer"></span>
-            @if(loadingPointsCount() === routePoint.sequence){
-            <button mat-icon-button (click)="addLoadingPoint()">
-              <mat-icon>add</mat-icon>
+            @if(routePointExtended.routePoint.sequence > 1){
+            <button mat-icon-button (click)="removePoint(routePointExtended)">
+              <mat-icon>remove</mat-icon>
             </button>
             } @else {
-            <button mat-icon-button (click)="removePoint(routePoint)">
+            <button mat-icon-button disabled>
               <mat-icon>remove</mat-icon>
             </button>
             }
           </mat-grid-tile>
           }}
+          <mat-grid-tile colspan="4">
+            <button mat-button (click)="addLoadingPoint()">
+              <mat-icon>add</mat-icon>
+              <span>Add loading point</span>
+            </button>
+          </mat-grid-tile>
 
           <mat-grid-tile colspan="4">
             <h2>Unloading Information</h2>
@@ -314,20 +320,22 @@
               <mat-datepicker #unloadingPicker></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
-          @for(routePoint of routePoints; track $index){
-          @if(!isLoadingPoint(routePoint.type)){
+          @for(routePointExtended of routePointsExtended; track $index){
+          @if(!isLoadingPoint(routePointExtended.routePoint.type)){
           <mat-grid-tile>
             <label class="form-label">
-              Unloading point {{ routePoint.sequence }}:
+              Unloading point {{ routePointExtended.routePoint.sequence }}:
             </label>
           </mat-grid-tile>
           <mat-grid-tile colspan="3">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
-                name="unloadingPoint"
+                name="unloadingPoint_{{
+                  routePointExtended.routePoint.sequence
+                }}"
                 placeholder="Country, Province, City, Street, Number"
-                [(ngModel)]="routePoint.address.city"
+                [(ngModel)]="routePointExtended.compositeAdress"
                 required
                 #unloadingPoint="ngModel"
               />
@@ -336,17 +344,23 @@
               }
             </mat-form-field>
             <span class="single-spacer"></span>
-            @if(unloadingPointsCount() === routePoint.sequence){
-            <button mat-icon-button (click)="addUnloadingPoint()">
-              <mat-icon>add</mat-icon>
+            @if(routePointExtended.routePoint.sequence > 1){
+            <button mat-icon-button (click)="removePoint(routePointExtended)">
+              <mat-icon>remove</mat-icon>
             </button>
             } @else {
-            <button mat-icon-button (click)="removePoint(routePoint)">
+            <button mat-icon-button disabled>
               <mat-icon>remove</mat-icon>
             </button>
             }
           </mat-grid-tile>
           }}
+          <mat-grid-tile colspan="4">
+            <button mat-button (click)="addUnloadingPoint()">
+              <mat-icon>add</mat-icon>
+              <span>Add unloading point</span>
+            </button>
+          </mat-grid-tile>
 
           <mat-grid-tile colspan="4">
             <h2>Driver Details</h2>
@@ -409,7 +423,7 @@
                 matInput
                 name="driverLicense"
                 placeholder="Enter driver's license..."
-                [(ngModel)]="trip.driver.companyName"
+                [(ngModel)]="trip.driver.license"
                 type="tel"
                 required
                 #driverLicense="ngModel"

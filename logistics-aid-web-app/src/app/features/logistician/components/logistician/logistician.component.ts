@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { Logistician } from '../../../../shared/models/logistician.model';
-import { UserService } from '../../../../shared/services/user.service';
+import { LogisticianService } from '../../../../shared/services/logistician.service';
 import { UtilService } from '../../../../shared/services/util.service';
 import { Router } from '@angular/router';
 
@@ -29,7 +29,7 @@ export class LogisticianComponent {
 
   constructor(
     public utilService: UtilService,
-    private userService: UserService,
+    private userService: LogisticianService,
     private router: Router
   ) {}
 

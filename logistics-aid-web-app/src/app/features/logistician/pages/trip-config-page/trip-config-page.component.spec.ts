@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TripConfigPageComponent } from './trip-config-page.component';
+import TripConfigPageComponent from './trip-config-page.component';
 
 describe('TripConfigPageComponent', () => {
   let component: TripConfigPageComponent;
@@ -8,9 +8,8 @@ describe('TripConfigPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TripConfigPageComponent]
-    })
-    .compileComponents();
+      imports: [TripConfigPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TripConfigPageComponent);
     component = fixture.componentInstance;

@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { Logistician } from '../../../../shared/models/logistician.model';
-import { UserService } from '../../../../shared/services/user.service';
+import { LogisticianService } from '../../../../shared/services/logistician.service';
 import { UtilService } from '../../../../shared/services/util.service';
 import { Router } from '@angular/router';
 import { LogisticianComponent } from '../../components/logistician/logistician.component';
@@ -33,7 +33,7 @@ import { LogisticianComponent } from '../../components/logistician/logistician.c
 })
 export class LogisticiansPageComponent implements OnInit {
   constructor(
-    private userService: UserService,
+    private userService: LogisticianService,
     private utilService: UtilService,
     private router: Router
   ) {}

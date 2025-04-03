@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class LogisticianService {
   url: string = environment.apiBaseUrl + '/User';
 
   constructor(
