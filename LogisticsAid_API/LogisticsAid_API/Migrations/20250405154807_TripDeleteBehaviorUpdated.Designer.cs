@@ -4,6 +4,7 @@ using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticsAid_API.Migrations
 {
     [DbContext(typeof(LogisticsAidDbContext))]
-    partial class LogisticsAidDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250405154807_TripDeleteBehaviorUpdated")]
+    partial class TripDeleteBehaviorUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +76,6 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnName("street");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Country", "Province", "City", "Street", "Number")
-                        .IsUnique();
 
                     b.ToTable("addresses", "public");
                 });
@@ -424,7 +424,7 @@ namespace LogisticsAid_API.Migrations
                     b.HasOne("LogisticsAid_API.Entities.ContactInfo", "ContactInfo")
                         .WithMany()
                         .HasForeignKey("ContactInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LogisticsAid_API.Entities.Trip", "Trip")

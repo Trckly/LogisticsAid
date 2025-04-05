@@ -4,7 +4,8 @@ import { ContactInfo } from './contact-info.model';
 import { Trip } from './trip.model';
 
 export class RoutePoint {
-  trip: Trip = new Trip();
+  id: string;
+  tripId: string;
   address: Address = new Address();
   companyName: string;
   type: ERoutePointType;

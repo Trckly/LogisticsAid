@@ -1,12 +1,8 @@
-﻿using System.Globalization;
-using AutoMapper;
+﻿using AutoMapper;
 using LogisticsAid_API.Context;
-using LogisticsAid_API.Repositories;
 using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
 using LogisticsAid_API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
 
 namespace LogisticsAid_API.Services;
 

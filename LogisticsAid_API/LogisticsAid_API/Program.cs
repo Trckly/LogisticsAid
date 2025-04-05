@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities;
 using LogisticsAid_API.Entities.Enums;
@@ -24,22 +25,26 @@ builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<LogisticianService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ContactInfoService>();
-// builder.Services.AddScoped<DoctorService>();
-// builder.Services.AddScoped<QuestionnaireService>();
-// builder.Services.AddScoped<AdminService>();
-// builder.Services.AddScoped<ClinicalImpressionService>();
-// builder.Services.AddScoped<ObservationService>();
-// builder.Services.AddScoped<IObservationRepository, ObservationRepository>();    
-// builder.Services.AddScoped<IClinicalImpressionRepository, ClinicalImpressionRepository>();
-// builder.Services.AddScoped<IUserRepository, UserRepository>();
-// builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
-// builder.Services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
-// builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-// builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<TripService>();
+builder.Services.AddScoped<ContactInfoService>();
+builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<RoutePointService>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<ICarrierRepository, CarrierRepository>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IRoutePointRepository, RoutePointRepository>();
+builder.Services.AddScoped<ITransportRepository, TransportRepository>();
+builder.Services.AddScoped<ITripRepository, TripRepository>();
 builder.Services.AddScoped<ILogisticianRepository, LogisticianRepository>();
 builder.Services.AddScoped<IContactInfoRepository, ContactInfoRepository>();
 //
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddCors(options =>
 {
@@ -94,7 +99,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<LogisticsAidDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DevConnection"), 
+    options
+        .EnableSensitiveDataLogging()
+        .UseNpgsql(builder.Configuration.GetConnectionString("DevConnection"), 
         o => o.MapEnum<EGender>("gender").MapEnum<ERoutePointType>("route_point_type"));
 });
 

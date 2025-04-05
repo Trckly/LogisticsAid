@@ -2,6 +2,7 @@ import { Carrier } from './carrier.model';
 import { Customer } from './customer.model';
 import { Driver } from './driver.model';
 import { Logistician } from './logistician.model';
+import { RoutePoint } from './route-point.model';
 import { Transport } from './transport.model';
 
 export class Trip {
@@ -17,4 +18,5 @@ export class Trip {
   transport: Transport = new Transport();
   price: number;
   cargoName: string;
+  routePoints: RoutePoint[] = [];
 }

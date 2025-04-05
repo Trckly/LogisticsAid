@@ -11,7 +11,7 @@ public sealed class LogisticsAidDbContext : DbContext
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Transport> Transport { get; set; }
-    public DbSet<Trip> Orders { get; set; }
+    public DbSet<Trip> Trips { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<RoutePoint> RoutePoints { get; set; }
 
@@ -80,7 +80,13 @@ public sealed class LogisticsAidDbContext : DbContext
         {
         });
 
-        modelBuilder.Entity<Address>(entity => { });
+        modelBuilder.Entity<Address>(entity =>
+        {
+            entity
+                .HasIndex(address => new
+                    { address.Country, address.Province, address.City, address.Street, address.Number })
+                .IsUnique();
+        });
 
         modelBuilder.Entity<RoutePoint>(entity =>
         {
@@ -92,7 +98,7 @@ public sealed class LogisticsAidDbContext : DbContext
             entity.HasOne(rp => rp.ContactInfo)
                 .WithMany()
                 .HasForeignKey(rp => rp.ContactInfoId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Trip>(entity =>
@@ -100,27 +106,27 @@ public sealed class LogisticsAidDbContext : DbContext
             entity.HasOne(t => t.Logistician)
                 .WithOne()
                 .HasForeignKey<Trip>(t => t.LogisticianId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Carrier)
                 .WithOne()
                 .HasForeignKey<Trip>(t => t.CarrierId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Customer)
                 .WithOne()
                 .HasForeignKey<Trip>(t => t.CustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Driver)
                 .WithOne()
                 .HasForeignKey<Trip>(t => t.DriverId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Transport)
                 .WithOne()
                 .HasForeignKey<Trip>(t => t.TransportId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany(o => o.RoutePoints)
                 .WithOne(rp => rp.Trip)

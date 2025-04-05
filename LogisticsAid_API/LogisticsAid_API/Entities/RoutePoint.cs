@@ -9,6 +9,10 @@ public class RoutePoint
 {
     [Key]
     [Required]
+    [Column("id")]
+    public required Guid Id { get; set; }
+    
+    [Required]
     [Column("order_id")]
     public required Guid TripId { get; set; }
 

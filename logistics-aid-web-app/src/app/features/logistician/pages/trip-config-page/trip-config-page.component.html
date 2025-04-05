@@ -228,8 +228,9 @@
           </mat-grid-tile>
 
           <mat-grid-tile colspan="4">
-            <h2>Loading Information</h2> </mat-grid-tile
-          ><mat-grid-tile>
+            <h2>Loading Information</h2>
+          </mat-grid-tile>
+          <mat-grid-tile>
             <label class="form-label">Loading date:</label>
           </mat-grid-tile>
           <mat-grid-tile colspan="3">
@@ -255,6 +256,85 @@
           </mat-grid-tile>
           @for(routePointExtended of routePointsExtended; track $index){
           @if(isLoadingPoint(routePointExtended.routePoint.type)){
+          <mat-grid-tile rowspan="2">
+            <label class="form-label">
+              Loading company info
+              {{ routePointExtended.routePoint.sequence }}:
+            </label>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>First name:</mat-label>
+              <input
+                matInput
+                name="loadingFirstName_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                [(ngModel)]="
+                  routePointExtended.routePoint.contactInfo.firstName
+                "
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>Last name:</mat-label>
+              <input
+                matInput
+                name="loadingLastName_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                [(ngModel)]="routePointExtended.routePoint.contactInfo.lastName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                name="loadingPhone_{{ routePointExtended.routePoint.sequence }}"
+                [(ngModel)]="routePointExtended.routePoint.contactInfo.phone"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <input
+                matInput
+                name="loadingCompanyName_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                placeholder="Enter company name..."
+                [(ngModel)]="routePointExtended.routePoint.companyName"
+                required
+                #loadingCompanyName="ngModel"
+              />
+              @if(loadingCompanyName.invalid && loadingCompanyName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+
           <mat-grid-tile>
             <label class="form-label">
               Loading point {{ routePointExtended.routePoint.sequence }}:
@@ -292,7 +372,6 @@
               <span>Add loading point</span>
             </button>
           </mat-grid-tile>
-
           <mat-grid-tile colspan="4">
             <h2>Unloading Information</h2>
           </mat-grid-tile>
@@ -322,6 +401,86 @@
           </mat-grid-tile>
           @for(routePointExtended of routePointsExtended; track $index){
           @if(!isLoadingPoint(routePointExtended.routePoint.type)){
+          <mat-grid-tile rowspan="2">
+            <label class="form-label"
+              >Unloading company info
+              {{ routePointExtended.routePoint.sequence }}:</label
+            >
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>First name:</mat-label>
+              <input
+                matInput
+                name="unloadingFirstName_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                [(ngModel)]="
+                  routePointExtended.routePoint.contactInfo.firstName
+                "
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>Last name:</mat-label>
+              <input
+                matInput
+                name="unloadingLastName_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                [(ngModel)]="routePointExtended.routePoint.contactInfo.lastName"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                name="unloadingPhone_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                [(ngModel)]="routePointExtended.routePoint.contactInfo.phone"
+                required
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field
+              appearance="outline"
+              class="full-width"
+              subscriptSizing="dynamic"
+            >
+              <input
+                matInput
+                name="unloadingCompanyName_{{
+                  routePointExtended.routePoint.sequence
+                }}"
+                placeholder="Enter company name..."
+                [(ngModel)]="routePointExtended.routePoint.companyName"
+                required
+                #unloadingCompanyName="ngModel"
+              />
+              @if(unloadingCompanyName.invalid && unloadingCompanyName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
           <mat-grid-tile>
             <label class="form-label">
               Unloading point {{ routePointExtended.routePoint.sequence }}:
