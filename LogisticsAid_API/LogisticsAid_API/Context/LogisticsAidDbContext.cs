@@ -103,29 +103,32 @@ public sealed class LogisticsAidDbContext : DbContext
 
         modelBuilder.Entity<Trip>(entity =>
         {
+            entity.HasIndex(t => t.ReadableId)
+                .IsUnique();
+            
             entity.HasOne(t => t.Logistician)
-                .WithOne()
-                .HasForeignKey<Trip>(t => t.LogisticianId)
+                .WithMany()
+                .HasForeignKey(t => t.LogisticianId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Carrier)
-                .WithOne()
-                .HasForeignKey<Trip>(t => t.CarrierId)
+                .WithMany()
+                .HasForeignKey(t => t.CarrierId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Customer)
-                .WithOne()
-                .HasForeignKey<Trip>(t => t.CustomerId)
+                .WithMany()
+                .HasForeignKey(t => t.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Driver)
-                .WithOne()
-                .HasForeignKey<Trip>(t => t.DriverId)
+                .WithMany()
+                .HasForeignKey(t => t.DriverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Transport)
-                .WithOne()
-                .HasForeignKey<Trip>(t => t.TransportId)
+                .WithMany()
+                .HasForeignKey(t => t.TransportId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany(o => o.RoutePoints)

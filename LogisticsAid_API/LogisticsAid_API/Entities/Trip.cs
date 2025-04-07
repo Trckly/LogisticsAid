@@ -34,6 +34,10 @@ public class Trip
     public required string CargoName { get; set; }
     
     [Required]
+    [Column("cargo_weight")]
+    public required decimal CargoWeight { get; set; }
+    
+    [Required]
     [Column("logistician_id")]
     public required Guid LogisticianId { get; set; }
     
@@ -57,6 +61,10 @@ public class Trip
     [Required]
     [Column("price")]
     public decimal Price { get; set; }
+    
+    [Required]
+    [Column("with_tax")]
+    public required bool WithTax { get; set; }
 
     
     

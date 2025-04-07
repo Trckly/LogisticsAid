@@ -1,0 +1,18 @@
+@if(visible){
+<div [@fadeInOut] class="error-popup">
+  <div class="error-content">
+    <div class="error-icon">
+      <i class="material-icons">error</i>
+    </div>
+    <div class="error-message">
+      {{ message }}
+    </div>
+    <div class="close-button" (click)="hidePopup()">
+      <i class="material-icons">close</i>
+    </div>
+  </div>
+  <div class="progress-bar">
+    <div class="progress" [style.width.%]="progressWidth"></div>
+  </div>
+</div>
+}

@@ -17,6 +17,8 @@ export class Trip {
   driver: Driver = new Driver();
   transport: Transport = new Transport();
   price: number;
+  withTax: boolean;
   cargoName: string;
+  cargoWeight: number;
   routePoints: RoutePoint[] = [];
 }

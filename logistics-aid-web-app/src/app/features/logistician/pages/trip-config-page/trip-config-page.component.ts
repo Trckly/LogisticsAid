@@ -9,11 +9,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
+
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Router } from '@angular/router';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { Trip } from '../../../../shared/models/trip.model';
 import { RoutePoint } from '../../../../shared/models/route-point.model';
 import { ERoutePointType } from '../../../../shared/enums/route-point-type';
@@ -21,6 +26,8 @@ import { Logistician } from '../../../../shared/models/logistician.model';
 import { v4 as uuidv4 } from 'uuid';
 import { TripService } from '../../../../shared/services/trip.service';
 import { Address } from '../../../../shared/models/address.model';
+import { ErrorPopupService } from '../../../../shared/services/error-popup.service';
+import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
 
 class RoutePointExtended {
   routePoint: RoutePoint = new RoutePoint();
@@ -41,10 +48,14 @@ class RoutePointExtended {
     MatCardModule,
     MatGridListModule,
     MatDividerModule,
+    MatButtonToggleModule,
   ],
   templateUrl: './trip-config-page.component.html',
   styleUrl: './trip-config-page.component.scss',
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class TripConfigPageComponent implements OnInit {
   trip: Trip = new Trip();
@@ -52,18 +63,22 @@ export class TripConfigPageComponent implements OnInit {
 
   routePointsExtended: RoutePointExtended[] = [];
 
-  // UI
-  gridCols: number = 2;
+  minDate: Date = new Date();
 
   constructor(
     private authService: AuthService,
     private tripService: TripService,
-    private router: Router
+    private router: Router,
+    private errorPopupService: ErrorPopupService,
+    private SuccessPopupService: SuccessPopupService
   ) {}
 
   ngOnInit(): void {
     this.authService.getUserWithToken().then((user) => {
       this.currentUser = user;
+
+      this.minDate = new Date();
+      this.minDate.setHours(0, 0, 0, 0);
 
       const initialLoadingPoint: RoutePointExtended = new RoutePointExtended();
       initialLoadingPoint.routePoint.id = uuidv4();
@@ -96,7 +111,9 @@ export class TripConfigPageComponent implements OnInit {
 
       this.trip.readableId = '1111p';
       this.trip.price = 25000;
+      this.trip.withTax = false;
       this.trip.cargoName = 'метал';
+      this.trip.cargoWeight = 22;
 
       this.trip.customer.contact.id = uuidv4();
       this.trip.customer.contact.firstName = 'Андрій';
@@ -138,11 +155,15 @@ export class TripConfigPageComponent implements OnInit {
       this.tripService.addTrip(this.trip).subscribe({
         next: (data) => {
           console.log(data);
+          this.SuccessPopupService.show('Trip saved successfully');
+          this.router.navigate(['Logistician/trips']);
         },
         error: (err) => {
-          console.error(err);
+          this.errorPopupService.show(err?.error?.message);
         },
       });
+    } else {
+      this.errorPopupService.show('Not all mandatory fields are filled!');
     }
   }
 

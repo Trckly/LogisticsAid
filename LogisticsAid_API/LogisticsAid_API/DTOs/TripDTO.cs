@@ -14,5 +14,7 @@ public class TripDTO
     public required TransportDTO Transport { get; set; }
     public required decimal Price { get; set; }
     public required string CargoName { get; set; }
+    public required decimal CargoWeight { get; set; }
+    public required bool WithTax { get; set; }
     public required IEnumerable<RoutePointDTO> RoutePoints { get; set; } = [];
 }

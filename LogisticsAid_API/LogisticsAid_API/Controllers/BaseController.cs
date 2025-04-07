@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using LogisticsAid_API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticsAid_API.Controllers;
@@ -10,6 +11,10 @@ public abstract class BaseController : ControllerBase
         try
         {
             return await action();
+        }
+        catch (TripAlreadyExistsException ex)
+        {
+            return Conflict(new { message = ex.Message });
         }
         catch (OperationCanceledException)
         {

@@ -1,0 +1,18 @@
+@if(visible){
+<div [@fadeInOut] class="success-popup">
+  <div class="success-content">
+    <div class="success-icon">
+      <i class="material-icons">check_circle</i>
+    </div>
+    <div class="success-message">
+      {{ message }}
+    </div>
+    <div class="close-button" (click)="hidePopup()">
+      <i class="material-icons">close</i>
+    </div>
+  </div>
+  <div class="progress-bar">
+    <div class="progress" [style.width.%]="progressWidth"></div>
+  </div>
+</div>
+}

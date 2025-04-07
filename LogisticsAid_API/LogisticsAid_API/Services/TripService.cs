@@ -4,6 +4,7 @@ using AutoMapper;
 using LogisticsAid_API.Context;
 using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
+using LogisticsAid_API.Exceptions;
 using LogisticsAid_API.Repositories.Interfaces;
 
 namespace LogisticsAid_API.Services;
@@ -47,9 +48,20 @@ public class TripService
     {
         return await _tripRepository.GetTripAsync(Guid.Parse(id), ct);
     }
+    
+    public async Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct)
+    {
+        return await _tripRepository.GetTripAsync(readableId, ct);
+    }
 
     public async Task AddTripAsync(TripDTO tripDto, CancellationToken ct)
     {
+        var existingTrip = await _tripRepository.GetTripAsync(tripDto.ReadableId, ct);
+        if (existingTrip != null)
+        {
+            throw new TripAlreadyExistsException(existingTrip.ReadableId);
+        }
+        
         await using var transaction = await _context.Database.BeginTransactionAsync(ct);
         try
         {

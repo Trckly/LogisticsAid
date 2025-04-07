@@ -5,6 +5,7 @@ namespace LogisticsAid_API.Repositories.Interfaces;
 public interface ITripRepository
 {
     public Task<Trip?> GetTripAsync(Guid id, CancellationToken ct);
+    public Task<Trip?> GetTripAsync(string readableId, CancellationToken ct);
     public Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByLogisticianAsync(Guid logisticianId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByCustomerAsync(Guid customerId, CancellationToken ct);

@@ -39,7 +39,7 @@
           <mat-grid-tile>
             <label class="form-label">Price: </label>
           </mat-grid-tile>
-          <mat-grid-tile colspan="3">
+          <mat-grid-tile colspan="1">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
@@ -53,6 +53,12 @@
               <mat-error> This field is mandatory </mat-error>
               }
             </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2">
+            <mat-button-toggle-group name="taxGroup" [(ngModel)]="trip.withTax">
+              <mat-button-toggle [value]="false">без ПДВ</mat-button-toggle>
+              <mat-button-toggle [value]="true">з ПДВ</mat-button-toggle>
+            </mat-button-toggle-group>
           </mat-grid-tile>
           <mat-grid-tile>
             <label class="form-label">Cargo name: </label>
@@ -68,6 +74,24 @@
                 #cargoName="ngModel"
               />
               @if(cargoName.invalid && cargoName.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <label class="form-label">Cargo weight: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input
+                matInput
+                name="cargoWeight"
+                placeholder="Enter weight..."
+                [(ngModel)]="trip.cargoWeight"
+                required
+                #cargoWeight="ngModel"
+              />
+              @if(cargoWeight.invalid && cargoWeight.touched){
               <mat-error> This field is mandatory </mat-error>
               }
             </mat-form-field>
@@ -239,13 +263,17 @@
                 matInput
                 [matDatepicker]="loadingPicker"
                 name="loadingDate"
-                placeholder="MM/DD/YYYY"
+                placeholder="DD/MM/YYYY"
                 [(ngModel)]="trip.loadingDate"
+                [min]="minDate"
                 required
                 #loadingDate="ngModel"
               />
               @if(loadingDate.invalid && loadingDate.touched){
-              <mat-error> This field is mandatory </mat-error>
+              <mat-error>
+                @if(loadingDate.errors?.['matDatepickerMin']){ Date cannot be
+                earlier than today } @else { This field is mandatory }
+              </mat-error>
               }
               <mat-datepicker-toggle
                 matSuffix
@@ -384,13 +412,17 @@
                 matInput
                 [matDatepicker]="unloadingPicker"
                 name="unloadingDate"
-                placeholder="MM/DD/YYYY"
+                placeholder="DD/MM/YYYY"
                 [(ngModel)]="trip.unloadingDate"
+                [min]="minDate"
                 required
                 #unloadingDate="ngModel"
               />
               @if(unloadingDate.invalid && unloadingDate.touched){
-              <mat-error> This field is mandatory </mat-error>
+              <mat-error>
+                @if(unloadingDate.errors?.['matDatepickerMin']){ Date cannot be
+                earlier than today } @else { This field is mandatory }
+              </mat-error>
               }
               <mat-datepicker-toggle
                 matSuffix

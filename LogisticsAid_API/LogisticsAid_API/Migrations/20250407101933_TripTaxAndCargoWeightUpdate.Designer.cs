@@ -4,6 +4,7 @@ using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticsAid_API.Migrations
 {
     [DbContext(typeof(LogisticsAidDbContext))]
-    partial class LogisticsAidDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250407101933_TripTaxAndCargoWeightUpdate")]
+    partial class TripTaxAndCargoWeightUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,18 +362,20 @@ namespace LogisticsAid_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarrierId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DriverId");
-
-                    b.HasIndex("LogisticianId");
-
-                    b.HasIndex("ReadableId")
+                    b.HasIndex("CarrierId")
                         .IsUnique();
 
-                    b.HasIndex("TransportId");
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.HasIndex("DriverId")
+                        .IsUnique();
+
+                    b.HasIndex("LogisticianId")
+                        .IsUnique();
+
+                    b.HasIndex("TransportId")
+                        .IsUnique();
 
                     b.ToTable("trips", "public");
                 });
@@ -449,32 +454,32 @@ namespace LogisticsAid_API.Migrations
             modelBuilder.Entity("LogisticsAid_API.Entities.Trip", b =>
                 {
                     b.HasOne("LogisticsAid_API.Entities.Carrier", "Carrier")
-                        .WithMany()
-                        .HasForeignKey("CarrierId")
+                        .WithOne()
+                        .HasForeignKey("LogisticsAid_API.Entities.Trip", "CarrierId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LogisticsAid_API.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .WithOne()
+                        .HasForeignKey("LogisticsAid_API.Entities.Trip", "CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LogisticsAid_API.Entities.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
+                        .WithOne()
+                        .HasForeignKey("LogisticsAid_API.Entities.Trip", "DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LogisticsAid_API.Entities.Logistician", "Logistician")
-                        .WithMany()
-                        .HasForeignKey("LogisticianId")
+                        .WithOne()
+                        .HasForeignKey("LogisticsAid_API.Entities.Trip", "LogisticianId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LogisticsAid_API.Entities.Transport", "Transport")
-                        .WithMany()
-                        .HasForeignKey("TransportId")
+                        .WithOne()
+                        .HasForeignKey("LogisticsAid_API.Entities.Trip", "TransportId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

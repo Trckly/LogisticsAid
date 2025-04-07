@@ -41,7 +41,6 @@ public class TripController : BaseController
         ExecuteSafely(async () =>
         {
             await _tripService.AddTripAsync(tripDto, ct);
-            
             return Ok();
         });
 }

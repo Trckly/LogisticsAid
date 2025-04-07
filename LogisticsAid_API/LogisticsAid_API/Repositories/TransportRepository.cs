@@ -40,8 +40,10 @@ public class TransportRepository : ITransportRepository
         }
         else
         {
-            _context.Transport.Update(transport);
+            _context.Entry(existingTransport).CurrentValues.SetValues(transport);
         }
+
+        await _context.SaveChangesAsync(ct);
     }
 
     public async Task UpdateTransportAsync(Transport transport, CancellationToken ct)

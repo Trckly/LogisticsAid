@@ -21,6 +21,11 @@ public class TripRepository : ITripRepository
             .FirstOrDefaultAsync(t => t.Id == id, ct);
     }
 
+    public async Task<Trip?> GetTripAsync(string readableId, CancellationToken ct)
+    {
+        return await _context.Trips.SingleOrDefaultAsync(t => t.ReadableId == readableId, ct);
+    }
+
     public async Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct)
     {
         return await _context.Trips
@@ -71,6 +76,7 @@ public class TripRepository : ITripRepository
     public async Task AddTripAsync(Trip trip, CancellationToken ct)
     {
         await _context.Trips.AddAsync(trip, ct);
+        await _context.SaveChangesAsync(ct);
     }
 
     public async Task UpdateTripAsync(Trip trip, CancellationToken ct)

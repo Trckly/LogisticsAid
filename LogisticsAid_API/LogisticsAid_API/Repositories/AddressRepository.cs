@@ -46,13 +46,8 @@ public class AddressRepository : IAddressRepository
         if (existingAddress == null)
         {
             await _context.Addresses.AddAsync(address, ct);
+            await _context.SaveChangesAsync(ct);
         }
-        else
-        {
-            _context.Addresses.Update(address);
-        }
-
-        await _context.SaveChangesAsync(ct);
     }
 
     public async Task UpdateAddressAsync(Address address, CancellationToken ct)
