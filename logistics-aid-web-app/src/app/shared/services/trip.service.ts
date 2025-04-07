@@ -11,10 +11,20 @@ export class TripService {
 
   constructor(private http: HttpClient) {}
 
+  getAllTrips() {
+    return this.http.get(this.url + '/GetAllTrips', { withCredentials: true });
+  }
+
   addTrip(trip: Trip) {
-    console.log(trip);
     return this.http.post(this.url + '/AddTrip', trip, {
       withCredentials: true,
+    });
+  }
+
+  getTrips(pageIndex: number, pageSize: number) {
+    return this.http.get(this.url + '/GetTrips', {
+      withCredentials: true,
+      params: { page: pageIndex.toString(), pageSize: pageSize.toString() },
     });
   }
 }

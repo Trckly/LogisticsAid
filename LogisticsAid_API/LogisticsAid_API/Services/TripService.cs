@@ -39,9 +39,11 @@ public class TripService
         _addressService = addressService;
     }
 
-    public async Task<IEnumerable<Trip>> GetAllTripsAsync(CancellationToken ct)
+    public async Task<IEnumerable<TripDTO>> GetAllTripsAsync(CancellationToken ct)
     {
-        return await _tripRepository.GetAllTripsAsync(ct);
+        var trips = await _tripRepository.GetAllTripsAsync(ct);
+        var tripsDto = trips.Select(trip => _mapper.Map<TripDTO>(trip));
+        return tripsDto;
     }
 
     public async Task<Trip?> GetTripByIdAsync(string id, CancellationToken ct)
@@ -52,6 +54,12 @@ public class TripService
     public async Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct)
     {
         return await _tripRepository.GetTripAsync(readableId, ct);
+    }
+
+    public async Task<IEnumerable<TripDTO>> GetTripsAsync(int page, int pageSize, CancellationToken ct)
+    {
+        var trips = await _tripRepository.GetTripsAsync(page, pageSize, ct);
+        return trips.Select(trip => _mapper.Map<TripDTO>(trip));
     }
 
     public async Task AddTripAsync(TripDTO tripDto, CancellationToken ct)
@@ -131,5 +139,10 @@ public class TripService
             await transaction.RollbackAsync(ct);
             throw;
         }
+    }
+
+    public async Task<int> CountAsync(CancellationToken ct)
+    {
+        return await _tripRepository.CountAsync(ct);
     }
 }

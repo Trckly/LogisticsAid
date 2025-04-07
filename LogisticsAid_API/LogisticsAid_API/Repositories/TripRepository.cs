@@ -1,4 +1,5 @@
 using LogisticsAid_API.Context;
+using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
 using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,25 @@ public class TripRepository : ITripRepository
     {
         return await _context.Trips.SingleOrDefaultAsync(t => t.ReadableId == readableId, ct);
     }
+
+    public async Task<IEnumerable<Trip>> GetTripsAsync(int page, int pageSize, CancellationToken ct)
+    {
+        return await _context.Trips
+            .OrderBy(t => t.ReadableId)
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .Include(t => t.Logistician)
+            .ThenInclude(logistician => logistician.Contact)
+            .Include(t => t.Driver)
+            .ThenInclude(driver => driver.Contact)
+            .Include(t => t.Customer)
+            .ThenInclude(customer => customer.Contact)
+            .Include(t => t.Carrier)
+            .ThenInclude(carrier => carrier.Contact)
+            .Include(t => t.Transport)
+            .ToListAsync(ct);
+    }
+
 
     public async Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct)
     {
@@ -70,7 +90,17 @@ public class TripRepository : ITripRepository
 
     public async Task<IEnumerable<Trip>> GetAllTripsAsync(CancellationToken ct)
     {
-        return await _context.Trips.ToListAsync(ct);
+        return await _context.Trips
+            .Include(t => t.Logistician)
+            .ThenInclude(logistician => logistician.Contact)
+            .Include(t => t.Driver)
+            .ThenInclude(driver => driver.Contact)
+            .Include(t => t.Customer)
+            .ThenInclude(customer => customer.Contact)
+            .Include(t => t.Carrier)
+            .ThenInclude(carrier => carrier.Contact)
+            .Include(t => t.Transport)
+            .ToListAsync(ct);
     }
 
     public async Task AddTripAsync(Trip trip, CancellationToken ct)
@@ -99,5 +129,10 @@ public class TripRepository : ITripRepository
             _context.Trips.Remove(trip);
             await _context.SaveChangesAsync(ct);
         }
+    }
+
+    public async Task<int> CountAsync(CancellationToken ct)
+    {
+        return await _context.Trips.CountAsync(ct);
     }
 }

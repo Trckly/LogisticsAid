@@ -19,12 +19,33 @@ public class TripController : BaseController
     }
     
     [HttpGet]
-    public Task<ActionResult> GetAllTrips(string id, CancellationToken ct) =>
+    public Task<ActionResult> GetAllTrips(CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var trips = await _tripService.GetAllTripsAsync(ct);
+            var tripsDto = await _tripService.GetAllTripsAsync(ct);
 
-            return Ok(trips);
+            return Ok(tripsDto);
+        });
+
+    [HttpGet]
+    public Task<ActionResult> GetTrips(
+        [FromQuery] int page, 
+        [FromQuery] int pageSize, 
+        CancellationToken ct) =>
+        ExecuteSafely(async () =>
+        {
+            var totalItems = await _tripService.CountAsync(ct);
+            var items = await _tripService.GetTripsAsync(page, pageSize, ct);
+
+            var response = new PaginatedResponse<TripDTO>
+            {
+                Items = items,
+                TotalCount = totalItems,
+                PageIndex = page,
+                PageSize = pageSize
+            };
+            
+            return Ok(response);
         });
     
     [HttpGet("{id}")]

@@ -1,3 +1,4 @@
+using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
 
 namespace LogisticsAid_API.Repositories.Interfaces;
@@ -6,6 +7,7 @@ public interface ITripRepository
 {
     public Task<Trip?> GetTripAsync(Guid id, CancellationToken ct);
     public Task<Trip?> GetTripAsync(string readableId, CancellationToken ct);
+    public Task<IEnumerable<Trip>> GetTripsAsync(int page, int pageSize, CancellationToken ct);
     public Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByLogisticianAsync(Guid logisticianId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByCustomerAsync(Guid customerId, CancellationToken ct);
@@ -17,4 +19,5 @@ public interface ITripRepository
     public Task UpdateTripAsync(Trip trip, CancellationToken ct);
     public Task CreateTripAsync(Trip trip, CancellationToken ct);
     public Task DeleteTripAsync(Guid id, CancellationToken ct);
+    public Task<int> CountAsync(CancellationToken ct);
 }
