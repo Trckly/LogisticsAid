@@ -22,13 +22,13 @@
     </mat-form-field>
   </mat-toolbar>
 
-  <div class="example-container mat-elevation-z8">
+  <div class="container mat-elevation-z8">
     @if (isLoadingResults || isRateLimitReached) {
-    <div class="example-loading-shade">
+    <div class="loading-shade">
       @if (isLoadingResults) {
       <mat-spinner></mat-spinner>
       } @if (isRateLimitReached) {
-      <div class="example-rate-limit-reached">
+      <div class="rate-limit-reached">
         GitHub's API rate limit has been reached. It will be reset in one
         minute.
       </div>
@@ -39,7 +39,7 @@
     <div class="table-container">
       <table
         mat-table
-        [dataSource]="paginatedTrips.items"
+        [dataSource]="tableData"
         class="table"
         matSort
         matSortActive="created"
@@ -49,22 +49,24 @@
         <!-- ReadableId Column -->
         <ng-container matColumnDef="ID">
           <th mat-header-cell *matHeaderCellDef>ID</th>
-          <td mat-cell *matCellDef="let row">{{ row.readableId }}</td>
+          <td mat-cell *matCellDef="let row">
+            {{ row.trip.readableId }}
+          </td>
         </ng-container>
 
         <!-- Loading Date Column -->
-        <ng-container matColumnDef="loading">
-          <th mat-header-cell *matHeaderCellDef>Loading</th>
+        <ng-container matColumnDef="loadingDate">
+          <th mat-header-cell *matHeaderCellDef>Loading date</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.loadingDate | date : "dd/MM/yyyy" }}
+            {{ row.trip.loadingDate | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
 
         <!-- Unoading Date Column -->
-        <ng-container matColumnDef="unloading">
-          <th mat-header-cell *matHeaderCellDef>Unloading</th>
+        <ng-container matColumnDef="unloadingDate">
+          <th mat-header-cell *matHeaderCellDef>Unloading date</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.unloadingDate | date : "dd/MM/yyyy" }}
+            {{ row.trip.unloadingDate | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
 
@@ -73,7 +75,39 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
             Price
           </th>
-          <td mat-cell *matCellDef="let row">{{ row.price }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.trip.price }}</td>
+        </ng-container>
+
+        <!-- Loading Address -->
+        <ng-container matColumnDef="loadingAddress">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Loading address
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.trip.price }}</td>
+        </ng-container>
+
+        <!-- Unloading Address Column -->
+        <ng-container matColumnDef="unloadingAddress">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Unloading address
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.trip.price }}</td>
+        </ng-container>
+
+        <!-- Driver Name Column -->
+        <ng-container matColumnDef="driverName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Driver name
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.trip.price }}</td>
+        </ng-container>
+
+        <!-- License Plate Column -->
+        <ng-container matColumnDef="licensePlate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            License plate
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.trip.price }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -83,8 +117,10 @@
 
     <mat-paginator
       [length]="resultsLength"
-      [pageSize]="30"
-      aria-label="Select page of GitHub search results"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 20, 30, 50, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page of trips"
     ></mat-paginator>
   </div>
 

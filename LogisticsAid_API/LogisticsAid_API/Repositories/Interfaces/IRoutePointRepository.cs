@@ -9,6 +9,7 @@ public interface IRoutePointRepository
     public Task<IEnumerable<RoutePoint>> GetRoutePointsByTripAsync(Guid tripId, CancellationToken ct);
     public Task<IEnumerable<RoutePoint>> GetRoutePointsByTypeAsync(ERoutePointType type, CancellationToken ct);
     public Task<IEnumerable<RoutePoint>> GetAllRoutePointsAsync(CancellationToken ct);
+    public Task<IEnumerable<RoutePoint>> GetRoutePointsByIdAsync(IEnumerable<Guid> routePointIds, CancellationToken ct);
     public Task UpdateRoutePointAsync(RoutePoint routePoint, CancellationToken ct);
     public Task UpdateRoutePointRangeAsync(IEnumerable<RoutePoint> routePoint, CancellationToken ct);
     public Task CreateRoutePointAsync(RoutePoint routePoint, CancellationToken ct);

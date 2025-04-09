@@ -8,7 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -25,6 +29,12 @@ import {
   of as observableOf,
 } from 'rxjs';
 import { PaginatedResponse } from '../../../../shared/models/paginated-response.model';
+import { RoutePoint } from '../../../../shared/models/route-point.model';
+
+class TableData {
+  trip: Trip = new Trip();
+  routePoints: RoutePoint[] = [];
+}
 
 @Component({
   selector: 'app-trips-page',
@@ -48,14 +58,28 @@ import { PaginatedResponse } from '../../../../shared/models/paginated-response.
 })
 export class TripsPageComponent implements OnInit, AfterViewInit {
   paginatedTrips: PaginatedResponse<Trip> = new PaginatedResponse<Trip>();
+  routePoints: RoutePoint[] = [];
+
+  tableData: TableData[] = [];
 
   selectedFilter: string = '';
 
-  displayedColumns: string[] = ['ID', 'loading', 'unloading', 'price'];
+  displayedColumns: string[] = [
+    'ID',
+    'loadingDate',
+    'unloadingDate',
+    'price',
+    'loadingAddress',
+    'unloadingAddress',
+    'driverName',
+    'licensePlate',
+  ];
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
+
+  pageSize: number = 10;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -66,17 +90,7 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
     private errorPopupService: ErrorPopupService
   ) {}
 
-  ngOnInit(): void {
-    this.tripService.getAllTrips().subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      error: (err) => {
-        console.log(err);
-        this.errorPopupService.show(err.error.message);
-      },
-    });
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     // If the user changes the sort order, reset back to the first page.
@@ -91,28 +105,62 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
             .getTrips(this.paginator.pageIndex, this.paginator.pageSize)
             .pipe(catchError(() => observableOf(null)));
         }),
-        map((data: PaginatedResponse<Trip> | null) => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.isRateLimitReached = data === null;
-
-          if (data === null) {
-            return [];
+        switchMap((tripData: PaginatedResponse<Trip> | null) => {
+          if (tripData === null) {
+            return observableOf({ trips: null, routePoints: null });
           }
 
-          // Only refresh the result length if there is new data. In case of rate
-          // limit errors, we do not want to reset the paginator to zero, as that
-          // would prevent users from re-triggering requests.
-          this.resultsLength = data.totalCount;
-          return data.items;
+          // Second query: Get route points using trip IDs
+          const tripIds: string[] = tripData.items.map((trip) => trip.id);
+          return this.tripService.getRoutePointsById(tripIds).pipe(
+            map((routePointsData) => {
+              return {
+                trips: tripData,
+                routePoints: routePointsData,
+              };
+            }),
+            catchError(() =>
+              observableOf({
+                trips: tripData,
+                routePoints: [],
+              })
+            )
+          );
+        }),
+        map((result) => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+
+          const { trips, routePoints } = result;
+          this.isRateLimitReached = trips === null;
+
+          if (trips === null) {
+            return { tripItems: [], routePointItems: [] };
+          }
+
+          // Update results length for pagination
+          this.resultsLength = trips.totalCount;
+
+          return {
+            tripItems: trips.items,
+            routePointItems: routePoints,
+          };
         })
       )
       .subscribe((data) => {
-        this.paginatedTrips.items = data;
+        this.paginatedTrips.items = data.tripItems;
+        this.routePoints = data.routePointItems;
 
         this.paginatedTrips.items.forEach((trip) => {
           trip.loadingDate = new Date(trip.loadingDate);
           trip.unloadingDate = new Date(trip.unloadingDate);
+        });
+
+        this.paginatedTrips.items.forEach((item) => {
+          this.tableData.push({
+            trip: item,
+            routePoints: this.routePoints.filter((rp) => rp.tripId === item.id),
+          });
         });
       });
   }
@@ -136,5 +184,9 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
 
   onAddTripClicked() {
     this.router.navigate(['trip-config']);
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this.pageSize = event.pageSize;
   }
 }

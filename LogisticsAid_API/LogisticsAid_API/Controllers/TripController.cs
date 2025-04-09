@@ -12,10 +12,12 @@ namespace LogisticsAid_API.Controllers;
 public class TripController : BaseController
 {
     private readonly TripService _tripService;
+    private readonly RoutePointService _routePointService;
 
-    public TripController(TripService tripService)
+    public TripController(TripService tripService, RoutePointService routePointService)
     {
         _tripService = tripService;
+        _routePointService = routePointService;
     }
     
     [HttpGet]
@@ -47,7 +49,25 @@ public class TripController : BaseController
             
             return Ok(response);
         });
-    
+
+    [HttpGet]
+    public Task<ActionResult> GetRoutePointsById(
+        [FromQuery] IEnumerable<string>? routePointIds,
+        CancellationToken ct) =>
+        ExecuteSafely(async () =>
+        {
+            var ids = routePointIds?.ToList();
+
+            if (ids == null || ids.Count == 0)
+            {
+                return BadRequest("No route point IDs provided.");
+            }
+
+            var routePointsDto = await _routePointService.GetRoutePointsByIdAsync(ids, ct);
+
+            return Ok(routePointsDto);
+        });
+
     [HttpGet("{id}")]
     public Task<ActionResult> GetTripById(string id, CancellationToken ct) =>
         ExecuteSafely(async () =>

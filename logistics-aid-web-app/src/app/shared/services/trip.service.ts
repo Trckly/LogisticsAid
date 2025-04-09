@@ -27,4 +27,11 @@ export class TripService {
       params: { page: pageIndex.toString(), pageSize: pageSize.toString() },
     });
   }
+
+  getRoutePointsById(ids: string[]) {
+    return this.http.get(this.url + '/GetRoutePointsById', {
+      withCredentials: true,
+      params: { routePointIds: ids },
+    });
+  }
 }

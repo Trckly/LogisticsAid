@@ -38,4 +38,15 @@ public class RoutePointService
         routePoint.ContactInfoId = Guid.Parse(contactInfoDto.Id);   // Actual contact info id
         await _routePointRepository.CreateRoutePointAsync(routePoint, ct);
     }
+
+    public async Task<IEnumerable<RoutePointDTO>> GetRoutePointsByIdAsync(IEnumerable<string> routePointIds,
+        CancellationToken ct)
+    {
+        var routePoints = 
+            await _routePointRepository.GetRoutePointsByIdAsync(routePointIds.Select(Guid.Parse), ct);
+        
+        return routePoints.Select(rp => _mapper.Map<RoutePointDTO>(rp));
+    }
+
+
 }

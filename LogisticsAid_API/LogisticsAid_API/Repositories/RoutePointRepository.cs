@@ -41,6 +41,15 @@ public class RoutePointRepository : IRoutePointRepository
         return await _context.RoutePoints.ToListAsync(ct);
     }
 
+    public async Task<IEnumerable<RoutePoint>> GetRoutePointsByIdAsync(IEnumerable<Guid> routePointIds, CancellationToken ct)
+    {
+        return await _context.RoutePoints
+            .Where(rp => routePointIds.Contains(rp.TripId))
+            .Include(rp => rp.Address)
+            .Include(rp => rp.ContactInfo)
+            .ToListAsync(ct);
+    }
+
     public async Task UpdateRoutePointAsync(RoutePoint routePoint, CancellationToken ct)
     {
         _context.RoutePoints.Update(routePoint);
