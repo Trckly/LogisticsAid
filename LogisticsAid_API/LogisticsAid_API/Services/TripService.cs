@@ -112,7 +112,7 @@ public class TripService
                 }
             }
             
-            var transport = await _transportRepository.GetTransportAsync(tripDto.Transport.LicencePlate, ct);
+            var transport = await _transportRepository.GetTransportAsync(tripDto.Transport.LicensePlate, ct);
             if (transport == null)
             {
                 transport = _mapper.Map<Transport>(tripDto.Transport);

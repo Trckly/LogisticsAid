@@ -28,10 +28,11 @@ import { TripService } from '../../../../shared/services/trip.service';
 import { Address } from '../../../../shared/models/address.model';
 import { ErrorPopupService } from '../../../../shared/services/error-popup.service';
 import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
+import { ContactInfo } from '../../../../shared/models/contact-info.model';
 
 class RoutePointExtended {
   routePoint: RoutePoint = new RoutePoint();
-  compositeAdress: string = '';
+  compositeAddress: string = '';
 }
 
 @Component({
@@ -86,12 +87,25 @@ export class TripConfigPageComponent implements OnInit {
       initialLoadingPoint.routePoint.tripId = this.trip.id;
       initialLoadingPoint.routePoint.type = ERoutePointType.Loading;
       initialLoadingPoint.routePoint.companyName = 'Метінвест';
-      initialLoadingPoint.compositeAdress =
+      initialLoadingPoint.compositeAddress =
         'Україна, Львівська обл., м. Львів, вул. Наукова, 5а';
       initialLoadingPoint.routePoint.contactInfo.id = uuidv4();
       initialLoadingPoint.routePoint.contactInfo.firstName = 'Джо';
       initialLoadingPoint.routePoint.contactInfo.lastName = 'Рандомний';
       initialLoadingPoint.routePoint.contactInfo.phone = '+380678754635';
+
+      const initialLoadingPoint2: RoutePointExtended = new RoutePointExtended();
+      initialLoadingPoint2.routePoint.id = uuidv4();
+      initialLoadingPoint2.routePoint.sequence = 1;
+      initialLoadingPoint2.routePoint.tripId = this.trip.id;
+      initialLoadingPoint2.routePoint.type = ERoutePointType.Loading;
+      initialLoadingPoint2.routePoint.companyName = 'Метінвест-СМЦ';
+      initialLoadingPoint2.compositeAddress =
+        'Україна, Львівська обл., м. Миколаїв, вул. Окружна, 12';
+      initialLoadingPoint2.routePoint.contactInfo.id = uuidv4();
+      initialLoadingPoint2.routePoint.contactInfo.firstName = 'Павло';
+      initialLoadingPoint2.routePoint.contactInfo.lastName = 'Петращук';
+      initialLoadingPoint2.routePoint.contactInfo.phone = '+380987770044';
 
       const initialUnloadingPoint: RoutePointExtended =
         new RoutePointExtended();
@@ -100,14 +114,33 @@ export class TripConfigPageComponent implements OnInit {
       initialUnloadingPoint.routePoint.tripId = this.trip.id;
       initialUnloadingPoint.routePoint.type = ERoutePointType.Unloading;
       initialUnloadingPoint.routePoint.companyName = 'Інтергалбуд';
-      initialUnloadingPoint.compositeAdress =
+      initialUnloadingPoint.compositeAddress =
         'Україна, Київська обл., м. Київ, вул. Хрещатик, 27';
       initialUnloadingPoint.routePoint.contactInfo.id = uuidv4();
       initialUnloadingPoint.routePoint.contactInfo.firstName = 'Максим';
       initialUnloadingPoint.routePoint.contactInfo.lastName = 'Мельник';
       initialUnloadingPoint.routePoint.contactInfo.phone = '+380673542789';
 
-      this.routePointsExtended.push(initialLoadingPoint, initialUnloadingPoint);
+      const initialUnloadingPoint2: RoutePointExtended =
+        new RoutePointExtended();
+      initialUnloadingPoint2.routePoint.id = uuidv4();
+      initialUnloadingPoint2.routePoint.sequence = 1;
+      initialUnloadingPoint2.routePoint.tripId = this.trip.id;
+      initialUnloadingPoint2.routePoint.type = ERoutePointType.Unloading;
+      initialUnloadingPoint2.routePoint.companyName = 'Оболоньсталь';
+      initialUnloadingPoint2.compositeAddress =
+        'Україна, Київська обл., м. Оболонь, вул. Надвірна, 2';
+      initialUnloadingPoint2.routePoint.contactInfo.id = uuidv4();
+      initialUnloadingPoint2.routePoint.contactInfo.firstName = 'Матвій';
+      initialUnloadingPoint2.routePoint.contactInfo.lastName = 'Первак';
+      initialUnloadingPoint2.routePoint.contactInfo.phone = '+380970003322';
+
+      this.routePointsExtended.push(
+        initialLoadingPoint,
+        initialLoadingPoint2,
+        initialUnloadingPoint,
+        initialUnloadingPoint2
+      );
 
       this.trip.readableId = '1111p';
       this.trip.price = 25000;
@@ -133,8 +166,8 @@ export class TripConfigPageComponent implements OnInit {
       this.trip.driver.contact.phone = '+380670989898';
       this.trip.driver.license = 'BXI123456';
 
-      this.trip.transport.licencePlate = 'AC4567BX';
-      this.trip.transport.trailerLicencePlate = 'AC5543XM';
+      this.trip.transport.licensePlate = 'AC4567BX';
+      this.trip.transport.trailerLicensePlate = 'AC5543XM';
       this.trip.transport.truckBrand = 'MAN';
     });
   }
@@ -160,6 +193,7 @@ export class TripConfigPageComponent implements OnInit {
         },
         error: (err) => {
           this.errorPopupService.show(err?.error?.message);
+          console.log(this.routePointsExtended);
         },
       });
     } else {
@@ -190,19 +224,27 @@ export class TripConfigPageComponent implements OnInit {
   addLoadingPoint() {
     const newLoadingPoint: RoutePointExtended = new RoutePointExtended();
     newLoadingPoint.routePoint = { ...new RoutePointExtended().routePoint };
+    newLoadingPoint.routePoint.id = uuidv4();
     newLoadingPoint.routePoint.sequence = this.loadingPointsCount() + 1;
     newLoadingPoint.routePoint.tripId = this.trip.id;
     newLoadingPoint.routePoint.type = ERoutePointType.Loading;
+
+    newLoadingPoint.routePoint.contactInfo = new ContactInfo();
+    newLoadingPoint.routePoint.contactInfo.id = uuidv4();
 
     this.routePointsExtended = [...this.routePointsExtended, newLoadingPoint];
   }
 
   addUnloadingPoint() {
     const newUnloadingPoint: RoutePointExtended = new RoutePointExtended();
+    newUnloadingPoint.routePoint.id = uuidv4();
     newUnloadingPoint.routePoint = { ...new RoutePointExtended().routePoint };
     newUnloadingPoint.routePoint.sequence = this.unloadingPointsCount() + 1;
     newUnloadingPoint.routePoint.tripId = this.trip.id;
     newUnloadingPoint.routePoint.type = ERoutePointType.Unloading;
+
+    newUnloadingPoint.routePoint.contactInfo = new ContactInfo();
+    newUnloadingPoint.routePoint.contactInfo.id = uuidv4();
 
     this.routePointsExtended = [...this.routePointsExtended, newUnloadingPoint];
   }
@@ -225,7 +267,7 @@ export class TripConfigPageComponent implements OnInit {
 
   organizeRoutePoints() {
     this.routePointsExtended.forEach((rpe) => {
-      rpe.routePoint.address = this.parseAddress(rpe.compositeAdress);
+      rpe.routePoint.address = this.parseAddress(rpe.compositeAddress);
       rpe.routePoint.tripId = this.trip.id;
     });
   }

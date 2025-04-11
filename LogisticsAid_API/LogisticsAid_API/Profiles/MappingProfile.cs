@@ -37,7 +37,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CarrierId, opt => opt.MapFrom(src => src.Carrier.Contact.Id ))
             .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.Customer.Contact.Id))
             .ForMember(dest => dest.DriverId, opt => opt.MapFrom(src => src.Driver.Contact.Id))
-            .ForMember(dest => dest.TransportId, opt => opt.MapFrom(src => src.Transport.LicencePlate))
+            .ForMember(dest => dest.TransportId, opt => opt.MapFrom(src => src.Transport.LicensePlate))
             .ForMember(dest => dest.RoutePoints, opt => opt.Ignore())
             .ForMember(dest => dest.Customer, opt => opt.Ignore())
             .ForMember(dest => dest.Carrier, opt => opt.Ignore())
@@ -89,15 +89,15 @@ public class MappingProfile : Profile
     
         // Transport
         CreateMap<TransportDTO, Transport>()
-            .ForMember(dest => dest.LicencePlate, opt => opt.MapFrom(src => src.LicencePlate)) 
+            .ForMember(dest => dest.LicensePlate, opt => opt.MapFrom(src => src.LicensePlate)) 
             .ForMember(dest => dest.TruckBrand, opt => opt.MapFrom(src => src.TruckBrand)) 
-            .ForMember(dest => dest.TrailerLicencePlate, opt => opt.MapFrom(src => src.TrailerLicencePlate)) 
+            .ForMember(dest => dest.TrailerLicensePlate, opt => opt.MapFrom(src => src.TrailerLicensePlate)) 
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName));
 
         CreateMap<Transport, TransportDTO>()
-            .ForMember(dest => dest.LicencePlate, opt => opt.MapFrom(src => src.LicencePlate))
+            .ForMember(dest => dest.LicensePlate, opt => opt.MapFrom(src => src.LicensePlate))
             .ForMember(dest => dest.TruckBrand, opt => opt.MapFrom(src => src.TruckBrand))
-            .ForMember(dest => dest.TrailerLicencePlate, opt => opt.MapFrom(src => src.TrailerLicencePlate))
+            .ForMember(dest => dest.TrailerLicensePlate, opt => opt.MapFrom(src => src.TrailerLicensePlate))
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName));
         
         // RoutePoint

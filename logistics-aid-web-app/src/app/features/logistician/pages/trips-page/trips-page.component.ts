@@ -30,6 +30,10 @@ import {
 } from 'rxjs';
 import { PaginatedResponse } from '../../../../shared/models/paginated-response.model';
 import { RoutePoint } from '../../../../shared/models/route-point.model';
+import { ContactInfo } from '../../../../shared/models/contact-info.model';
+import { Address } from '../../../../shared/models/address.model';
+import { ERoutePointType } from '../../../../shared/enums/route-point-type';
+import { Transport } from '../../../../shared/models/transport.model';
 
 class TableData {
   trip: Trip = new Trip();
@@ -151,6 +155,8 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
         this.paginatedTrips.items = data.tripItems;
         this.routePoints = data.routePointItems;
 
+        this.tableData = [];
+
         this.paginatedTrips.items.forEach((trip) => {
           trip.loadingDate = new Date(trip.loadingDate);
           trip.unloadingDate = new Date(trip.unloadingDate);
@@ -162,6 +168,8 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
             routePoints: this.routePoints.filter((rp) => rp.tripId === item.id),
           });
         });
+
+        console.log(this.tableData);
       });
   }
 
@@ -188,5 +196,23 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
 
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
+  }
+
+  getContactName(contactInfo: ContactInfo): string {
+    return contactInfo.firstName + ' ' + contactInfo.lastName;
+  }
+
+  getAddress(routePoints: RoutePoint[], type: string): string {
+    let result: string = '';
+    routePoints.forEach((rp) => {
+      if (rp.type.valueOf() === type) {
+        result += `${rp.address.city}, ${rp.address.street}, ${rp.address.number}\n`;
+      }
+    });
+    return result.trimEnd();
+  }
+
+  getLicensePlate(transport: Transport): string {
+    return transport.licensePlate + '\n' + transport.trailerLicensePlate;
   }
 }

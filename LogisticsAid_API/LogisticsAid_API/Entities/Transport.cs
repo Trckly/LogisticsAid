@@ -8,9 +8,9 @@ public class Transport
 {
     [Key]
     [Required]
-    [Column("licence_plate")]
+    [Column("license_plate")]
     [MaxLength(8)]
-    public required string LicencePlate { get; set; }
+    public required string LicensePlate { get; set; }
     
     [Required]
     [Column("truck_brand")]
@@ -18,9 +18,9 @@ public class Transport
     public required string TruckBrand { get; set; }
     
     [Required]
-    [Column("trailer_licence_plate")]
+    [Column("trailer_license_plate")]
     [MaxLength(8)]
-    public required string TrailerLicencePlate { get; set; }
+    public required string TrailerLicensePlate { get; set; }
     
     [Required]
     [Column("company_name")]

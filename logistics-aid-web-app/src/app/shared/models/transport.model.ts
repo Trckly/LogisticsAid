@@ -1,6 +1,6 @@
 export class Transport {
-  licencePlate: string;
+  licensePlate: string;
   truckBrand: string;
-  trailerLicencePlate: string;
+  trailerLicensePlate: string;
   companyName: string;
 }

@@ -33,7 +33,7 @@ public class TransportRepository : ITransportRepository
 
     public async Task UpsertTransportAsync(Transport transport, CancellationToken ct)
     {
-        var existingTransport = await _context.Transport.FindAsync([transport.LicencePlate], ct);
+        var existingTransport = await _context.Transport.FindAsync([transport.LicensePlate], ct);
         if (existingTransport == null)
         {
             await _context.Transport.AddAsync(transport, ct);

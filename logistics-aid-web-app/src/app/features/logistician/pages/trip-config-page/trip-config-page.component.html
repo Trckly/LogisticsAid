@@ -374,7 +374,7 @@
                 matInput
                 name="loadingPoint_{{ routePointExtended.routePoint.sequence }}"
                 placeholder="Country, Province, City, Street, Number"
-                [(ngModel)]="routePointExtended.compositeAdress"
+                [(ngModel)]="routePointExtended.compositeAddress"
                 required
                 #loadingPoint="ngModel"
               />
@@ -526,7 +526,7 @@
                   routePointExtended.routePoint.sequence
                 }}"
                 placeholder="Country, Province, City, Street, Number"
-                [(ngModel)]="routePointExtended.compositeAdress"
+                [(ngModel)]="routePointExtended.compositeAddress"
                 required
                 #unloadingPoint="ngModel"
               />
@@ -655,7 +655,7 @@
                 matInput
                 name="vehicleLicensePlate"
                 placeholder="Enter vehicle license plate..."
-                [(ngModel)]="trip.transport.licencePlate"
+                [(ngModel)]="trip.transport.licensePlate"
                 required
                 #vehicleLicensePlate="ngModel"
               />
@@ -673,7 +673,7 @@
                 matInput
                 name="trailerLicensePlate"
                 placeholder="Enter trailer license plate..."
-                [(ngModel)]="trip.transport.trailerLicencePlate"
+                [(ngModel)]="trip.transport.trailerLicensePlate"
                 required
                 #trailerLicensePlate="ngModel"
               />
