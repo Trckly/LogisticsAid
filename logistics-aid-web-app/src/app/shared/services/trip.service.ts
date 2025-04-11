@@ -34,4 +34,13 @@ export class TripService {
       params: { routePointIds: ids },
     });
   }
+
+  deleteTrips(ids: string[]) {
+    return this.http.delete(this.url + '/DeleteTrips', {
+      withCredentials: true,
+      params: {
+        tripIds: ids,
+      },
+    });
+  }
 }

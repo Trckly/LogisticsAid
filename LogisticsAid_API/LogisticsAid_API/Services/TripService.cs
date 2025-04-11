@@ -145,4 +145,9 @@ public class TripService
     {
         return await _tripRepository.CountAsync(ct);
     }
+    
+    public async Task DeleteTripsAsync(IEnumerable<string> tripIds, CancellationToken ct)
+    {
+        await _tripRepository.DeleteTripsAsync(tripIds.Select(Guid.Parse), ct);
+    }
 }

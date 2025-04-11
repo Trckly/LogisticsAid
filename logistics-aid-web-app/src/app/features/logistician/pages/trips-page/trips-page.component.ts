@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   MatPaginator,
@@ -15,7 +16,7 @@ import {
 } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../../../shared/models/trip.model';
 import { TripService } from '../../../../shared/services/trip.service';
 import { ErrorPopupService } from '../../../../shared/services/error-popup.service';
@@ -27,13 +28,14 @@ import {
   map,
   Observable,
   of as observableOf,
+  Subject,
 } from 'rxjs';
 import { PaginatedResponse } from '../../../../shared/models/paginated-response.model';
 import { RoutePoint } from '../../../../shared/models/route-point.model';
 import { ContactInfo } from '../../../../shared/models/contact-info.model';
-import { Address } from '../../../../shared/models/address.model';
-import { ERoutePointType } from '../../../../shared/enums/route-point-type';
 import { Transport } from '../../../../shared/models/transport.model';
+import { SelectionModel } from '@angular/cdk/collections';
+import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
 
 class TableData {
   trip: Trip = new Trip();
@@ -55,6 +57,7 @@ class TableData {
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
+    MatCheckboxModule,
   ],
   templateUrl: './trips-page.component.html',
   styleUrl: './trips-page.component.scss',
@@ -68,7 +71,11 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
 
   selectedFilter: string = '';
 
+  isEditMode: boolean = false;
+  selection = new SelectionModel<TableData>(true, []);
+
   displayedColumns: string[] = [
+    'select',
     'ID',
     'loadingDate',
     'unloadingDate',
@@ -83,15 +90,19 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
   isLoadingResults = true;
   isRateLimitReached = false;
 
-  pageSize: number = 10;
+  pageSize: number = 20;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  private reloadSubject = new Subject<void>();
+
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private tripService: TripService,
-    private errorPopupService: ErrorPopupService
+    private errorPopupService: ErrorPopupService,
+    private successPopupService: SuccessPopupService
   ) {}
 
   ngOnInit(): void {}
@@ -100,7 +111,7 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-    merge(this.sort.sortChange, this.paginator.page)
+    merge(this.sort.sortChange, this.paginator.page, this.reloadSubject)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -171,6 +182,76 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
 
         console.log(this.tableData);
       });
+  }
+
+  deleteSelected() {
+    const selectedIds: string[] = this.selection.selected.map(
+      (item) => item.trip.id
+    );
+
+    console.log('Selected trip ids:', selectedIds);
+
+    if (
+      confirm(
+        `Are you sure you want to delete ${selectedIds.length} selected trips?`
+      )
+    ) {
+      this.tripService.deleteTrips(selectedIds).subscribe({
+        next: (data) => {
+          this.selection.clear();
+          this.reloadSubject.next();
+          this.successPopupService.show(
+            `${selectedIds.length} trip(s) deleted successfully`
+          );
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+    }
+  }
+
+  onRowClicked(tableData: TableData) {
+    this.router.navigate(['..', 'trip'], {
+      relativeTo: this.route,
+      queryParams: {
+        trip: JSON.stringify(tableData.trip),
+        routePoints: JSON.stringify(tableData.routePoints),
+      },
+    });
+  }
+
+  toggleEditMode(): void {
+    this.isEditMode = !this.isEditMode;
+
+    // When exiting edit mode, clear selection
+    if (!this.isEditMode) {
+      this.selection.clear();
+    }
+
+    // Update displayed columns based on edit mode
+    if (this.isEditMode) {
+      if (!this.displayedColumns.includes('select')) {
+        this.displayedColumns = ['select', ...this.displayedColumns];
+      }
+    } else {
+      this.displayedColumns = this.displayedColumns.filter(
+        (column) => column !== 'select'
+      );
+    }
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.tableData.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.tableData.forEach((row) => this.selection.select(row));
   }
 
   applyFilter(event: any) {

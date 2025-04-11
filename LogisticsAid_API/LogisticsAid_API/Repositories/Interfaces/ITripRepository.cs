@@ -18,6 +18,6 @@ public interface ITripRepository
     public Task AddTripAsync(Trip trip, CancellationToken ct);
     public Task UpdateTripAsync(Trip trip, CancellationToken ct);
     public Task CreateTripAsync(Trip trip, CancellationToken ct);
-    public Task DeleteTripAsync(Guid id, CancellationToken ct);
+    public Task DeleteTripsAsync(IEnumerable<Guid> tripIds, CancellationToken ct);
     public Task<int> CountAsync(CancellationToken ct);
 }

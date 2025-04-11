@@ -8,6 +8,7 @@ import { MainPageComponent } from './features/logistician/pages/main-page/main-p
 import { LogisticiansPageComponent } from './features/logistician/pages/logisticians-page/logisticians-page.component';
 import { TripsPageComponent } from './features/logistician/pages/trips-page/trips-page.component';
 import { TripConfigPageComponent } from './features/logistician/pages/trip-config-page/trip-config-page.component';
+import { TripComponent } from './features/logistician/components/trip/trip.component';
 
 export const routes: Routes = [
   {
@@ -42,8 +43,21 @@ export const routes: Routes = [
         component: TripsPageComponent,
         canActivate: [authGuard],
         title: 'Trips',
+        children: [],
+      },
+      {
+        path: 'trip',
+        component: TripComponent,
+        canActivate: [authGuard],
+        title: 'Trip View',
       },
     ],
+  },
+  {
+    path: 'trip-config',
+    component: TripConfigPageComponent,
+    canActivate: [authGuard],
+    title: 'Trip Configuration',
   },
   {
     path: 'login',
@@ -60,11 +74,5 @@ export const routes: Routes = [
     component: ProfileComponent,
     canActivate: [authGuard],
     title: 'Profile',
-  },
-  {
-    path: 'trip-config',
-    component: TripConfigPageComponent,
-    canActivate: [authGuard],
-    title: 'Trip Configuration',
   },
 ];

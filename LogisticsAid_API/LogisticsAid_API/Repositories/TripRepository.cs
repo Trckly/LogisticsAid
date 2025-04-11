@@ -1,5 +1,6 @@
 using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities;
+using LogisticsAid_API.Exceptions;
 using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -120,12 +121,23 @@ public class TripRepository : ITripRepository
         await _context.SaveChangesAsync(ct);
     }
 
-    public async Task DeleteTripAsync(Guid id, CancellationToken ct)
+    public async Task DeleteTripsAsync(IEnumerable<Guid> tripIds, CancellationToken ct)
     {
-        var trip = await _context.Trips.FindAsync([id], cancellationToken: ct);
-        if (trip != null)
+        var tripsToDelete = new List<Trip>();
+        foreach (var tripId in tripIds)
         {
-            _context.Trips.Remove(trip);
+            var trip = await _context.Trips.FindAsync([tripId], cancellationToken: ct);
+            if (trip == null)
+            {
+                throw new TripDoesntExistException(tripId.ToString());
+            }
+            
+            tripsToDelete.Add(trip);
+        }
+
+        if (tripsToDelete.Count > 0)
+        {
+            _context.Trips.RemoveRange(tripsToDelete);
             await _context.SaveChangesAsync(ct);
         }
     }

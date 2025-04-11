@@ -76,12 +76,21 @@ public class TripController : BaseController
 
             return Ok(trip);
         });
-    
+
     [HttpPost]
     public Task<ActionResult> AddTrip([FromBody] TripDTO tripDto, CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
             await _tripService.AddTripAsync(tripDto, ct);
+            return Ok();
+        });
+    
+    
+    [HttpDelete]
+    public Task<ActionResult> DeleteTrips([FromQuery] IEnumerable<string> tripIds, CancellationToken ct) =>
+        ExecuteSafely(async () =>
+        {
+            await _tripService.DeleteTripsAsync(tripIds, ct);
             return Ok();
         });
 }

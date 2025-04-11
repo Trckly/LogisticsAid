@@ -96,7 +96,7 @@ export class TripConfigPageComponent implements OnInit {
 
       const initialLoadingPoint2: RoutePointExtended = new RoutePointExtended();
       initialLoadingPoint2.routePoint.id = uuidv4();
-      initialLoadingPoint2.routePoint.sequence = 1;
+      initialLoadingPoint2.routePoint.sequence = 2;
       initialLoadingPoint2.routePoint.tripId = this.trip.id;
       initialLoadingPoint2.routePoint.type = ERoutePointType.Loading;
       initialLoadingPoint2.routePoint.companyName = 'Метінвест-СМЦ';
@@ -124,7 +124,7 @@ export class TripConfigPageComponent implements OnInit {
       const initialUnloadingPoint2: RoutePointExtended =
         new RoutePointExtended();
       initialUnloadingPoint2.routePoint.id = uuidv4();
-      initialUnloadingPoint2.routePoint.sequence = 1;
+      initialUnloadingPoint2.routePoint.sequence = 2;
       initialUnloadingPoint2.routePoint.tripId = this.trip.id;
       initialUnloadingPoint2.routePoint.type = ERoutePointType.Unloading;
       initialUnloadingPoint2.routePoint.companyName = 'Оболоньсталь';

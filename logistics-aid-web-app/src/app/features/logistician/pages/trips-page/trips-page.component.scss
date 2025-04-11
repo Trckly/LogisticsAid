@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 .table-container {
   display: flex;
   width: 85vw;
@@ -10,7 +12,7 @@
 .table-container {
   position: relative;
   min-height: 200px;
-  max-height: 400px;
+  max-height: 80vh;
   overflow: auto;
 }
 
@@ -80,4 +82,19 @@ table {
   }
 
   border-radius: 30px;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+.table-controls .delete-button {
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-error),
+    )
+  );
 }
