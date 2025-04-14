@@ -37,19 +37,37 @@
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-            <label class="form-label">Price: </label>
+            <label class="form-label">Customer price: </label>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input
+                matInput
+                name="customerPrice"
+                placeholder="Enter price..."
+                [(ngModel)]="trip.customerPrice"
+                required
+                #customerPrice="ngModel"
+              />
+              @if(customerPrice.invalid && customerPrice.touched){
+              <mat-error> This field is mandatory </mat-error>
+              }
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <label class="form-label">Carrier price: </label>
           </mat-grid-tile>
           <mat-grid-tile colspan="1">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
-                name="price"
+                name="carrierPrice"
                 placeholder="Enter price..."
-                [(ngModel)]="trip.price"
+                [(ngModel)]="trip.carrierPrice"
                 required
-                #price="ngModel"
+                #carrierPrice="ngModel"
               />
-              @if(price.invalid && price.touched){
+              @if(carrierPrice.invalid && carrierPrice.touched){
               <mat-error> This field is mandatory </mat-error>
               }
             </mat-form-field>

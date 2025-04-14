@@ -12,7 +12,8 @@ public class TripDTO
     public required CustomerDTO Customer { get; set; }
     public required DriverDTO Driver { get; set; }
     public required TransportDTO Transport { get; set; }
-    public required decimal Price { get; set; }
+    public required decimal CustomerPrice { get; set; }
+    public required decimal CarrierPrice { get; set; }
     public required string CargoName { get; set; }
     public required decimal CargoWeight { get; set; }
     public required bool WithTax { get; set; }

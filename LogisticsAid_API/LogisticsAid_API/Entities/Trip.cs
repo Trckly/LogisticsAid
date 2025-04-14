@@ -59,8 +59,12 @@ public class Trip
     public required string TransportId { get; set; }
     
     [Required]
-    [Column("price")]
-    public decimal Price { get; set; }
+    [Column("customer_price")]
+    public decimal CustomerPrice { get; set; }
+    
+    [Required]
+    [Column("carrier_price")]
+    public decimal CarrierPrice { get; set; }
     
     [Required]
     [Column("with_tax")]

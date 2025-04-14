@@ -80,7 +80,9 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
     'ID',
     'loadingDate',
     'unloadingDate',
-    'price',
+    'customerPrice',
+    'carrierPrice',
+    'profit',
     'loadingAddress',
     'unloadingAddress',
     'driverName',
@@ -297,5 +299,13 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
 
   getLicensePlate(transport: Transport): string {
     return transport.licensePlate + '\n' + transport.trailerLicensePlate;
+  }
+
+  calculateProfit(trip: Trip): number {
+    if (!trip.withTax) {
+      return trip.customerPrice - trip.carrierPrice * 1.2;
+    } else {
+      return trip.customerPrice - trip.carrierPrice;
+    }
   }
 }

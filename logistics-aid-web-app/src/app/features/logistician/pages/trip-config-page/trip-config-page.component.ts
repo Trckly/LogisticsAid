@@ -142,8 +142,9 @@ export class TripConfigPageComponent implements OnInit {
       );
 
       this.trip.readableId = '1111p';
-      this.trip.price = 25000;
-      this.trip.withTax = false;
+      this.trip.customerPrice = 30000;
+      this.trip.carrierPrice = 25000;
+      this.trip.withTax = true;
       this.trip.cargoName = 'метал';
       this.trip.cargoWeight = 22;
 

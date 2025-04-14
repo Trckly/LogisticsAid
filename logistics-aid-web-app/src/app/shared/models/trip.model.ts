@@ -16,7 +16,8 @@ export class Trip {
   customer: Customer = new Customer();
   driver: Driver = new Driver();
   transport: Transport = new Transport();
-  price: number;
+  customerPrice: number;
+  carrierPrice: number;
   withTax: boolean;
   cargoName: string;
   cargoWeight: number;
