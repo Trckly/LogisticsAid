@@ -121,7 +121,14 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
             Price
           </th>
-          <td mat-cell *matCellDef="let row">{{ row.trip.price }}</td>
+          <td
+            mat-cell
+            *matCellDef="let row"
+            class="price-cell"
+            [ngClass]="{ 'with-tax': row.trip.withTax == true }"
+          >
+            {{ row.trip.price | separatedNumber }}
+          </td>
         </ng-container>
 
         <!-- Loading Address -->

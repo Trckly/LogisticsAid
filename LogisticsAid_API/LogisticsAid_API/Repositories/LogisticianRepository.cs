@@ -21,7 +21,7 @@ public class LogisticianRepository : ILogisticianRepository
 
     public async Task<Logistician?> GetLogisticianAsync(string email, CancellationToken ct)
     {
-        return await _context.Logisticians.FindAsync([email], cancellationToken: ct);
+        return await _context.Logisticians.FirstOrDefaultAsync(l => l.Contact.Email == email, cancellationToken: ct);
     }
 
     public async Task<IEnumerable<Logistician>> GetAllLogisticianAsync(CancellationToken ct)

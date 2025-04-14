@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using LogisticsAid_API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace LogisticsAid_API.Controllers;
 
@@ -11,6 +13,10 @@ public abstract class BaseController : ControllerBase
         try
         {
             return await action();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx)
+        {
+            return BadRequest(new { message = pgEx.MessageText });
         }
         catch (TripAlreadyExistsException ex)
         {

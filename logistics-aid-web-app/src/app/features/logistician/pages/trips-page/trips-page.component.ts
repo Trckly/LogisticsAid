@@ -26,7 +26,6 @@ import {
   switchMap,
   catchError,
   map,
-  Observable,
   of as observableOf,
   Subject,
 } from 'rxjs';
@@ -36,6 +35,7 @@ import { ContactInfo } from '../../../../shared/models/contact-info.model';
 import { Transport } from '../../../../shared/models/transport.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
+import { SeparatedNumberPipe } from '../../../../shared/pipes/separated-number.pipe';
 
 class TableData {
   trip: Trip = new Trip();
@@ -58,10 +58,11 @@ class TableData {
     MatSortModule,
     MatTableModule,
     MatCheckboxModule,
+    SeparatedNumberPipe,
   ],
   templateUrl: './trips-page.component.html',
   styleUrl: './trips-page.component.scss',
-  providers: [DatePipe],
+  providers: [SeparatedNumberPipe],
 })
 export class TripsPageComponent implements OnInit, AfterViewInit {
   paginatedTrips: PaginatedResponse<Trip> = new PaginatedResponse<Trip>();
@@ -285,9 +286,10 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
 
   getAddress(routePoints: RoutePoint[], type: string): string {
     let result: string = '';
+
     routePoints.forEach((rp) => {
       if (rp.type.valueOf() === type) {
-        result += `${rp.address.city}, ${rp.address.street}, ${rp.address.number}\n`;
+        result += `${rp.sequence}) ${rp.address.city}, ${rp.address.street}, ${rp.address.number}\n`;
       }
     });
     return result.trimEnd();

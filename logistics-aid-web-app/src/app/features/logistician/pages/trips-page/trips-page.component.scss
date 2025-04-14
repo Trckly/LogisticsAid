@@ -98,3 +98,11 @@ table {
     )
   );
 }
+
+.price-cell {
+}
+
+/* Style for price cells with tax */
+.price-cell.with-tax {
+  background-color: yellow; /* Green color for prices with tax */
+}

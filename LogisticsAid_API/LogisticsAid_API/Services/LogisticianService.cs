@@ -80,7 +80,7 @@ public class LogisticianService
 
     public async Task<LogisticianDTO> CreateUserAsync(LogisticianDTO logisticianDto, CancellationToken ct)
     {
-        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Id, ct);
+        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Email!, ct);
         if (logistician != null)
             throw new Exception("User already exists");
 

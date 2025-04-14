@@ -15,7 +15,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import {
-  MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
   provideNativeDateAdapter,
 } from '@angular/material/core';

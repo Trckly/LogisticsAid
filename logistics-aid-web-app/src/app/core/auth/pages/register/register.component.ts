@@ -18,15 +18,20 @@ import {
   MatDatepickerModule,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { GenderEnum } from '../../../../shared/enums/gender-enum';
 import { UserRoleEnum } from '../../../../shared/enums/user-role-enum';
 import { MatIcon } from '@angular/material/icon';
 import { v4 as uuidv4 } from 'uuid';
+import { ErrorPopupService } from '../../../../shared/services/error-popup.service';
+import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
+import { Logistician } from '../../../../shared/models/logistician.model';
 
 @Component({
   selector: 'app-register',
-  providers: [provideNativeDateAdapter()],
   imports: [
     MatToolbarModule,
     MatCard,
@@ -51,6 +56,10 @@ import { v4 as uuidv4 } from 'uuid';
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class RegisterComponent implements OnInit {
   EGender = Object.entries(GenderEnum);
@@ -63,7 +72,9 @@ export class RegisterComponent implements OnInit {
   constructor(
     public service: AuthService,
     private router: Router,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    private errorPopupService: ErrorPopupService,
+    private successPopupService: SuccessPopupService
   ) {
     service.formData.password = 'embryo';
     service.formData.contactInfo.firstName = 'Danylo';
@@ -102,11 +113,14 @@ export class RegisterComponent implements OnInit {
       this.service.formData.contactInfo.id = uuidv4();
       this.service.register().subscribe({
         next: (data) => {
-          console.log(data);
+          const user = data as Logistician;
+          this.successPopupService.show(
+            `User ${user.contactInfo.email} registered successfully!`
+          );
           this.router.navigate([`/Logistician`]);
         },
         error: (error) => {
-          console.log(error);
+          this.errorPopupService.show(error?.error?.message);
         },
       });
     }

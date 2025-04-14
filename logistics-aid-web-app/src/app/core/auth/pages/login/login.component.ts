@@ -18,7 +18,6 @@ import { Logistician } from '../../../../shared/models/logistician.model';
   selector: 'app-login',
   imports: [
     FormsModule,
-    MatAnchor,
     MatButton,
     MatCard,
     MatCardContent,
@@ -30,7 +29,6 @@ import { Logistician } from '../../../../shared/models/logistician.model';
     MatLabel,
     MatSuffix,
     ReactiveFormsModule,
-    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
