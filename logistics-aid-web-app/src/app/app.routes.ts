@@ -9,6 +9,7 @@ import { LogisticiansPageComponent } from './features/logistician/pages/logistic
 import { TripsPageComponent } from './features/logistician/pages/trips-page/trips-page.component';
 import { TripConfigPageComponent } from './features/logistician/pages/trip-config-page/trip-config-page.component';
 import { TripComponent } from './features/logistician/components/trip/trip.component';
+import { adminGuard } from './core/auth/admin.guard';
 
 export const routes: Routes = [
   {
@@ -56,7 +57,7 @@ export const routes: Routes = [
   {
     path: 'trip-config',
     component: TripConfigPageComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     title: 'Trip Configuration',
   },
   {
@@ -67,7 +68,7 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     title: 'Register',
   },
   {

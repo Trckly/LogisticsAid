@@ -22,7 +22,7 @@
         <mat-icon>settings</mat-icon>
         <span>Settings</span>
       </button>
-      @if (this.authService.retrieveAdminPrivileges() === true){
+      @if (this.authService.isAdmin){
       <button mat-menu-item (click)="addLogistician()">
         <mat-icon>person_add</mat-icon>
         <span>Add Logistician</span>

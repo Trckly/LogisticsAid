@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
 
   constructor() {
     this.authService.retrieveUsername();
+    this.authService.retrieveAdminPrivileges();
   }
 
   ngOnInit(): void {}

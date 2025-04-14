@@ -14,6 +14,7 @@ export class AuthService implements OnInit {
   public formData: Logistician = new Logistician();
   public formSubmitted = false;
   public username = 'Username';
+  public isAdmin: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -87,45 +88,54 @@ export class AuthService implements OnInit {
   }
 
   getUserWithToken(): Promise<Logistician | null> {
+    console.log('Getting user with token...');
     return new Promise((resolve) => {
       this.http
         .get(this.url + '/GetUser', { withCredentials: true })
         .subscribe({
           next: (data) => {
+            console.log('User retrieved successfully');
             resolve(data as Logistician);
           },
           error: (err) => {
+            console.log('Error getting user with token:', err.status);
             if (err.status === 401 && sessionStorage.getItem('user') != null) {
               sessionStorage.removeItem('user');
-              this.retrieveUsername();
+              // Don't call retrieveUsername here
+              this.username = 'Username'; // Set directly instead
             }
             resolve(null);
-            console.log(err);
           },
         });
     });
   }
 
   retrieveUsername() {
+    console.log('Retrieving username...');
     this.getUserWithToken().then((currentUser) => {
       if (currentUser === null) {
         this.username = 'Username';
-        console.log('failed to get user from token');
+        console.log('Failed to get user from token');
       } else {
         this.username =
           currentUser.contactInfo.firstName +
           ' ' +
           currentUser.contactInfo.lastName;
+        console.log('Username set to:', this.username);
       }
     });
   }
 
-  retrieveAdminPrivileges(): boolean | null {
-    const userJson = sessionStorage.getItem('user');
-    if (userJson != null) {
-      const user: Logistician = JSON.parse(userJson);
-      return user.hasAdminPrivileges;
-    }
-    return null;
+  retrieveAdminPrivileges(): Promise<boolean> {
+    return this.getUserWithToken().then((currentUser) => {
+      if (currentUser === null) {
+        console.error('failed to get user from token');
+        this.isAdmin = false;
+        return false;
+      } else {
+        this.isAdmin = !!currentUser.hasAdminPrivileges;
+        return this.isAdmin;
+      }
+    });
   }
 }

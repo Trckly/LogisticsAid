@@ -10,7 +10,8 @@ export const authGuard = async () => {
   console.log("Authentication check: ", isAuthenticated);
 
   if(isAuthenticated) {
-    authService.retrieveUsername();
+    // Get the username separately after authentication is confirmed
+    setTimeout(() => authService.retrieveUsername(), 0); // Defer this call
     return true;
   }
   return router.parseUrl('/login');
