@@ -107,7 +107,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName)) 
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
             .ForMember(dest => dest.Sequence, opt => opt.MapFrom(src => src.Sequence))
-            .ForMember(dest => dest.Trip, opt => opt.Ignore())
+            .ForMember(dest => dest.RoutePointTrips, opt => opt.Ignore())
             .ForMember(dest => dest.Address, opt => opt.Ignore())
             .ForMember(dest => dest.ContactInfo, opt => opt.Ignore());
 

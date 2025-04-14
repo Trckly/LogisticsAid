@@ -1,6 +1,7 @@
 using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities;
 using LogisticsAid_API.Entities.Enums;
+using LogisticsAid_API.Exceptions;
 using LogisticsAid_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,15 +19,14 @@ public class RoutePointRepository : IRoutePointRepository
     public async Task<RoutePoint?> GetRoutePointAsync(Guid tripId, Guid addressId, CancellationToken ct)
     {
         return await _context.RoutePoints
-            .FirstOrDefaultAsync(rp => rp.TripId == tripId && rp.AddressId == addressId, ct);
+            .Where(rp => rp.RoutePointTrips.Any(rpt => rpt.TripId == tripId) && rp.AddressId == addressId)
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<IEnumerable<RoutePoint>> GetRoutePointsByTripAsync(Guid tripId, CancellationToken ct)
+    public IEnumerable<RoutePoint> GetRoutePointsByTrip(Guid tripId, CancellationToken ct)
     {
-        return await _context.RoutePoints
-            .Where(rp => rp.TripId == tripId)
-            .OrderBy(rp => rp.Sequence)
-            .ToListAsync(ct);
+        return _context.RoutePoints
+            .Where(rp => rp.RoutePointTrips.Any(rpt => rpt.TripId == tripId));
     }
 
     public async Task<IEnumerable<RoutePoint>> GetRoutePointsByTypeAsync(ERoutePointType type, CancellationToken ct)
@@ -44,7 +44,7 @@ public class RoutePointRepository : IRoutePointRepository
     public async Task<IEnumerable<RoutePoint>> GetRoutePointsByIdAsync(IEnumerable<Guid> routePointIds, CancellationToken ct)
     {
         return await _context.RoutePoints
-            .Where(rp => routePointIds.Contains(rp.TripId))
+            .Where(rp => routePointIds.Contains(rp.Id))
             .Include(rp => rp.Address)
             .Include(rp => rp.ContactInfo)
             .ToListAsync(ct);
@@ -77,12 +77,17 @@ public class RoutePointRepository : IRoutePointRepository
     public async Task DeleteRoutePointAsync(Guid tripId, Guid addressId, CancellationToken ct)
     {
         var routePoint = await _context.RoutePoints
-            .FirstOrDefaultAsync(rp => rp.TripId == tripId && rp.AddressId == addressId, ct);
+            .Where(rp => rp.RoutePointTrips.Any(rpt => rpt.TripId == tripId) && rp.AddressId == addressId)
+            .FirstOrDefaultAsync(ct);
 
         if (routePoint != null)
         {
             _context.RoutePoints.Remove(routePoint);
             await _context.SaveChangesAsync(ct);
+        }
+        else
+        {
+            throw new EntryDoesntExistException();
         }
     }
 }

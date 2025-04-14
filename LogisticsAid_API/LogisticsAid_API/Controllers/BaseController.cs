@@ -18,7 +18,7 @@ public abstract class BaseController : ControllerBase
         {
             return BadRequest(new { message = pgEx.MessageText });
         }
-        catch (TripAlreadyExistsException ex)
+        catch (Exception ex) when (ex is TripAlreadyExistsException or EntryDoesntExistException)
         {
             return Conflict(new { message = ex.Message });
         }

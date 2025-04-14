@@ -129,7 +129,7 @@ public class TripRepository : ITripRepository
             var trip = await _context.Trips.FindAsync([tripId], cancellationToken: ct);
             if (trip == null)
             {
-                throw new TripDoesntExistException(tripId.ToString());
+                throw new EntryDoesntExistException();
             }
             
             tripsToDelete.Add(trip);

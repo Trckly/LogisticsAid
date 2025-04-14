@@ -1,4 +1,5 @@
 ﻿using LogisticsAid_API.Entities;
+using LogisticsAid_API.Entities.Auxiliary;
 using Microsoft.EntityFrameworkCore;
 namespace LogisticsAid_API.Context;
 
@@ -131,10 +132,24 @@ public sealed class LogisticsAidDbContext : DbContext
                 .HasForeignKey(t => t.TransportId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasMany(o => o.RoutePoints)
-                .WithOne(rp => rp.Trip)
-                .HasForeignKey(rp => rp.TripId)
-                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(t => t.RoutePoints)
+                .WithMany(rp => rp.Trips)
+                .UsingEntity<RoutePointTrip>(
+                    r => r
+                        .HasOne<RoutePoint>(rpt => rpt.RoutePoint)
+                        .WithMany(rp => rp.RoutePointTrips)
+                        .HasForeignKey(rpt => rpt.RoutePointId)
+                        .OnDelete(DeleteBehavior.Restrict),
+                    l => l
+                        .HasOne<Trip>(rpt => rpt.Trip)
+                        .WithMany(t => t.RoutePointTrips)
+                        .HasForeignKey(rpt => rpt.TripId)
+                        .OnDelete(DeleteBehavior.Restrict));
         });
+        
+        modelBuilder.Entity<RoutePointTrip>(entity => 
+            entity.
+                HasKey(rpt => new { rpt.RoutePointId, rpt.TripId })
+            );
     }
 }

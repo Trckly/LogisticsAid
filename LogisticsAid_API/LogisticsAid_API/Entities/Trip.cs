@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LogisticsAid_API.Entities.Auxiliary;
 
 namespace LogisticsAid_API.Entities;
 
@@ -90,4 +91,5 @@ public class Trip
     public required Transport Transport { get; set; }
     
     public ICollection<RoutePoint> RoutePoints { get; set; } = new List<RoutePoint>();
+    public ICollection<RoutePointTrip> RoutePointTrips { get; set; } = new List<RoutePointTrip>();
 }

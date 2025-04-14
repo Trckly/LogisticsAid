@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LogisticsAid_API.Entities.Auxiliary;
 using LogisticsAid_API.Entities.Enums;
 
 namespace LogisticsAid_API.Entities;
@@ -11,10 +12,6 @@ public class RoutePoint
     [Required]
     [Column("id")]
     public required Guid Id { get; set; }
-    
-    [Required]
-    [Column("order_id")]
-    public required Guid TripId { get; set; }
 
     [Required]
     [Column("address_id")]
@@ -38,13 +35,12 @@ public class RoutePoint
     public Guid? ContactInfoId { get; set; }
 
     // -----Navigation properties-----
-     
-    [ForeignKey(nameof(TripId))]
-    public required Trip Trip { get; set; }
-
     [ForeignKey(nameof(AddressId))]
     public required Address Address { get; set; }
     
     [ForeignKey(nameof(ContactInfoId))]
     public required ContactInfo ContactInfo { get; set; }
+
+    public required ICollection<Trip> Trips { get; set; } = new List<Trip>();
+    public required ICollection<RoutePointTrip> RoutePointTrips { get; set; } = new List<RoutePointTrip>();
 }
