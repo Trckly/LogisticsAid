@@ -10,705 +10,844 @@
         novalidate
         autocomplete="off"
       >
-        <mat-grid-list cols="4" rowHeight="4.8em" gutterSize="0.2em">
-          <mat-grid-tile colspan="4">
-            <h2>Trip Details</h2>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Trip id: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field
-              appearance="outline"
-              class="compact-input"
-              subscriptSizing="dynamic"
-            >
-              <input
-                matInput
-                name="readableId"
-                placeholder="Enter trip id..."
-                [(ngModel)]="trip.readableId"
-                required
-                #tripId="ngModel"
-              />
-              @if(tripId.invalid && tripId.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Customer price: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="customerPrice"
-                placeholder="Enter price..."
-                [(ngModel)]="trip.customerPrice"
-                required
-                #customerPrice="ngModel"
-              />
-              @if(customerPrice.invalid && customerPrice.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Carrier price: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="1">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="carrierPrice"
-                placeholder="Enter price..."
-                [(ngModel)]="trip.carrierPrice"
-                required
-                #carrierPrice="ngModel"
-              />
-              @if(carrierPrice.invalid && carrierPrice.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="2">
-            <mat-button-toggle-group name="taxGroup" [(ngModel)]="trip.withTax">
-              <mat-button-toggle [value]="false">без ПДВ</mat-button-toggle>
-              <mat-button-toggle [value]="true">з ПДВ</mat-button-toggle>
-            </mat-button-toggle-group>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Cargo name: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="cargoName"
-                placeholder="Enter price..."
-                [(ngModel)]="trip.cargoName"
-                required
-                #cargoName="ngModel"
-              />
-              @if(cargoName.invalid && cargoName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Cargo weight: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="cargoWeight"
-                placeholder="Enter weight..."
-                [(ngModel)]="trip.cargoWeight"
-                required
-                #cargoWeight="ngModel"
-              />
-              @if(cargoWeight.invalid && cargoWeight.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
+        <mat-stepper #stepper>
+          <!-- Trip Details Step -->
+          <mat-step [stepControl]="tripDetailsFormGroup" label="Trip Details">
+            <div class="step-content">
+              <h2>Trip Details</h2>
+              <div class="form-row">
+                <label class="form-label">Trip id: </label>
+                <mat-form-field
+                  appearance="outline"
+                  class="compact-input"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="readableId"
+                    placeholder="Enter trip id..."
+                    [(ngModel)]="trip.readableId"
+                    required
+                    #tripId="ngModel"
+                  />
+                  @if(tripId.invalid && tripId.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
 
-          <mat-grid-tile colspan="4">
-            <h2>Customer Information</h2>
-          </mat-grid-tile>
-          <mat-grid-tile class="form-label-tile">
-            <label class="form-label">Contact info:</label>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>First name</mat-label>
-              <input
-                matInput
-                name="customerFirstName"
-                [(ngModel)]="trip.customer.contact.firstName"
-                required
-                #customerFirstName="ngModel"
-              />
-              @if(customerFirstName.invalid && customerFirstName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Last name</mat-label>
-              <input
-                matInput
-                name="customerLastName"
-                [(ngModel)]="trip.customer.contact.lastName"
-                required
-                #customerLastName="ngModel"
-              />
-              @if(customerLastName.invalid && customerLastName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Phone</mat-label>
-              <input
-                matInput
-                name="customerPhone"
-                [(ngModel)]="trip.customer.contact.phone"
-                type="tel"
-                required
-                #customerPhone="ngModel"
-              />
-              @if(customerPhone.invalid && customerPhone.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile class="form-label-tile">
-            <label class="form-label">Company name:</label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <input
-                matInput
-                name="customerCompanyName"
-                placeholder="Enter company name..."
-                [(ngModel)]="trip.customer.companyName"
-                required
-                #customerCompanyName="ngModel"
-              />
-              @if(customerCompanyName.invalid && customerCompanyName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
+              <div class="form-row">
+                <label class="form-label">Customer price: </label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    name="customerPrice"
+                    placeholder="Enter price..."
+                    [(ngModel)]="trip.customerPrice"
+                    required
+                    #customerPrice="ngModel"
+                  />
+                  @if(customerPrice.invalid && customerPrice.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
 
-          <mat-grid-tile colspan="4">
-            <h2>Carrier Information</h2>
-          </mat-grid-tile>
-          <mat-grid-tile class="form-label-tile">
-            <label class="form-label">Contact info:</label>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>First name</mat-label>
-              <input
-                matInput
-                name="carrierFirstName"
-                [(ngModel)]="trip.carrier.contact.firstName"
-                required
-                #carrierFirstName="ngModel"
-              />
-              @if(carrierFirstName.invalid && carrierFirstName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Last name</mat-label>
-              <input
-                matInput
-                name="carrierLastName"
-                [(ngModel)]="trip.carrier.contact.lastName"
-                required
-                #carrierLastName="ngModel"
-              />
-              @if(carrierLastName.invalid && carrierLastName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Phone</mat-label>
-              <input
-                matInput
-                name="carrierPhone"
-                [(ngModel)]="trip.carrier.contact.phone"
-                type="tel"
-                required
-                #carrierPhone="ngModel"
-              />
-              @if(carrierPhone.invalid && carrierPhone.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile class="form-label-tile">
-            <label class="form-label">Company name:</label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <input
-                matInput
-                name="carrierCompanyName"
-                placeholder="Enter company name..."
-                [(ngModel)]="trip.carrier.companyName"
-                required
-                #carrierCompanyName="ngModel"
-              />
-              @if(carrierCompanyName.invalid && carrierCompanyName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
+              <div class="form-row">
+                <label class="form-label">Carrier price: </label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    name="carrierPrice"
+                    placeholder="Enter price..."
+                    [(ngModel)]="trip.carrierPrice"
+                    required
+                    #carrierPrice="ngModel"
+                  />
+                  @if(carrierPrice.invalid && carrierPrice.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
 
-          <mat-grid-tile colspan="4">
-            <h2>Loading Information</h2>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Loading date:</label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                [matDatepicker]="loadingPicker"
-                name="loadingDate"
-                placeholder="DD/MM/YYYY"
-                [(ngModel)]="trip.loadingDate"
-                [min]="minDate"
-                required
-                #loadingDate="ngModel"
-              />
-              @if(loadingDate.invalid && loadingDate.touched){
-              <mat-error>
-                @if(loadingDate.errors?.['matDatepickerMin']){ Date cannot be
-                earlier than today } @else { This field is mandatory }
-              </mat-error>
-              }
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="loadingPicker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #loadingPicker></mat-datepicker>
-            </mat-form-field>
-          </mat-grid-tile>
-          @for(routePointExtended of routePointsExtended; track $index){
-          @if(isLoadingPoint(routePointExtended.routePoint.type)){
-          <mat-grid-tile rowspan="2">
-            <label class="form-label">
-              Loading company info
-              {{ routePointExtended.routePoint.sequence }}:
-            </label>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>First name:</mat-label>
-              <input
-                matInput
-                name="loadingFirstName_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                [(ngModel)]="
-                  routePointExtended.routePoint.contactInfo.firstName
-                "
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>Last name:</mat-label>
-              <input
-                matInput
-                name="loadingLastName_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                [(ngModel)]="routePointExtended.routePoint.contactInfo.lastName"
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>Phone</mat-label>
-              <input
-                matInput
-                name="loadingPhone_{{ routePointExtended.routePoint.sequence }}"
-                [(ngModel)]="routePointExtended.routePoint.contactInfo.phone"
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <input
-                matInput
-                name="loadingCompanyName_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                placeholder="Enter company name..."
-                [(ngModel)]="routePointExtended.routePoint.companyName"
-                required
-                #loadingCompanyName="ngModel"
-              />
-              @if(loadingCompanyName.invalid && loadingCompanyName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
+                <mat-button-toggle-group
+                  name="taxGroup"
+                  [(ngModel)]="trip.withTax"
+                >
+                  <mat-button-toggle [value]="true">з ПДВ</mat-button-toggle>
+                  <mat-button-toggle [value]="false">без ПДВ</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
 
-          <mat-grid-tile>
-            <label class="form-label">
-              Loading point {{ routePointExtended.routePoint.sequence }}:
-            </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="loadingPoint_{{ routePointExtended.routePoint.sequence }}"
-                placeholder="Country, Province, City, Street, Number"
-                [(ngModel)]="routePointExtended.compositeAddress"
-                required
-                #loadingPoint="ngModel"
-              />
-              @if(loadingPoint.invalid && loadingPoint.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-            <span class="single-spacer"></span>
-            <button
-              mat-icon-button
-              type="button"
-              [disabled]="routePointExtended.routePoint.sequence == 1"
-              (click)="removePoint(routePointExtended)"
-            >
-              <mat-icon>remove</mat-icon>
-            </button>
-          </mat-grid-tile>
-          }}
-          <mat-grid-tile colspan="4">
-            <button mat-button type="button" (click)="addLoadingPoint()">
-              <mat-icon>add</mat-icon>
-              <span>Add loading point</span>
-            </button>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="4">
-            <h2>Unloading Information</h2>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Unloading date:</label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                [matDatepicker]="unloadingPicker"
-                name="unloadingDate"
-                placeholder="DD/MM/YYYY"
-                [(ngModel)]="trip.unloadingDate"
-                [min]="minDate"
-                required
-                #unloadingDate="ngModel"
-              />
-              @if(unloadingDate.invalid && unloadingDate.touched){
-              <mat-error>
-                @if(unloadingDate.errors?.['matDatepickerMin']){ Date cannot be
-                earlier than today } @else { This field is mandatory }
-              </mat-error>
-              }
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="unloadingPicker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #unloadingPicker></mat-datepicker>
-            </mat-form-field>
-          </mat-grid-tile>
-          @for(routePointExtended of routePointsExtended; track $index){
-          @if(!isLoadingPoint(routePointExtended.routePoint.type)){
-          <mat-grid-tile rowspan="2">
-            <label class="form-label"
-              >Unloading company info
-              {{ routePointExtended.routePoint.sequence }}:</label
-            >
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>First name:</mat-label>
-              <input
-                matInput
-                name="unloadingFirstName_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                [(ngModel)]="
-                  routePointExtended.routePoint.contactInfo.firstName
-                "
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>Last name:</mat-label>
-              <input
-                matInput
-                name="unloadingLastName_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                [(ngModel)]="routePointExtended.routePoint.contactInfo.lastName"
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>Phone</mat-label>
-              <input
-                matInput
-                name="unloadingPhone_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                [(ngModel)]="routePointExtended.routePoint.contactInfo.phone"
-                required
-              />
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field
-              appearance="outline"
-              class="full-width"
-              subscriptSizing="dynamic"
-            >
-              <input
-                matInput
-                name="unloadingCompanyName_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                placeholder="Enter company name..."
-                [(ngModel)]="routePointExtended.routePoint.companyName"
-                required
-                #unloadingCompanyName="ngModel"
-              />
-              @if(unloadingCompanyName.invalid && unloadingCompanyName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">
-              Unloading point {{ routePointExtended.routePoint.sequence }}:
-            </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="unloadingPoint_{{
-                  routePointExtended.routePoint.sequence
-                }}"
-                placeholder="Country, Province, City, Street, Number"
-                [(ngModel)]="routePointExtended.compositeAddress"
-                required
-                #unloadingPoint="ngModel"
-              />
-              @if(unloadingPoint.invalid && unloadingPoint.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-            <span class="single-spacer"></span>
-            <button
-              mat-icon-button
-              type="button"
-              [disabled]="routePointExtended.routePoint.sequence == 1"
-              (click)="removePoint(routePointExtended)"
-            >
-              <mat-icon>remove</mat-icon>
-            </button>
-          </mat-grid-tile>
-          }}
-          <mat-grid-tile colspan="4">
-            <button mat-button type="button" (click)="addUnloadingPoint()">
-              <mat-icon>add</mat-icon>
-              <span>Add unloading point</span>
-            </button>
-          </mat-grid-tile>
+              <div class="form-row">
+                <label class="form-label">Cargo name: </label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    name="cargoName"
+                    placeholder="Enter cargo name..."
+                    [(ngModel)]="trip.cargoName"
+                    required
+                    #cargoName="ngModel"
+                  />
+                  @if(cargoName.invalid && cargoName.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
 
-          <mat-grid-tile colspan="4">
-            <h2>Driver Details</h2>
-          </mat-grid-tile>
-          <mat-grid-tile class="form-label-tile">
-            <label class="form-label">Contact info:</label>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>First name</mat-label>
-              <input
-                matInput
-                name="driverFirstName"
-                [(ngModel)]="trip.driver.contact.firstName"
-                required
-                #driverFirstName="ngModel"
-              />
-              @if(driverFirstName.invalid && driverFirstName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Last name</mat-label>
-              <input
-                matInput
-                name="driverLastName"
-                [(ngModel)]="trip.driver.contact.lastName"
-                required
-                #driverLastName="ngModel"
-              />
-              @if(driverLastName.invalid && driverLastName.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Phone</mat-label>
-              <input
-                matInput
-                name="driverPhone"
-                [(ngModel)]="trip.driver.contact.phone"
-                type="tel"
-                required
-                #driverPhone="ngModel"
-              />
-              @if(driverPhone.invalid && driverPhone.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Driver's license:</label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="driverLicense"
-                placeholder="Enter driver's license..."
-                [(ngModel)]="trip.driver.license"
-                type="tel"
-                required
-                #driverLicense="ngModel"
-              />
-              @if(driverLicense.invalid && driverLicense.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
+              <div class="form-row">
+                <label class="form-label">Cargo weight: </label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    name="cargoWeight"
+                    placeholder="Enter weight..."
+                    [(ngModel)]="trip.cargoWeight"
+                    required
+                    #cargoWeight="ngModel"
+                  />
+                  @if(cargoWeight.invalid && cargoWeight.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
 
-          <mat-grid-tile colspan="4">
-            <h2>Vehicle Details</h2>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Vehicle model: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="vehicleModel"
-                placeholder="Enter vehicle model..."
-                [(ngModel)]="trip.transport.truckBrand"
-                required
-                #vehicleModel="ngModel"
-              />
-              @if(vehicleModel.invalid && vehicleModel.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">License plate: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="vehicleLicensePlate"
-                placeholder="Enter vehicle license plate..."
-                [(ngModel)]="trip.transport.licensePlate"
-                required
-                #vehicleLicensePlate="ngModel"
-              />
-              @if(vehicleLicensePlate.invalid && vehicleLicensePlate.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <label class="form-label">Trailer license plate: </label>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="3">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input
-                matInput
-                name="trailerLicensePlate"
-                placeholder="Enter trailer license plate..."
-                [(ngModel)]="trip.transport.trailerLicensePlate"
-                required
-                #trailerLicensePlate="ngModel"
-              />
-              @if(trailerLicensePlate.invalid && trailerLicensePlate.touched){
-              <mat-error> This field is mandatory </mat-error>
-              }
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile colspan="4"></mat-grid-tile>
-          <mat-grid-tile colspan="4">
-            <div class="button-container">
-              <button mat-raised-button type="button" (click)="onCancel()">
-                Cancel
-              </button>
-              <button mat-flat-button type="submit">Submit</button>
+              <div class="step-actions">
+                <button mat-button matStepperNext type="button">Next</button>
+              </div>
             </div>
-          </mat-grid-tile>
-        </mat-grid-list>
+          </mat-step>
+
+          <!-- Customer Information Step -->
+          <mat-step
+            [stepControl]="customerFormGroup"
+            label="Customer Information"
+          >
+            <div class="step-content">
+              <h2>Customer Information</h2>
+              <div class="form-row">
+                <label class="form-label">Contact info:</label>
+                <div class="contact-fields">
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>First name</mat-label>
+                    <input
+                      matInput
+                      name="customerFirstName"
+                      [(ngModel)]="trip.customer.contact.firstName"
+                      required
+                      #customerFirstName="ngModel"
+                    />
+                    @if(customerFirstName.invalid && customerFirstName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>Last name</mat-label>
+                    <input
+                      matInput
+                      name="customerLastName"
+                      [(ngModel)]="trip.customer.contact.lastName"
+                      required
+                      #customerLastName="ngModel"
+                    />
+                    @if(customerLastName.invalid && customerLastName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>Phone</mat-label>
+                    <input
+                      matInput
+                      name="customerPhone"
+                      [(ngModel)]="trip.customer.contact.phone"
+                      type="tel"
+                      required
+                      #customerPhone="ngModel"
+                    />
+                    @if(customerPhone.invalid && customerPhone.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Company name:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="customerCompanyName"
+                    placeholder="Enter company name..."
+                    [(ngModel)]="trip.customer.companyName"
+                    required
+                    #customerCompanyName="ngModel"
+                  />
+                  @if(customerCompanyName.invalid &&
+                  customerCompanyName.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button matStepperPrevious type="button">
+                  Back
+                </button>
+                <button mat-button matStepperNext type="button">Next</button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Carrier Information Step -->
+          <mat-step
+            [stepControl]="carrierFormGroup"
+            label="Carrier Information"
+          >
+            <div class="step-content">
+              <h2>Carrier Information</h2>
+              <div class="form-row">
+                <label class="form-label">Contact info:</label>
+                <div class="contact-fields">
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>First name</mat-label>
+                    <input
+                      matInput
+                      name="carrierFirstName"
+                      [(ngModel)]="trip.carrier.contact.firstName"
+                      required
+                      #carrierFirstName="ngModel"
+                    />
+                    @if(carrierFirstName.invalid && carrierFirstName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>Last name</mat-label>
+                    <input
+                      matInput
+                      name="carrierLastName"
+                      [(ngModel)]="trip.carrier.contact.lastName"
+                      required
+                      #carrierLastName="ngModel"
+                    />
+                    @if(carrierLastName.invalid && carrierLastName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>Phone</mat-label>
+                    <input
+                      matInput
+                      name="carrierPhone"
+                      [(ngModel)]="trip.carrier.contact.phone"
+                      type="tel"
+                      required
+                      #carrierPhone="ngModel"
+                    />
+                    @if(carrierPhone.invalid && carrierPhone.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Company name:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="carrierCompanyName"
+                    placeholder="Enter company name..."
+                    [(ngModel)]="trip.carrier.companyName"
+                    required
+                    #carrierCompanyName="ngModel"
+                  />
+                  @if(carrierCompanyName.invalid && carrierCompanyName.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button matStepperPrevious type="button">
+                  Back
+                </button>
+                <button mat-button matStepperNext type="button">Next</button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Loading Information Step -->
+          <mat-step
+            [stepControl]="loadingFormGroup"
+            label="Loading Information"
+          >
+            <div class="step-content">
+              <h2>Loading Information</h2>
+              <div class="form-row">
+                <label class="form-label">Loading date:</label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    [matDatepicker]="loadingPicker"
+                    name="loadingDate"
+                    placeholder="DD/MM/YYYY"
+                    [(ngModel)]="trip.loadingDate"
+                    [min]="minDate"
+                    required
+                    #loadingDate="ngModel"
+                  />
+                  @if(loadingDate.invalid && loadingDate.touched){
+                  <mat-error>
+                    @if(loadingDate.errors?.['matDatepickerMin']){ Date cannot
+                    be earlier than today } @else { This field is mandatory }
+                  </mat-error>
+                  }
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="loadingPicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #loadingPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              @for(routePointExtended of routePointsExtended; track $index){
+              @if(isLoadingPoint(routePointExtended.routePoint.type)){
+              <div class="loading-point-section">
+                <h3>
+                  Loading Point {{ routePointExtended.routePoint.sequence }}
+                </h3>
+                <div class="form-row">
+                  <label class="form-label">Company Info:</label>
+                  <div class="contact-fields">
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-label>First name</mat-label>
+                      <input
+                        matInput
+                        name="loadingFirstName_{{
+                          routePointExtended.routePoint.sequence
+                        }}"
+                        [(ngModel)]="
+                          routePointExtended.routePoint.contactInfo.firstName
+                        "
+                        required
+                      />
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-label>Last name</mat-label>
+                      <input
+                        matInput
+                        name="loadingLastName_{{
+                          routePointExtended.routePoint.sequence
+                        }}"
+                        [(ngModel)]="
+                          routePointExtended.routePoint.contactInfo.lastName
+                        "
+                        required
+                      />
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-label>Phone</mat-label>
+                      <input
+                        matInput
+                        name="loadingPhone_{{
+                          routePointExtended.routePoint.sequence
+                        }}"
+                        [(ngModel)]="
+                          routePointExtended.routePoint.contactInfo.phone
+                        "
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Company name:</label>
+                  <mat-form-field
+                    appearance="outline"
+                    class="full-width"
+                    subscriptSizing="dynamic"
+                  >
+                    <input
+                      matInput
+                      name="loadingCompanyName_{{
+                        routePointExtended.routePoint.sequence
+                      }}"
+                      placeholder="Enter company name..."
+                      [(ngModel)]="routePointExtended.routePoint.companyName"
+                      required
+                      #loadingCompanyName="ngModel"
+                    />
+                    @if(loadingCompanyName.invalid &&
+                    loadingCompanyName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Address:</label>
+                  <mat-form-field
+                    appearance="outline"
+                    class="full-width"
+                    subscriptSizing="dynamic"
+                  >
+                    <input
+                      matInput
+                      name="loadingPoint_{{
+                        routePointExtended.routePoint.sequence
+                      }}"
+                      placeholder="Country, Province, City, Street, Number"
+                      [(ngModel)]="routePointExtended.compositeAddress"
+                      required
+                      #loadingPoint="ngModel"
+                    />
+                    @if(loadingPoint.invalid && loadingPoint.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="routePointExtended.routePoint.sequence == 1"
+                    (click)="removePoint(routePointExtended)"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+              } }
+
+              <div class="add-point-button">
+                <button mat-button type="button" (click)="addLoadingPoint()">
+                  <mat-icon>add</mat-icon>
+                  <span>Add loading point</span>
+                </button>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button matStepperPrevious type="button">
+                  Back
+                </button>
+                <button mat-button matStepperNext type="button">Next</button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Unloading Information Step -->
+          <mat-step
+            [stepControl]="unloadingFormGroup"
+            label="Unloading Information"
+          >
+            <div class="step-content">
+              <h2>Unloading Information</h2>
+              <div class="form-row">
+                <label class="form-label">Unloading date:</label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <input
+                    matInput
+                    [matDatepicker]="unloadingPicker"
+                    name="unloadingDate"
+                    placeholder="DD/MM/YYYY"
+                    [(ngModel)]="trip.unloadingDate"
+                    [min]="minDate"
+                    required
+                    #unloadingDate="ngModel"
+                  />
+                  @if(unloadingDate.invalid && unloadingDate.touched){
+                  <mat-error>
+                    @if(unloadingDate.errors?.['matDatepickerMin']){ Date cannot
+                    be earlier than today } @else { This field is mandatory }
+                  </mat-error>
+                  }
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="unloadingPicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #unloadingPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              @for(routePointExtended of routePointsExtended; track $index){
+              @if(!isLoadingPoint(routePointExtended.routePoint.type)){
+              <div class="unloading-point-section">
+                <h3>
+                  Unloading Point {{ routePointExtended.routePoint.sequence }}
+                </h3>
+                <div class="form-row">
+                  <label class="form-label">Company Info:</label>
+                  <div class="contact-fields">
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-label>First name</mat-label>
+                      <input
+                        matInput
+                        name="unloadingFirstName_{{
+                          routePointExtended.routePoint.sequence
+                        }}"
+                        [(ngModel)]="
+                          routePointExtended.routePoint.contactInfo.firstName
+                        "
+                        required
+                      />
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-label>Last name</mat-label>
+                      <input
+                        matInput
+                        name="unloadingLastName_{{
+                          routePointExtended.routePoint.sequence
+                        }}"
+                        [(ngModel)]="
+                          routePointExtended.routePoint.contactInfo.lastName
+                        "
+                        required
+                      />
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-label>Phone</mat-label>
+                      <input
+                        matInput
+                        name="unloadingPhone_{{
+                          routePointExtended.routePoint.sequence
+                        }}"
+                        [(ngModel)]="
+                          routePointExtended.routePoint.contactInfo.phone
+                        "
+                        required
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Company name:</label>
+                  <mat-form-field
+                    appearance="outline"
+                    class="full-width"
+                    subscriptSizing="dynamic"
+                  >
+                    <input
+                      matInput
+                      name="unloadingCompanyName_{{
+                        routePointExtended.routePoint.sequence
+                      }}"
+                      placeholder="Enter company name..."
+                      [(ngModel)]="routePointExtended.routePoint.companyName"
+                      required
+                      #unloadingCompanyName="ngModel"
+                    />
+                    @if(unloadingCompanyName.invalid &&
+                    unloadingCompanyName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <label class="form-label">Address:</label>
+                  <mat-form-field
+                    appearance="outline"
+                    class="full-width"
+                    subscriptSizing="dynamic"
+                  >
+                    <input
+                      matInput
+                      name="unloadingPoint_{{
+                        routePointExtended.routePoint.sequence
+                      }}"
+                      placeholder="Country, Province, City, Street, Number"
+                      [(ngModel)]="routePointExtended.compositeAddress"
+                      required
+                      #unloadingPoint="ngModel"
+                    />
+                    @if(unloadingPoint.invalid && unloadingPoint.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="routePointExtended.routePoint.sequence == 1"
+                    (click)="removePoint(routePointExtended)"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+              } }
+
+              <div class="add-point-button">
+                <button mat-button type="button" (click)="addUnloadingPoint()">
+                  <mat-icon>add</mat-icon>
+                  <span>Add unloading point</span>
+                </button>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button matStepperPrevious type="button">
+                  Back
+                </button>
+                <button mat-button matStepperNext type="button">Next</button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Driver & Vehicle Step -->
+          <mat-step
+            [stepControl]="driverVehicleFormGroup"
+            label="Driver & Vehicle"
+          >
+            <div class="step-content">
+              <h2>Driver Details</h2>
+              <div class="form-row">
+                <label class="form-label">Contact info:</label>
+                <div class="contact-fields">
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>First name</mat-label>
+                    <input
+                      matInput
+                      name="driverFirstName"
+                      [(ngModel)]="trip.driver.contact.firstName"
+                      required
+                      #driverFirstName="ngModel"
+                    />
+                    @if(driverFirstName.invalid && driverFirstName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>Last name</mat-label>
+                    <input
+                      matInput
+                      name="driverLastName"
+                      [(ngModel)]="trip.driver.contact.lastName"
+                      required
+                      #driverLastName="ngModel"
+                    />
+                    @if(driverLastName.invalid && driverLastName.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-label>Phone</mat-label>
+                    <input
+                      matInput
+                      name="driverPhone"
+                      [(ngModel)]="trip.driver.contact.phone"
+                      type="tel"
+                      required
+                      #driverPhone="ngModel"
+                    />
+                    @if(driverPhone.invalid && driverPhone.touched){
+                    <mat-error>This field is mandatory</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Driver's license:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="driverLicense"
+                    placeholder="Enter driver's license..."
+                    [(ngModel)]="trip.driver.license"
+                    type="tel"
+                    required
+                    #driverLicense="ngModel"
+                  />
+                  @if(driverLicense.invalid && driverLicense.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <h2>Vehicle Details</h2>
+              <div class="form-row">
+                <label class="form-label">Vehicle model:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="vehicleModel"
+                    placeholder="Enter vehicle model..."
+                    [(ngModel)]="trip.transport.truckBrand"
+                    required
+                    #vehicleModel="ngModel"
+                  />
+                  @if(vehicleModel.invalid && vehicleModel.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">License plate:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="vehicleLicensePlate"
+                    placeholder="Enter vehicle license plate..."
+                    [(ngModel)]="trip.transport.licensePlate"
+                    required
+                    #vehicleLicensePlate="ngModel"
+                  />
+                  @if(vehicleLicensePlate.invalid &&
+                  vehicleLicensePlate.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Trailer license plate:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="trailerLicensePlate"
+                    placeholder="Enter trailer license plate..."
+                    [(ngModel)]="trip.transport.trailerLicensePlate"
+                    required
+                    #trailerLicensePlate="ngModel"
+                  />
+                  @if(trailerLicensePlate.invalid &&
+                  trailerLicensePlate.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="step-actions">
+                <button mat-button matStepperPrevious type="button">
+                  Back
+                </button>
+                <button mat-button matStepperNext type="button">Next</button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Review & Submit Step -->
+          <mat-step label="Review & Submit">
+            <div class="step-content">
+              <h2>Review and Submit</h2>
+              <p>Please review all information before submitting.</p>
+
+              <div class="form-summary">
+                <h3>Trip Summary</h3>
+                <p><strong>Trip ID:</strong> {{ trip.readableId }}</p>
+                <p><strong>Customer Price:</strong> {{ trip.customerPrice }}</p>
+                <p>
+                  <strong>Carrier Price:</strong> {{ trip.carrierPrice }}
+                  {{ trip.withTax ? "з ПДВ" : "без ПДВ" }}
+                </p>
+                <p>
+                  <strong>Cargo:</strong> {{ trip.cargoName }},
+                  {{ trip.cargoWeight }}
+                </p>
+
+                <h3>Loading & Unloading Details</h3>
+                <p>
+                  <strong>Loading Date:</strong>
+                  {{ getReadableDate(trip.loadingDate) }}
+                </p>
+                <p>
+                  <strong>Unloading Date:</strong>
+                  {{ getReadableDate(trip.unloadingDate) }}
+                </p>
+              </div>
+
+              <div class="step-actions final-buttons">
+                <button mat-button matStepperPrevious type="button">
+                  Back
+                </button>
+                <button mat-raised-button type="button" (click)="onCancel()">
+                  Cancel
+                </button>
+                <button mat-flat-button type="submit">Submit</button>
+              </div>
+            </div>
+          </mat-step>
+        </mat-stepper>
       </form>
     </mat-card-content>
   </mat-card>

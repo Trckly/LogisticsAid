@@ -23,7 +23,7 @@ export class UtilService {
     );
   }
 
-  getReadableDateandTime(date: any): string {
+  getReadableDateAndTime(date: any): string {
     if (!date) return 'Invalid Date';
 
     // Convert string date to Date object if necessary

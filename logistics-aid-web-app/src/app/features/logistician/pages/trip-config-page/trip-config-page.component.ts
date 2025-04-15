@@ -1,16 +1,23 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule, NgForm } from '@angular/forms';
+import {
+  FormsModule,
+  NgForm,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Router } from '@angular/router';
@@ -28,6 +35,7 @@ import { Address } from '../../../../shared/models/address.model';
 import { ErrorPopupService } from '../../../../shared/services/error-popup.service';
 import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
 import { ContactInfo } from '../../../../shared/models/contact-info.model';
+import { UtilService } from '../../../../shared/services/util.service';
 
 class RoutePointExtended {
   routePoint: RoutePoint = new RoutePoint();
@@ -49,6 +57,7 @@ class RoutePointExtended {
     MatGridListModule,
     MatDividerModule,
     MatButtonToggleModule,
+    MatStepperModule,
   ],
   templateUrl: './trip-config-page.component.html',
   styleUrl: './trip-config-page.component.scss',
@@ -65,15 +74,72 @@ export class TripConfigPageComponent implements OnInit {
 
   minDate: Date = new Date();
 
+  // Add form groups for stepper
+  tripDetailsFormGroup: FormGroup;
+  customerFormGroup: FormGroup;
+  carrierFormGroup: FormGroup;
+  loadingFormGroup: FormGroup;
+  unloadingFormGroup: FormGroup;
+  driverVehicleFormGroup: FormGroup;
+
+  // ViewChild for the stepper
+  @ViewChild('stepper') stepper;
+
   constructor(
     private authService: AuthService,
     private tripService: TripService,
+    private utilService: UtilService,
     private router: Router,
     private errorPopupService: ErrorPopupService,
-    private SuccessPopupService: SuccessPopupService
+    private SuccessPopupService: SuccessPopupService,
+    private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    // Initialize form groups with validators
+    this.tripDetailsFormGroup = this._formBuilder.group({
+      readableId: ['', Validators.required],
+      customerPrice: ['', Validators.required],
+      carrierPrice: ['', Validators.required],
+      cargoName: ['', Validators.required],
+      cargoWeight: ['', Validators.required],
+      withTax: [false],
+    });
+
+    this.customerFormGroup = this._formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      phone: ['', Validators.required],
+      companyName: ['', Validators.required],
+    });
+
+    this.carrierFormGroup = this._formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      phone: ['', Validators.required],
+      companyName: ['', Validators.required],
+    });
+
+    this.loadingFormGroup = this._formBuilder.group({
+      loadingDate: ['', Validators.required],
+      // For dynamic loading points, you can add form arrays if needed
+    });
+
+    this.unloadingFormGroup = this._formBuilder.group({
+      unloadingDate: ['', Validators.required],
+      // For dynamic unloading points, you can add form arrays if needed
+    });
+
+    this.driverVehicleFormGroup = this._formBuilder.group({
+      driverFirstName: ['', Validators.required],
+      driverLastName: ['', Validators.required],
+      driverPhone: ['', Validators.required],
+      driverLicense: ['', Validators.required],
+      vehicleModel: ['', Validators.required],
+      vehicleLicensePlate: ['', Validators.required],
+      trailerLicensePlate: ['', Validators.required],
+    });
+
     this.authService.getUserWithToken().then((user) => {
       this.currentUser = user;
 
@@ -88,6 +154,7 @@ export class TripConfigPageComponent implements OnInit {
       initialLoadingPoint.routePoint.companyName = 'Метінвест';
       initialLoadingPoint.compositeAddress =
         'Україна, Львівська обл., м. Львів, вул. Наукова, 5а';
+      initialLoadingPoint.routePoint.contactInfo = new ContactInfo();
       initialLoadingPoint.routePoint.contactInfo.id = uuidv4();
       initialLoadingPoint.routePoint.contactInfo.firstName = 'Джо';
       initialLoadingPoint.routePoint.contactInfo.lastName = 'Рандомний';
@@ -101,6 +168,7 @@ export class TripConfigPageComponent implements OnInit {
       initialLoadingPoint2.routePoint.companyName = 'Метінвест-СМЦ';
       initialLoadingPoint2.compositeAddress =
         'Україна, Львівська обл., м. Миколаїв, вул. Окружна, 12';
+      initialLoadingPoint2.routePoint.contactInfo = new ContactInfo();
       initialLoadingPoint2.routePoint.contactInfo.id = uuidv4();
       initialLoadingPoint2.routePoint.contactInfo.firstName = 'Павло';
       initialLoadingPoint2.routePoint.contactInfo.lastName = 'Петращук';
@@ -115,6 +183,7 @@ export class TripConfigPageComponent implements OnInit {
       initialUnloadingPoint.routePoint.companyName = 'Інтергалбуд';
       initialUnloadingPoint.compositeAddress =
         'Україна, Київська обл., м. Київ, вул. Хрещатик, 27';
+      initialUnloadingPoint.routePoint.contactInfo = new ContactInfo();
       initialUnloadingPoint.routePoint.contactInfo.id = uuidv4();
       initialUnloadingPoint.routePoint.contactInfo.firstName = 'Максим';
       initialUnloadingPoint.routePoint.contactInfo.lastName = 'Мельник';
@@ -129,6 +198,7 @@ export class TripConfigPageComponent implements OnInit {
       initialUnloadingPoint2.routePoint.companyName = 'Оболоньсталь';
       initialUnloadingPoint2.compositeAddress =
         'Україна, Київська обл., м. Оболонь, вул. Надвірна, 2';
+      initialUnloadingPoint2.routePoint.contactInfo = new ContactInfo();
       initialUnloadingPoint2.routePoint.contactInfo.id = uuidv4();
       initialUnloadingPoint2.routePoint.contactInfo.firstName = 'Матвій';
       initialUnloadingPoint2.routePoint.contactInfo.lastName = 'Первак';
@@ -148,18 +218,21 @@ export class TripConfigPageComponent implements OnInit {
       this.trip.cargoName = 'метал';
       this.trip.cargoWeight = 22;
 
+      this.trip.customer.contact = new ContactInfo();
       this.trip.customer.contact.id = uuidv4();
       this.trip.customer.contact.firstName = 'Андрій';
       this.trip.customer.contact.lastName = 'Юшкевич';
       this.trip.customer.contact.phone = '+380677653443';
       this.trip.customer.companyName = 'Андрій Метал';
 
+      this.trip.carrier.contact = new ContactInfo();
       this.trip.carrier.contact.id = uuidv4();
       this.trip.carrier.contact.firstName = 'Володимир';
       this.trip.carrier.contact.lastName = 'Шурко';
       this.trip.carrier.contact.phone = '+380675676789';
       this.trip.carrier.companyName = 'Вова Транс';
 
+      this.trip.driver.contact = new ContactInfo();
       this.trip.driver.contact.id = uuidv4();
       this.trip.driver.contact.firstName = 'Олег';
       this.trip.driver.contact.lastName = 'Джамбо';
@@ -169,6 +242,48 @@ export class TripConfigPageComponent implements OnInit {
       this.trip.transport.licensePlate = 'AC4567BX';
       this.trip.transport.trailerLicensePlate = 'AC5543XM';
       this.trip.transport.truckBrand = 'MAN';
+
+      // Update form values from trip data
+      this.updateFormGroupsFromTripData();
+    });
+  }
+
+  // Add method to update form groups from trip data
+  updateFormGroupsFromTripData(): void {
+    // Update trip details form
+    this.tripDetailsFormGroup.patchValue({
+      readableId: this.trip.readableId,
+      customerPrice: this.trip.customerPrice,
+      carrierPrice: this.trip.carrierPrice,
+      cargoName: this.trip.cargoName,
+      cargoWeight: this.trip.cargoWeight,
+    });
+
+    // Update customer form
+    this.customerFormGroup.patchValue({
+      firstName: this.trip.customer.contact.firstName,
+      lastName: this.trip.customer.contact.lastName,
+      phone: this.trip.customer.contact.phone,
+      companyName: this.trip.customer.companyName,
+    });
+
+    // Update carrier form
+    this.carrierFormGroup.patchValue({
+      firstName: this.trip.carrier.contact.firstName,
+      lastName: this.trip.carrier.contact.lastName,
+      phone: this.trip.carrier.contact.phone,
+      companyName: this.trip.carrier.companyName,
+    });
+
+    // Update driver & vehicle form
+    this.driverVehicleFormGroup.patchValue({
+      driverFirstName: this.trip.driver.contact.firstName,
+      driverLastName: this.trip.driver.contact.lastName,
+      driverPhone: this.trip.driver.contact.phone,
+      driverLicense: this.trip.driver.license,
+      vehicleModel: this.trip.transport.truckBrand,
+      vehicleLicensePlate: this.trip.transport.licensePlate,
+      trailerLicensePlate: this.trip.transport.trailerLicensePlate,
     });
   }
 
@@ -288,5 +403,9 @@ export class TripConfigPageComponent implements OnInit {
     address.number = match[7] || '';
 
     return address;
+  }
+
+  getReadableDate(date: any): string {
+    return this.utilService.getReadableDate(date);
   }
 }
