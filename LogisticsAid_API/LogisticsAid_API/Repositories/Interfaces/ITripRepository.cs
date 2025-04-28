@@ -10,8 +10,8 @@ public interface ITripRepository
     public Task<IEnumerable<Trip>> GetTripsAsync(int page, int pageSize, CancellationToken ct);
     public Task<Trip?> GetTripByReadableIdAsync(string readableId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByLogisticianAsync(Guid logisticianId, CancellationToken ct);
-    public Task<IEnumerable<Trip>> GetTripsByCustomerAsync(Guid customerId, CancellationToken ct);
-    public Task<IEnumerable<Trip>> GetTripsByCarrierAsync(Guid carrierId, CancellationToken ct);
+    public Task<IEnumerable<Trip>> GetTripsByCustomerCompanyAsync(string customerCompanyId, CancellationToken ct);
+    public Task<IEnumerable<Trip>> GetTripsByCarrierCompanyAsync(string carrierCompanyId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByDriverAsync(Guid driverId, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetTripsByDateRangeAsync(DateTime start, DateTime end, CancellationToken ct);
     public Task<IEnumerable<Trip>> GetAllTripsAsync(CancellationToken ct);

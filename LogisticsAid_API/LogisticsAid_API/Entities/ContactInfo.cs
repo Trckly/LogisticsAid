@@ -28,12 +28,30 @@ public class ContactInfo
     [MinLength(13)]
     public required string Phone { get; set; }
     
+    [Required]
+    [Column("email")]
+    [MaxLength(254)]
+    public required string Email { get; set; }
+    
+    
     // -----Optional-----
+    
+    [Column("customer_company_id")]
+    [MaxLength(50)]
+    public string? CustomerCompanyId { get; set; }
+    
+    [Column("carrier_company_id")]
+    [MaxLength(50)]
+    public string? CarrierCompanyId { get; set; }
     
     [Column("birth_date")]
     public DateTime? BirthDate { get; set; }
     
-    [Column("email")]
-    [MaxLength(254)]
-    public string? Email { get; set; }
+    // Navigation properties
+    [ForeignKey(nameof(CustomerCompanyId))]
+    public CustomerCompany? CustomerCompany { get; set; }
+    
+    [ForeignKey(nameof(CarrierCompanyId))]
+    public CarrierCompany? CarrierCompany { get; set; }
+    
 }

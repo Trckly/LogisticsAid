@@ -2,7 +2,7 @@ using LogisticsAid_API.Entities;
 
 namespace LogisticsAid_API.Repositories.Interfaces;
 
-public interface ICarrierRepository
+public interface ICarrierCompanyRepository
 {
     public Task<CarrierCompany?> GetCarrierAsync(string companyName, CancellationToken ct);
     public Task<CarrierCompany?> GetCarrierByCompanyNameAsync(string companyName, CancellationToken ct);

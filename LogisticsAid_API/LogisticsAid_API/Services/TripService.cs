@@ -14,8 +14,8 @@ public class TripService
     private readonly LogisticsAidDbContext _context;
     private readonly IMapper _mapper;
     private readonly ITripRepository _tripRepository;
-    private readonly ICustomerRepository _customerRepository;
-    private readonly ICarrierRepository _carrierRepository;
+    private readonly ICustomerCompanyRepository _customerCompanyRepository;
+    private readonly ICarrierCompanyRepository _carrierCompanyRepository;
     private readonly IDriverRepository _driverRepository;
     private readonly ITransportRepository _transportRepository;
     private readonly RoutePointService _routePointService;
@@ -23,15 +23,15 @@ public class TripService
     private readonly AddressService _addressService;
 
     public TripService(LogisticsAidDbContext context, IMapper mapper, ITripRepository tripRepository, 
-        ICustomerRepository customerRepository, ICarrierRepository carrierRepository, IDriverRepository driverRepository, 
+        ICustomerCompanyRepository customerCompanyRepository, ICarrierCompanyRepository carrierCompanyRepository, IDriverRepository driverRepository, 
         ITransportRepository transportRepository, RoutePointService routePointService, 
         ContactInfoService contactInfoService, AddressService addressService)
     {
         _context = context;
         _mapper = mapper;
         _tripRepository = tripRepository;
-        _customerRepository = customerRepository;
-        _carrierRepository = carrierRepository;
+        _customerCompanyRepository = customerCompanyRepository;
+        _carrierCompanyRepository = carrierCompanyRepository;
         _driverRepository = driverRepository;
         _transportRepository = transportRepository;
         _routePointService = routePointService;
@@ -73,57 +73,53 @@ public class TripService
         await using var transaction = await _context.Database.BeginTransactionAsync(ct);
         try
         {
-            var customer = await _customerRepository.GetCustomerAsync(tripDto.Customer.Contact.Id, ct);
+            var customer = await _customerCompanyRepository.GetCustomerCompanyAsync(tripDto.CustomerCompany.CompanyName, ct);
             if (customer == null)
             {
-                customer = await _customerRepository.GetCustomerAsync(tripDto.Customer.Contact.Phone, ct);
-                if (customer == null)
-                {
-                    await _contactInfoService.UpsertContactInfoAsync(tripDto.Customer.Contact, ct);
-                    
-                    customer = _mapper.Map<Customer>(tripDto.Customer);
-                    await _customerRepository.UpsertCustomerAsync(customer, ct);
-                }
+                customer = _mapper.Map<CustomerCompany>(tripDto.CustomerCompany);
+                await _customerCompanyRepository.UpsertCustomerCompanyAsync(customer, ct);
             }
-            
-            var carrier = await _carrierRepository.GetCarrierAsync(tripDto.Carrier.Contact.Id, ct);
+
+            var carrier = await _carrierCompanyRepository.GetCarrierAsync(tripDto.CarrierCompany.CompanyName, ct);
             if (carrier == null)
             {
-                carrier = await _carrierRepository.GetCarrierAsync(tripDto.Carrier.Contact.Phone, ct);
-                if (carrier == null)
-                {
-                    await _contactInfoService.UpsertContactInfoAsync(tripDto.Carrier.Contact, ct);
-                    
-                    carrier = _mapper.Map<Carrier>(tripDto.Carrier);
-                    await _carrierRepository.UpsertCarrierAsync(carrier, ct);
-                }
+                carrier = _mapper.Map<CarrierCompany>(tripDto.CarrierCompany);
+                await _carrierCompanyRepository.UpsertCarrierAsync(carrier, ct);
             }
-            
-            var driver = await _driverRepository.GetDriverAsync(tripDto.Driver.Contact.Id, ct);
+
+            var driver = await _driverRepository.GetDriverAsync(tripDto.Driver.ContactInfo.Id, ct);
             if (driver == null)
             {
-                driver = await _driverRepository.GetDriverAsync(tripDto.Driver.Contact.Phone, ct);
+                driver = await _driverRepository.GetDriverAsync(tripDto.Driver.ContactInfo.Phone, ct);
                 if (driver == null)
                 {
-                    await _contactInfoService.UpsertContactInfoAsync(tripDto.Driver.Contact, ct);
+                    await _contactInfoService.UpsertContactInfoAsync(tripDto.Driver.ContactInfo, ct);
                     
                     driver = _mapper.Map<Driver>(tripDto.Driver);
                     await _driverRepository.UpsertDriverAsync(driver, ct);
                 }
             }
             
-            var transport = await _transportRepository.GetTransportAsync(tripDto.Transport.LicensePlate, ct);
-            if (transport == null)
+            var truck = await _transportRepository.GetTransportAsync(tripDto.Truck.LicensePlate, ct);
+            if (truck == null)
             {
-                transport = _mapper.Map<Transport>(tripDto.Transport);
-                await _transportRepository.UpsertTransportAsync(transport, ct);
+                truck = _mapper.Map<Transport>(tripDto.Truck);
+                await _transportRepository.UpsertTransportAsync(truck, ct);
+            }
+            
+            var trailer = await _transportRepository.GetTransportAsync(tripDto.Trailer.LicensePlate, ct);
+            if (trailer == null)
+            {
+                trailer = _mapper.Map<Transport>(tripDto.Trailer);
+                await _transportRepository.UpsertTransportAsync(trailer, ct);
             }
             
             var trip = _mapper.Map<Trip>(tripDto);
-            trip.Customer = customer;
-            trip.Carrier = carrier;
+            trip.CustomerCompany = customer;
+            trip.CarrierCompany = carrier;
             trip.Driver = driver;
-            trip.Transport = transport;
+            trip.Truck = truck;
+            trip.Trailer = trailer;
             
             await _tripRepository.AddTripAsync(trip, ct);
             

@@ -28,5 +28,5 @@ public class Logistician
     // -----Navigation properties-----
 
     [ForeignKey(nameof(ContactId))]
-    public required ContactInfo Contact { get; set; }  
+    public required ContactInfo ContactInfo { get; set; }  
 }

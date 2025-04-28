@@ -126,63 +126,6 @@
             <div class="step-content">
               <h2>Customer Information</h2>
               <div class="form-row">
-                <label class="form-label">Contact info:</label>
-                <div class="contact-fields">
-                  <mat-form-field
-                    appearance="outline"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-label>First name</mat-label>
-                    <input
-                      matInput
-                      name="customerFirstName"
-                      [(ngModel)]="trip.customer.contact.firstName"
-                      required
-                      #customerFirstName="ngModel"
-                    />
-                    @if(customerFirstName.invalid && customerFirstName.touched){
-                    <mat-error>This field is mandatory</mat-error>
-                    }
-                  </mat-form-field>
-
-                  <mat-form-field
-                    appearance="outline"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-label>Last name</mat-label>
-                    <input
-                      matInput
-                      name="customerLastName"
-                      [(ngModel)]="trip.customer.contact.lastName"
-                      required
-                      #customerLastName="ngModel"
-                    />
-                    @if(customerLastName.invalid && customerLastName.touched){
-                    <mat-error>This field is mandatory</mat-error>
-                    }
-                  </mat-form-field>
-
-                  <mat-form-field
-                    appearance="outline"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-label>Phone</mat-label>
-                    <input
-                      matInput
-                      name="customerPhone"
-                      [(ngModel)]="trip.customer.contact.phone"
-                      type="tel"
-                      required
-                      #customerPhone="ngModel"
-                    />
-                    @if(customerPhone.invalid && customerPhone.touched){
-                    <mat-error>This field is mandatory</mat-error>
-                    }
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="form-row">
                 <label class="form-label">Company name:</label>
                 <mat-form-field
                   appearance="outline"
@@ -193,7 +136,7 @@
                     matInput
                     name="customerCompanyName"
                     placeholder="Enter company name..."
-                    [(ngModel)]="trip.customer.companyName"
+                    [(ngModel)]="trip.customerCompany.companyName"
                     required
                     #customerCompanyName="ngModel"
                   />
@@ -221,63 +164,6 @@
             <div class="step-content">
               <h2>Carrier Information</h2>
               <div class="form-row">
-                <label class="form-label">Contact info:</label>
-                <div class="contact-fields">
-                  <mat-form-field
-                    appearance="outline"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-label>First name</mat-label>
-                    <input
-                      matInput
-                      name="carrierFirstName"
-                      [(ngModel)]="trip.carrier.contact.firstName"
-                      required
-                      #carrierFirstName="ngModel"
-                    />
-                    @if(carrierFirstName.invalid && carrierFirstName.touched){
-                    <mat-error>This field is mandatory</mat-error>
-                    }
-                  </mat-form-field>
-
-                  <mat-form-field
-                    appearance="outline"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-label>Last name</mat-label>
-                    <input
-                      matInput
-                      name="carrierLastName"
-                      [(ngModel)]="trip.carrier.contact.lastName"
-                      required
-                      #carrierLastName="ngModel"
-                    />
-                    @if(carrierLastName.invalid && carrierLastName.touched){
-                    <mat-error>This field is mandatory</mat-error>
-                    }
-                  </mat-form-field>
-
-                  <mat-form-field
-                    appearance="outline"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-label>Phone</mat-label>
-                    <input
-                      matInput
-                      name="carrierPhone"
-                      [(ngModel)]="trip.carrier.contact.phone"
-                      type="tel"
-                      required
-                      #carrierPhone="ngModel"
-                    />
-                    @if(carrierPhone.invalid && carrierPhone.touched){
-                    <mat-error>This field is mandatory</mat-error>
-                    }
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="form-row">
                 <label class="form-label">Company name:</label>
                 <mat-form-field
                   appearance="outline"
@@ -288,7 +174,7 @@
                     matInput
                     name="carrierCompanyName"
                     placeholder="Enter company name..."
-                    [(ngModel)]="trip.carrier.companyName"
+                    [(ngModel)]="trip.carrierCompany.companyName"
                     required
                     #carrierCompanyName="ngModel"
                   />
@@ -354,48 +240,14 @@
                       appearance="outline"
                       subscriptSizing="dynamic"
                     >
-                      <mat-label>First name</mat-label>
+                      <mat-label>Additional info</mat-label>
                       <input
                         matInput
-                        name="loadingFirstName_{{
+                        name="loadingadditionalInfo_{{
                           routePointExtended.routePoint.sequence
                         }}"
                         [(ngModel)]="
-                          routePointExtended.routePoint.contactInfo.firstName
-                        "
-                        required
-                      />
-                    </mat-form-field>
-
-                    <mat-form-field
-                      appearance="outline"
-                      subscriptSizing="dynamic"
-                    >
-                      <mat-label>Last name</mat-label>
-                      <input
-                        matInput
-                        name="loadingLastName_{{
-                          routePointExtended.routePoint.sequence
-                        }}"
-                        [(ngModel)]="
-                          routePointExtended.routePoint.contactInfo.lastName
-                        "
-                        required
-                      />
-                    </mat-form-field>
-
-                    <mat-form-field
-                      appearance="outline"
-                      subscriptSizing="dynamic"
-                    >
-                      <mat-label>Phone</mat-label>
-                      <input
-                        matInput
-                        name="loadingPhone_{{
-                          routePointExtended.routePoint.sequence
-                        }}"
-                        [(ngModel)]="
-                          routePointExtended.routePoint.contactInfo.phone
+                          routePointExtended.routePoint.additionalInfo
                         "
                         required
                       />
@@ -523,48 +375,14 @@
                       appearance="outline"
                       subscriptSizing="dynamic"
                     >
-                      <mat-label>First name</mat-label>
+                      <mat-label>Additional info</mat-label>
                       <input
                         matInput
-                        name="unloadingFirstName_{{
+                        name="unloadingAdditionalInfo_{{
                           routePointExtended.routePoint.sequence
                         }}"
                         [(ngModel)]="
-                          routePointExtended.routePoint.contactInfo.firstName
-                        "
-                        required
-                      />
-                    </mat-form-field>
-
-                    <mat-form-field
-                      appearance="outline"
-                      subscriptSizing="dynamic"
-                    >
-                      <mat-label>Last name</mat-label>
-                      <input
-                        matInput
-                        name="unloadingLastName_{{
-                          routePointExtended.routePoint.sequence
-                        }}"
-                        [(ngModel)]="
-                          routePointExtended.routePoint.contactInfo.lastName
-                        "
-                        required
-                      />
-                    </mat-form-field>
-
-                    <mat-form-field
-                      appearance="outline"
-                      subscriptSizing="dynamic"
-                    >
-                      <mat-label>Phone</mat-label>
-                      <input
-                        matInput
-                        name="unloadingPhone_{{
-                          routePointExtended.routePoint.sequence
-                        }}"
-                        [(ngModel)]="
-                          routePointExtended.routePoint.contactInfo.phone
+                          routePointExtended.routePoint.additionalInfo
                         "
                         required
                       />
@@ -663,7 +481,7 @@
                     <input
                       matInput
                       name="driverFirstName"
-                      [(ngModel)]="trip.driver.contact.firstName"
+                      [(ngModel)]="trip.driver.contactInfo.firstName"
                       required
                       #driverFirstName="ngModel"
                     />
@@ -680,7 +498,7 @@
                     <input
                       matInput
                       name="driverLastName"
-                      [(ngModel)]="trip.driver.contact.lastName"
+                      [(ngModel)]="trip.driver.contactInfo.lastName"
                       required
                       #driverLastName="ngModel"
                     />
@@ -697,7 +515,7 @@
                     <input
                       matInput
                       name="driverPhone"
-                      [(ngModel)]="trip.driver.contact.phone"
+                      [(ngModel)]="trip.driver.contactInfo.phone"
                       type="tel"
                       required
                       #driverPhone="ngModel"
@@ -733,7 +551,7 @@
 
               <h2>Vehicle Details</h2>
               <div class="form-row">
-                <label class="form-label">Vehicle model:</label>
+                <label class="form-label">Truck model:</label>
                 <mat-form-field
                   appearance="outline"
                   class="full-width"
@@ -741,20 +559,20 @@
                 >
                   <input
                     matInput
-                    name="vehicleModel"
-                    placeholder="Enter vehicle model..."
-                    [(ngModel)]="trip.transport.truckBrand"
+                    name="truckModel"
+                    placeholder="Enter truck model..."
+                    [(ngModel)]="trip.truck.brand"
                     required
-                    #vehicleModel="ngModel"
+                    #truckModel="ngModel"
                   />
-                  @if(vehicleModel.invalid && vehicleModel.touched){
+                  @if(truckModel.invalid && truckModel.touched){
                   <mat-error>This field is mandatory</mat-error>
                   }
                 </mat-form-field>
               </div>
 
               <div class="form-row">
-                <label class="form-label">License plate:</label>
+                <label class="form-label">Truck license plate:</label>
                 <mat-form-field
                   appearance="outline"
                   class="full-width"
@@ -762,14 +580,34 @@
                 >
                   <input
                     matInput
-                    name="vehicleLicensePlate"
-                    placeholder="Enter vehicle license plate..."
-                    [(ngModel)]="trip.transport.licensePlate"
+                    name="truckLicensePlate"
+                    placeholder="Enter truck license plate..."
+                    [(ngModel)]="trip.truck.licensePlate"
                     required
-                    #vehicleLicensePlate="ngModel"
+                    #truckLicensePlate="ngModel"
                   />
-                  @if(vehicleLicensePlate.invalid &&
-                  vehicleLicensePlate.touched){
+                  @if(truckLicensePlate.invalid && truckLicensePlate.touched){
+                  <mat-error>This field is mandatory</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Trailer model:</label>
+                <mat-form-field
+                  appearance="outline"
+                  class="full-width"
+                  subscriptSizing="dynamic"
+                >
+                  <input
+                    matInput
+                    name="trailerModel"
+                    placeholder="Enter truck model..."
+                    [(ngModel)]="trip.trailer.brand"
+                    required
+                    #trailerModel="ngModel"
+                  />
+                  @if(trailerModel.invalid && trailerModel.touched){
                   <mat-error>This field is mandatory</mat-error>
                   }
                 </mat-form-field>
@@ -786,7 +624,7 @@
                     matInput
                     name="trailerLicensePlate"
                     placeholder="Enter trailer license plate..."
-                    [(ngModel)]="trip.transport.trailerLicensePlate"
+                    [(ngModel)]="trip.trailer.licensePlate"
                     required
                     #trailerLicensePlate="ngModel"
                   />

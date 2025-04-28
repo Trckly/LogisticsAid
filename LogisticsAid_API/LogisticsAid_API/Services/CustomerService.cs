@@ -8,29 +8,29 @@ namespace LogisticsAid_API.Services;
 public class CustomerService
 {
     private readonly IMapper _mapper;
-    private readonly ICustomerRepository _customerRepository;
+    private readonly ICustomerCompanyRepository _customerCompanyRepository;
 
-    public CustomerService(IMapper mapper, ICustomerRepository customerRepository)
+    public CustomerService(IMapper mapper, ICustomerCompanyRepository customerCompanyRepository)
     {
         _mapper = mapper;
-        _customerRepository = customerRepository;
+        _customerCompanyRepository = customerCompanyRepository;
     }
 
-    public async Task<CustomerDTO?> GetCustomerByIdAsync(string customerId, CancellationToken ct)
+    public async Task<CustomerCompanyDTO?> GetCustomerCompanyByIdAsync(string customerCompanyId, CancellationToken ct)
     {
-        var customer = await _customerRepository.GetCustomerAsync(Guid.Parse(customerId), ct);
-        return _mapper.Map<CustomerDTO>(customer);
+        var customer = await _customerCompanyRepository.GetCustomerCompanyAsync(customerCompanyId, ct);
+        return _mapper.Map<CustomerCompanyDTO>(customer);
     }
     
-    public async Task<CustomerDTO?> GetCustomerByPhoneAsync(string phone, CancellationToken ct)
+    public async Task<CustomerCompanyDTO?> GetCustomerCompanyByPhoneAsync(string phone, CancellationToken ct)
     {
-        var customer = await _customerRepository.GetCustomerAsync(phone, ct);
-        return _mapper.Map<CustomerDTO>(customer);
+        var customer = await _customerCompanyRepository.GetCustomerCompanyAsync(phone, ct);
+        return _mapper.Map<CustomerCompanyDTO>(customer);
     }
 
-    public async Task AddCustomerAsync(CustomerDTO customerDTO, CancellationToken ct)
+    public async Task AddCustomerCompanyAsync(CustomerCompanyDTO customerCompanyDto, CancellationToken ct)
     {
-        var customer = _mapper.Map<Customer>(customerDTO);
-        await _customerRepository.UpdateCustomerAsync(customer, ct);
+        var customer = _mapper.Map<CustomerCompany>(customerCompanyDto);
+        await _customerCompanyRepository.UpdateCustomerCompanyAsync(customer, ct);
     }
 }

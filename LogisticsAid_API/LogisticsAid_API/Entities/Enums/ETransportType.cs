@@ -1,6 +1,7 @@
 namespace LogisticsAid_API.Entities.Enums;
 
-public class ETransportType
+public enum ETransportType
 {
-    
+    Truck,
+    Trailer
 }

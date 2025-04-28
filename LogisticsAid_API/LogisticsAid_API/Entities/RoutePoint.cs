@@ -16,11 +16,6 @@ public class RoutePoint
     [Required]
     [Column("address_id")]
     public required Guid AddressId { get; set; }
-    
-    [Required]
-    [Column("company_name")]
-    [MaxLength(100)]
-    public required string CompanyName { get; set; }
 
     [Required]
     [Column("type")]
@@ -30,16 +25,20 @@ public class RoutePoint
     [Column("sequence")]
     public required int Sequence { get; set; }
     
-    [Required]
-    [Column("contact_info_id")]
-    public Guid? ContactInfoId { get; set; }
+    // -----Optional-----
+    
+    [Column("company_name")]
+    [MaxLength(100)]
+    public string? CompanyName { get; set; }
+    
+    
+    [Column("additional_info")]
+    [MaxLength(500)]
+    public string? AdditionalInfo { get; set; }
 
     // -----Navigation properties-----
     [ForeignKey(nameof(AddressId))]
     public required Address Address { get; set; }
-    
-    [ForeignKey(nameof(ContactInfoId))]
-    public required ContactInfo ContactInfo { get; set; }
 
     public required ICollection<Trip> Trips { get; set; } = new List<Trip>();
     public required ICollection<RoutePointTrip> RoutePointTrips { get; set; } = new List<RoutePointTrip>();

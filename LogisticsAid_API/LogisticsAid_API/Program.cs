@@ -29,9 +29,9 @@ builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<ContactInfoService>();
 builder.Services.AddScoped<AddressService>();
 builder.Services.AddScoped<RoutePointService>();
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerCompanyRepository, CustomerCompanyRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-builder.Services.AddScoped<ICarrierRepository, CarrierRepository>();
+builder.Services.AddScoped<ICarrierCompanyRepository, CarrierCompanyRepository>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IRoutePointRepository, RoutePointRepository>();
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
@@ -101,8 +101,11 @@ builder.Services.AddDbContext<LogisticsAidDbContext>(options =>
 {
     options
         .EnableSensitiveDataLogging()
-        .UseNpgsql(builder.Configuration.GetConnectionString("DevConnection"), 
-        o => o.MapEnum<EGender>("gender").MapEnum<ERoutePointType>("route_point_type"));
+        .UseNpgsql(builder.Configuration.GetConnectionString("DevConnection"),
+            o => o
+                .MapEnum<EGender>("gender")
+                .MapEnum<ERoutePointType>("route_point_type")
+                .MapEnum<ETransportType>("transport_type"));
 });
 
 var app = builder.Build();

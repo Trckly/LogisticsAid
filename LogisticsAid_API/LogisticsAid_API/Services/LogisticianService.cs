@@ -87,7 +87,7 @@ public class LogisticianService
         logistician = _mapper.Map<Logistician>(logisticianDto);
         var contactInfo = _mapper.Map<ContactInfo>(logisticianDto.ContactInfo);
 
-        logistician.Contact = contactInfo;
+        logistician.ContactInfo = contactInfo;
 
         var (hash, salt) = _passwordService.HashPassword(logisticianDto.Password!);
         logistician.PasswordHash = hash;

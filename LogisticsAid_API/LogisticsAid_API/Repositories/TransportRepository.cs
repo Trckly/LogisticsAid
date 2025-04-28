@@ -22,7 +22,7 @@ public class TransportRepository : ITransportRepository
     public async Task<IEnumerable<Transport>> GetTransportByCompanyAsync(string companyName, CancellationToken ct)
     {
         return await _context.Transport
-            .Where(t => t.CompanyName == companyName)
+            .Where(t => t.CarrierCompanyId == companyName)
             .ToListAsync(ct);
     }
 

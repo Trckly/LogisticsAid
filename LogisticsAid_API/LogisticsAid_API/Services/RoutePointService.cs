@@ -30,12 +30,8 @@ public class RoutePointService
         await _addressService.UpsertAddressAsync(routePointDto.Address, ct);
         var addressDto = await _addressService.GetAddressAsync(routePointDto.Address, ct);
         
-        await _contactInfoService.UpsertContactInfoAsync(routePointDto.ContactInfo, ct);
-        var contactInfoDto = await _contactInfoService.GetContactInfoAsync(routePointDto.ContactInfo, ct);
-        
         var routePoint = _mapper.Map<RoutePoint>(routePointDto);
         routePoint.AddressId = Guid.Parse(addressDto.Id);           // Actual address id if it already existed prior to this function call
-        routePoint.ContactInfoId = Guid.Parse(contactInfoDto.Id);   // Actual contact info id
         await _routePointRepository.CreateRoutePointAsync(routePoint, ct);
     }
 

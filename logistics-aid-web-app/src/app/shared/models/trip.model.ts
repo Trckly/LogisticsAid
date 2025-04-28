@@ -1,5 +1,5 @@
-import { Carrier } from './carrier.model';
-import { Customer } from './customer.model';
+import { CarrierCompany } from './carrier-company.model';
+import { CustomerCompany } from './customer-company.model';
 import { Driver } from './driver.model';
 import { Logistician } from './logistician.model';
 import { RoutePoint } from './route-point.model';
@@ -12,14 +12,15 @@ export class Trip {
   loadingDate: Date;
   unloadingDate: Date;
   logistician: Logistician = new Logistician();
-  carrier: Carrier = new Carrier();
-  customer: Customer = new Customer();
+  carrierCompany: CarrierCompany = new CarrierCompany();
+  customerCompany: CustomerCompany = new CustomerCompany();
   driver: Driver = new Driver();
-  transport: Transport = new Transport();
+  truck: Transport = new Transport();
+  trailer: Transport = new Transport();
   customerPrice: number;
   carrierPrice: number;
-  withTax: boolean;
   cargoName: string;
   cargoWeight: number;
+  withTax: boolean;
   routePoints: RoutePoint[] = [];
 }

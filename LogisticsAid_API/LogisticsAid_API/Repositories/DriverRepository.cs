@@ -21,7 +21,7 @@ public class DriverRepository : IDriverRepository
 
     public async Task<Driver?> GetDriverAsync(string phone, CancellationToken ct)
     {
-        return await _context.Drivers.SingleOrDefaultAsync(d => d.Contact.Phone == phone, cancellationToken: ct);
+        return await _context.Drivers.SingleOrDefaultAsync(d => d.ContactInfo.Phone == phone, cancellationToken: ct);
     }
 
     public async Task<Driver?> GetDriverByLicenseAsync(string license, CancellationToken ct)
@@ -31,7 +31,7 @@ public class DriverRepository : IDriverRepository
 
     public async Task<IEnumerable<Driver>> GetDriversByCompanyNameAsync(string companyName, CancellationToken ct)
     {
-        return await _context.Drivers.Where(d => d.CompanyName == companyName).ToListAsync(ct);
+        return await _context.Drivers.Where(d => d.CarrierCompanyId == companyName).ToListAsync(ct);
     }
 
     public async Task<IEnumerable<Driver>> GetAllDriversAsync(CancellationToken ct)

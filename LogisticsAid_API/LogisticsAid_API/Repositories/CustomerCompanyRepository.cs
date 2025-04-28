@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogisticsAid_API.Repositories;
 
-public class CustomerRepository : ICustomerRepository
+public class CustomerCompanyRepository : ICustomerCompanyRepository
 {
     private readonly LogisticsAidDbContext _context;
 
-    public CustomerRepository(LogisticsAidDbContext context)
+    public CustomerCompanyRepository(LogisticsAidDbContext context)
     {
         _context = context;
     }

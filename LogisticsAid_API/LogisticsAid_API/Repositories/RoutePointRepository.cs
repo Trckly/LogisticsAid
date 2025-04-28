@@ -46,7 +46,6 @@ public class RoutePointRepository : IRoutePointRepository
         return await _context.RoutePoints
             .Where(rp => routePointIds.Contains(rp.Id))
             .Include(rp => rp.Address)
-            .Include(rp => rp.ContactInfo)
             .ToListAsync(ct);
     }
 

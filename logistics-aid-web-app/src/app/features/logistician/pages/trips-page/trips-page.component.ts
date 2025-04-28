@@ -179,7 +179,9 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
         this.paginatedTrips.items.forEach((item) => {
           this.tableData.push({
             trip: item,
-            routePoints: this.routePoints.filter((rp) => rp.tripId === item.id),
+            routePoints: this.routePoints.filter((rp) =>
+              rp.trips.some((trip) => trip.id === item.id)
+            ),
           });
         });
 
@@ -297,8 +299,8 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
     return result.trimEnd();
   }
 
-  getLicensePlate(transport: Transport): string {
-    return transport.licensePlate + '\n' + transport.trailerLicensePlate;
+  getLicensePlate(truck: Transport, trailer: Transport): string {
+    return truck.licensePlate + '\n' + trailer.licensePlate;
   }
 
   calculateProfit(trip: Trip): number {

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LogisticsAid_API.Entities.Enums;
 
 namespace LogisticsAid_API.Entities;
 
@@ -13,19 +14,21 @@ public class Transport
     public required string LicensePlate { get; set; }
     
     [Required]
-    [Column("truck_brand")]
-    [MaxLength(50)]
-    public required string TruckBrand { get; set; }
+    [Column("carrier_company_id")]
+    [MaxLength(100)]
+    public required string CarrierCompanyId { get; set; }
     
     [Required]
-    [Column("trailer_license_plate")]
-    [MaxLength(8)]
-    public required string TrailerLicensePlate { get; set; }
+    [Column("type")]
+    public required ETransportType TransportType { get; set; }
     
-    [Required]
-    [Column("company_name")]
-    [MaxLength(50)]
-    public required string CompanyName { get; set; }
+    // -----Optional-----
+    
+    [Column("brand")]
+    [MaxLength(100)]
+    public string? Brand { get; set; }
     
     // -----Navigation properties-----
+    [ForeignKey(nameof(CarrierCompanyId))]
+    public CarrierCompany? CarrierCompany { get; set; }
 }

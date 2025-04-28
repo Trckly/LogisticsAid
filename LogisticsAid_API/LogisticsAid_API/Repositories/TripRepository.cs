@@ -34,14 +34,15 @@ public class TripRepository : ITripRepository
             .Skip(page * pageSize)
             .Take(pageSize)
             .Include(t => t.Logistician)
-            .ThenInclude(logistician => logistician.Contact)
+            .ThenInclude(logistician => logistician.ContactInfo)
             .Include(t => t.Driver)
-            .ThenInclude(driver => driver.Contact)
-            .Include(t => t.Customer)
-            .ThenInclude(customer => customer.Contact)
-            .Include(t => t.Carrier)
-            .ThenInclude(carrier => carrier.Contact)
-            .Include(t => t.Transport)
+            .ThenInclude(driver => driver.ContactInfo)
+            .Include(t => t.CustomerCompany)
+            .ThenInclude(customer => customer.Contacts)
+            .Include(t => t.CarrierCompany)
+            .ThenInclude(carrier => carrier.Contacts)
+            .Include(t => t.Truck)
+            .Include(t => t.Trailer)
             .ToListAsync(ct);
     }
 
@@ -60,17 +61,17 @@ public class TripRepository : ITripRepository
             .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<Trip>> GetTripsByCustomerAsync(Guid customerId, CancellationToken ct)
+    public async Task<IEnumerable<Trip>> GetTripsByCustomerCompanyAsync(string customerCompanyId, CancellationToken ct)
     {
         return await _context.Trips
-            .Where(t => t.CustomerId == customerId)
+            .Where(t => t.CustomerCompanyId == customerCompanyId)
             .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<Trip>> GetTripsByCarrierAsync(Guid carrierId, CancellationToken ct)
+    public async Task<IEnumerable<Trip>> GetTripsByCarrierCompanyAsync(string carrierCompanyId, CancellationToken ct)
     {
         return await _context.Trips
-            .Where(t => t.CarrierId == carrierId)
+            .Where(t => t.CarrierCompanyId == carrierCompanyId)
             .ToListAsync(ct);
     }
 
@@ -92,14 +93,15 @@ public class TripRepository : ITripRepository
     {
         return await _context.Trips
             .Include(t => t.Logistician)
-            .ThenInclude(logistician => logistician.Contact)
+            .ThenInclude(logistician => logistician.ContactInfo)
             .Include(t => t.Driver)
-            .ThenInclude(driver => driver.Contact)
-            .Include(t => t.Customer)
-            .ThenInclude(customer => customer.Contact)
-            .Include(t => t.Carrier)
-            .ThenInclude(carrier => carrier.Contact)
-            .Include(t => t.Transport)
+            .ThenInclude(driver => driver.ContactInfo)
+            .Include(t => t.CustomerCompany)
+            .ThenInclude(customer => customer.Contacts)
+            .Include(t => t.CarrierCompany)
+            .ThenInclude(carrier => carrier.Contacts)
+            .Include(t => t.Truck)
+            .Include(t => t.Trailer)
             .ToListAsync(ct);
     }
 

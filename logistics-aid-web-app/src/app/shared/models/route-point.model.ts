@@ -5,10 +5,10 @@ import { Trip } from './trip.model';
 
 export class RoutePoint {
   id: string;
-  tripId: string;
-  address: Address = new Address();
-  companyName: string;
   type: ERoutePointType;
   sequence: number;
-  contactInfo?: ContactInfo = new ContactInfo();
+  companyName?: string;
+  additionalInfo?: string;
+  address: Address = new Address();
+  trips?: Trip[] = [];
 }

@@ -2,7 +2,7 @@ using LogisticsAid_API.Entities;
 
 namespace LogisticsAid_API.Repositories.Interfaces;
 
-public interface ICustomerRepository
+public interface ICustomerCompanyRepository
 {
     public CustomerCompany? GetCustomerCompany(string companyName);
     public CustomerCompany? GetCustomerCompanyByPhone(string phone);

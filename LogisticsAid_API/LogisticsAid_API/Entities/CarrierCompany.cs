@@ -1,24 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace LogisticsAid_API.Entities;
 
-[Table("carriers", Schema = "public")]
-public class Carrier
+[Table("carrier_companies", Schema = "public")]
+public class CarrierCompany
 {
     [Key]
     [Required]
-    [Column("contact_id")]
-    public Guid ContactId { get; set; }  
-    
-    [Required]
     [Column("company_name")]
-    [MaxLength(50)]
+    [MaxLength(250)]
     public required string CompanyName { get; set; }
     
     // -----Navigation properties-----
-    
-    [ForeignKey(nameof(ContactId))]
-    public required ContactInfo Contact { get; set; }
+    public required ICollection<ContactInfo> Contacts { get; set; } = new List<ContactInfo>();
+    public required ICollection<Driver> Drivers { get; set; } = new List<Driver>();
+    public required ICollection<Transport> Transport { get; set; } = new List<Transport>();
 }

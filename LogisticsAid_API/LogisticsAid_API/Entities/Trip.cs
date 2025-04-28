@@ -43,21 +43,28 @@ public class Trip
     public required Guid LogisticianId { get; set; }
     
     [Required]
-    [Column("carrier_id")]
-    public required Guid CarrierId { get; set; }
+    [Column("carrier_company_id")]
+    [MaxLength(100)]
+    public required string CarrierCompanyId { get; set; }
     
     [Required]
-    [Column("customer_id")]
-    public required Guid CustomerId { get; set; }
+    [Column("customer_company_id")]
+    [MaxLength(100)]
+    public required string CustomerCompanyId { get; set; }
     
     [Required]
     [Column("driver_id")]
     public required Guid DriverId { get; set; }
     
     [Required]
-    [Column("transport_id")]
+    [Column("truck_id")]
     [MaxLength(8)]
-    public required string TransportId { get; set; }
+    public required string TruckId { get; set; }
+    
+    [Required]
+    [Column("trailer_id")]
+    [MaxLength(8)]
+    public required string TrailerId { get; set; }
     
     [Required]
     [Column("customer_price")]
@@ -78,17 +85,20 @@ public class Trip
     [ForeignKey(nameof(LogisticianId))] 
     public required Logistician Logistician { get; set; }
 
-    [ForeignKey(nameof(CarrierId))]
-    public required Carrier Carrier { get; set; }
+    [ForeignKey(nameof(CarrierCompanyId))]
+    public required CarrierCompany CarrierCompany { get; set; }
     
-    [ForeignKey(nameof(CustomerId))]
-    public required Customer Customer { get; set; }
+    [ForeignKey(nameof(CustomerCompanyId))]
+    public required CustomerCompany CustomerCompany { get; set; }
     
     [ForeignKey(nameof(DriverId))]
     public required Driver Driver { get; set; }
     
-    [ForeignKey(nameof(TransportId))]
-    public required Transport Transport { get; set; }
+    [ForeignKey(nameof(TruckId))]
+    public required Transport Truck { get; set; }
+    
+    [ForeignKey(nameof(TrailerId))]
+    public required Transport Trailer { get; set; }
     
     public ICollection<RoutePoint> RoutePoints { get; set; } = new List<RoutePoint>();
     public ICollection<RoutePointTrip> RoutePointTrips { get; set; } = new List<RoutePointTrip>();

@@ -187,7 +187,7 @@
             License plate
           </th>
           <td mat-cell *matCellDef="let row">
-            {{ getLicensePlate(row.trip.transport) }}
+            {{ getLicensePlate(row.trip.truck, row.trip.trailer) }}
           </td>
         </ng-container>
 

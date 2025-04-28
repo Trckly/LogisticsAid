@@ -17,12 +17,16 @@ public class Driver
     public required string License { get; set; }
     
     [Required]
-    [Column("company_name")]
-    [MaxLength(50)]
-    public required string CompanyName { get; set; }
+    [Column("carrier_company_id")]
+    [MaxLength(100)]
+    public required string CarrierCompanyId { get; set; }
+
     
     // -----Navigation properties-----
     
     [ForeignKey(nameof(ContactId))]
-    public required ContactInfo Contact { get; set; }  
+    public ContactInfo? ContactInfo { get; set; }  
+    
+    [ForeignKey(nameof(CarrierCompanyId))]
+    public CarrierCompany? CarrierCompany { get; set; }
 }

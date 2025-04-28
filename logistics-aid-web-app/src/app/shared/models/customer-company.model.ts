@@ -1,6 +1,7 @@
 import { ContactInfo } from './contact-info.model';
 
-export class Customer {
-  contact: ContactInfo = new ContactInfo();
+export class CustomerCompany {
   companyName: string;
+
+  contacts: ContactInfo[] = [];
 }

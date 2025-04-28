@@ -7,8 +7,8 @@ public sealed class LogisticsAidDbContext : DbContext
 {
     public DbSet<ContactInfo> ContactInfo { get; set; }
     public DbSet<Logistician> Logisticians { get; set; }
-    public DbSet<Carrier> Carriers { get; set; }
-    public DbSet<Customer> Customers { get; set; }
+    public DbSet<CarrierCompany> CarrierCompanies { get; set; }
+    public DbSet<CustomerCompany> CustomerCompanies { get; set; }
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Transport> Transport { get; set; }
@@ -38,39 +38,66 @@ public sealed class LogisticsAidDbContext : DbContext
         {
             entity.HasIndex(ci => ci.Phone)
                 .IsUnique();
+            
+            entity.HasIndex(ci => ci.Email)
+                .IsUnique();
+
+            entity.ToTable(t =>
+            {
+                t.HasCheckConstraint("CK_ContactInfo_SingleCompany",
+                    "customer_company_id IS NULL OR carrier_company_id IS NULL");
+                
+                // t.HasCheckConstraint("CK_ContactInfo_AtLeastOneCompany", 
+                //     "customer_company_id IS NOT NULL OR carrier_company_id IS NOT NULL");
+            });
         });
 
 
         modelBuilder.Entity<Logistician>(entity =>
         {
-            entity.HasOne(l => l.Contact)
+            entity.HasOne(l => l.ContactInfo)
                 .WithMany()
                 .HasForeignKey(l => l.ContactId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
 
-        modelBuilder.Entity<Carrier>(entity =>
+        modelBuilder.Entity<CarrierCompany>(entity =>
         {
-            entity.HasOne(c => c.Contact)
-                .WithMany()
-                .HasForeignKey(l => l.ContactId)
+            entity.HasMany(c => c.Contacts)
+                .WithOne(c => c.CarrierCompany)
+                .HasForeignKey(c => c.CarrierCompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasMany(c => c.Transport)
+                .WithOne(t => t.CarrierCompany)
+                .HasForeignKey(t => t.CarrierCompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasMany(c => c.Drivers)
+                .WithOne(d => d.CarrierCompany)
+                .HasForeignKey(d => d.CarrierCompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<Customer>(entity =>
+        modelBuilder.Entity<CustomerCompany>(entity =>
         {
-            entity.HasOne(c => c.Contact)
-                .WithMany()
-                .HasForeignKey(c => c.ContactId)
+            entity.HasMany(c => c.Contacts)
+                .WithOne(c => c.CustomerCompany)
+                .HasForeignKey(c => c.CustomerCompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Driver>(entity =>
         {
-            entity.HasOne(d => d.Contact)
+            entity.HasOne(d => d.ContactInfo)
                 .WithMany()
                 .HasForeignKey(d => d.ContactId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasOne(d => d.CarrierCompany)
+                .WithMany(c => c.Drivers)
+                .HasForeignKey(d => d.CarrierCompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
         });
@@ -79,6 +106,10 @@ public sealed class LogisticsAidDbContext : DbContext
 
         modelBuilder.Entity<Transport>(entity =>
         {
+            entity.HasOne(t => t.CarrierCompany)
+                .WithMany(cc => cc.Transport)
+                .HasForeignKey(t => t.CarrierCompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Address>(entity =>
@@ -95,11 +126,6 @@ public sealed class LogisticsAidDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(rp => rp.AddressId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(rp => rp.ContactInfo)
-                .WithMany()
-                .HasForeignKey(rp => rp.ContactInfoId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Trip>(entity =>
@@ -112,14 +138,14 @@ public sealed class LogisticsAidDbContext : DbContext
                 .HasForeignKey(t => t.LogisticianId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(t => t.Carrier)
+            entity.HasOne(t => t.CarrierCompany)
                 .WithMany()
-                .HasForeignKey(t => t.CarrierId)
+                .HasForeignKey(t => t.CarrierCompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(t => t.Customer)
+            entity.HasOne(t => t.CustomerCompany)
                 .WithMany()
-                .HasForeignKey(t => t.CustomerId)
+                .HasForeignKey(t => t.CustomerCompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(t => t.Driver)
@@ -127,9 +153,14 @@ public sealed class LogisticsAidDbContext : DbContext
                 .HasForeignKey(t => t.DriverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(t => t.Transport)
+            entity.HasOne(t => t.Truck)
                 .WithMany()
-                .HasForeignKey(t => t.TransportId)
+                .HasForeignKey(t => t.TruckId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(t => t.Trailer)
+                .WithMany()
+                .HasForeignKey(t => t.TrailerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany(t => t.RoutePoints)

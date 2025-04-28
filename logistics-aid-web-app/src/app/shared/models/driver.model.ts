@@ -1,7 +1,8 @@
 import { ContactInfo } from './contact-info.model';
+import { CarrierCompany } from './carrier-company.model';
 
 export class Driver {
   license: string;
-  companyName: string;
-  contact: ContactInfo = new ContactInfo();
+  contactInfo: ContactInfo = new ContactInfo();
+  carrierCompany: CarrierCompany = new CarrierCompany();
 }
