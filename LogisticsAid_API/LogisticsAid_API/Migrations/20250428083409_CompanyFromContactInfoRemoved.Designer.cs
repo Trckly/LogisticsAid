@@ -4,6 +4,7 @@ using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticsAid_API.Migrations
 {
     [DbContext(typeof(LogisticsAidDbContext))]
-    partial class LogisticsAidDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250428083409_CompanyFromContactInfoRemoved")]
+    partial class CompanyFromContactInfoRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,42 +80,6 @@ namespace LogisticsAid_API.Migrations
                     b.ToTable("addresses", "public");
                 });
 
-            modelBuilder.Entity("LogisticsAid_API.Entities.Auxiliary.ContactInfoCarrierCompany", b =>
-                {
-                    b.Property<Guid>("ContactInfoId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("contact_info_id");
-
-                    b.Property<string>("CarrierCompanyId")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("carrier_company_id");
-
-                    b.HasKey("ContactInfoId", "CarrierCompanyId");
-
-                    b.HasIndex("CarrierCompanyId");
-
-                    b.ToTable("contact_info_carrier_company", "public");
-                });
-
-            modelBuilder.Entity("LogisticsAid_API.Entities.Auxiliary.ContactInfoCustomerCompany", b =>
-                {
-                    b.Property<Guid>("ContactInfoId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("contact_info_id");
-
-                    b.Property<string>("CustomerCompanyId")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("customer_company_id");
-
-                    b.HasKey("ContactInfoId", "CustomerCompanyId");
-
-                    b.HasIndex("CustomerCompanyId");
-
-                    b.ToTable("contact_info_customer_company", "public");
-                });
-
             modelBuilder.Entity("LogisticsAid_API.Entities.Auxiliary.RoutePointTrip", b =>
                 {
                     b.Property<Guid>("RoutePointId")
@@ -165,6 +132,12 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("birth_date");
 
+                    b.Property<string>("CarrierCompanyCompanyName")
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<string>("CustomerCompanyCompanyName")
+                        .HasColumnType("character varying(250)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(254)
@@ -190,6 +163,10 @@ namespace LogisticsAid_API.Migrations
                         .HasColumnName("phone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarrierCompanyCompanyName");
+
+                    b.HasIndex("CustomerCompanyCompanyName");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -220,8 +197,8 @@ namespace LogisticsAid_API.Migrations
 
                     b.Property<string>("CarrierCompanyId")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("carrier_company_id");
 
                     b.Property<string>("License")
@@ -314,8 +291,8 @@ namespace LogisticsAid_API.Migrations
 
                     b.Property<string>("CarrierCompanyId")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("carrier_company_id");
 
                     b.Property<ETransportType>("TransportType")
@@ -428,44 +405,6 @@ namespace LogisticsAid_API.Migrations
                     b.ToTable("trips", "public");
                 });
 
-            modelBuilder.Entity("LogisticsAid_API.Entities.Auxiliary.ContactInfoCarrierCompany", b =>
-                {
-                    b.HasOne("LogisticsAid_API.Entities.CarrierCompany", "CarrierCompany")
-                        .WithMany("ContactInfoCarrierCompany")
-                        .HasForeignKey("CarrierCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("LogisticsAid_API.Entities.ContactInfo", "ContactInfo")
-                        .WithMany("ContactInfoCarrierCompany")
-                        .HasForeignKey("ContactInfoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CarrierCompany");
-
-                    b.Navigation("ContactInfo");
-                });
-
-            modelBuilder.Entity("LogisticsAid_API.Entities.Auxiliary.ContactInfoCustomerCompany", b =>
-                {
-                    b.HasOne("LogisticsAid_API.Entities.ContactInfo", "ContactInfo")
-                        .WithMany("ContactInfoCustomerCompany")
-                        .HasForeignKey("ContactInfoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("LogisticsAid_API.Entities.CustomerCompany", "CustomerCompany")
-                        .WithMany("ContactInfoCustomerCompanies")
-                        .HasForeignKey("CustomerCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ContactInfo");
-
-                    b.Navigation("CustomerCompany");
-                });
-
             modelBuilder.Entity("LogisticsAid_API.Entities.Auxiliary.RoutePointTrip", b =>
                 {
                     b.HasOne("LogisticsAid_API.Entities.RoutePoint", "RoutePoint")
@@ -485,12 +424,23 @@ namespace LogisticsAid_API.Migrations
                     b.Navigation("Trip");
                 });
 
+            modelBuilder.Entity("LogisticsAid_API.Entities.ContactInfo", b =>
+                {
+                    b.HasOne("LogisticsAid_API.Entities.CarrierCompany", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("CarrierCompanyCompanyName");
+
+                    b.HasOne("LogisticsAid_API.Entities.CustomerCompany", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("CustomerCompanyCompanyName");
+                });
+
             modelBuilder.Entity("LogisticsAid_API.Entities.Driver", b =>
                 {
                     b.HasOne("LogisticsAid_API.Entities.CarrierCompany", "CarrierCompany")
                         .WithMany("Drivers")
                         .HasForeignKey("CarrierCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LogisticsAid_API.Entities.ContactInfo", "ContactInfo")
@@ -531,7 +481,7 @@ namespace LogisticsAid_API.Migrations
                     b.HasOne("LogisticsAid_API.Entities.CarrierCompany", "CarrierCompany")
                         .WithMany("Transport")
                         .HasForeignKey("CarrierCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CarrierCompany");
@@ -590,23 +540,16 @@ namespace LogisticsAid_API.Migrations
 
             modelBuilder.Entity("LogisticsAid_API.Entities.CarrierCompany", b =>
                 {
-                    b.Navigation("ContactInfoCarrierCompany");
+                    b.Navigation("Contacts");
 
                     b.Navigation("Drivers");
 
                     b.Navigation("Transport");
                 });
 
-            modelBuilder.Entity("LogisticsAid_API.Entities.ContactInfo", b =>
-                {
-                    b.Navigation("ContactInfoCarrierCompany");
-
-                    b.Navigation("ContactInfoCustomerCompany");
-                });
-
             modelBuilder.Entity("LogisticsAid_API.Entities.CustomerCompany", b =>
                 {
-                    b.Navigation("ContactInfoCustomerCompanies");
+                    b.Navigation("Contacts");
                 });
 
             modelBuilder.Entity("LogisticsAid_API.Entities.RoutePoint", b =>

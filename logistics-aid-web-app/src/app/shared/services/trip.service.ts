@@ -31,7 +31,14 @@ export class TripService {
   getRoutePointsById(ids: string[]) {
     return this.http.get(this.url + '/GetRoutePointsById', {
       withCredentials: true,
-      params: { routePointIds: ids },
+      params: { tripIds: ids },
+    });
+  }
+
+  getRoutePointTrips(ids: string[]) {
+    return this.http.get(this.url + '/GetRoutePointsTrips', {
+      withCredentials: true,
+      params: { tripIds: ids },
     });
   }
 

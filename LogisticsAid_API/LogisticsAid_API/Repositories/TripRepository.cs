@@ -38,9 +38,7 @@ public class TripRepository : ITripRepository
             .Include(t => t.Driver)
             .ThenInclude(driver => driver.ContactInfo)
             .Include(t => t.CustomerCompany)
-            .ThenInclude(customer => customer.Contacts)
             .Include(t => t.CarrierCompany)
-            .ThenInclude(carrier => carrier.Contacts)
             .Include(t => t.Truck)
             .Include(t => t.Trailer)
             .ToListAsync(ct);

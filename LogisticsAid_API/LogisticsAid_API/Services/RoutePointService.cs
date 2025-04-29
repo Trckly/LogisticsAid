@@ -29,10 +29,15 @@ public class RoutePointService
     {
         await _addressService.UpsertAddressAsync(routePointDto.Address, ct);
         var addressDto = await _addressService.GetAddressAsync(routePointDto.Address, ct);
-        
+
         var routePoint = _mapper.Map<RoutePoint>(routePointDto);
-        routePoint.AddressId = Guid.Parse(addressDto.Id);           // Actual address id if it already existed prior to this function call
-        await _routePointRepository.CreateRoutePointAsync(routePoint, ct);
+        routePoint.AddressId = Guid.Parse(addressDto.Id);
+
+        var existingRoutePoint = await _routePointRepository.GetRoutePointAsync(routePoint, ct);
+        if (existingRoutePoint == null)
+        {
+            await _routePointRepository.CreateRoutePointAsync(routePoint, ct);
+        }
     }
 
     public async Task<IEnumerable<RoutePointDTO>> GetRoutePointsByIdAsync(IEnumerable<string> routePointIds,
@@ -43,6 +48,4 @@ public class RoutePointService
         
         return routePoints.Select(rp => _mapper.Map<RoutePointDTO>(rp));
     }
-
-
 }

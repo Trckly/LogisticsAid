@@ -13,11 +13,13 @@ public class TripController : BaseController
 {
     private readonly TripService _tripService;
     private readonly RoutePointService _routePointService;
+    private readonly RoutePointTripService _routePointTripService;
 
-    public TripController(TripService tripService, RoutePointService routePointService)
+    public TripController(TripService tripService, RoutePointService routePointService, RoutePointTripService routePointTripService)
     {
         _tripService = tripService;
         _routePointService = routePointService;
+        _routePointTripService = routePointTripService;
     }
     
     [HttpGet]
@@ -52,20 +54,38 @@ public class TripController : BaseController
 
     [HttpGet]
     public Task<ActionResult> GetRoutePointsById(
-        [FromQuery] IEnumerable<string>? routePointIds,
+        [FromQuery] IEnumerable<string>? tripIds,
         CancellationToken ct) =>
         ExecuteSafely(async () =>
         {
-            var ids = routePointIds?.ToList();
+            var ids = tripIds?.ToList();
 
             if (ids == null || ids.Count == 0)
             {
-                return BadRequest("No route point IDs provided.");
+                return BadRequest("No trip IDs provided for route points.");
             }
 
-            var routePointsDto = await _routePointService.GetRoutePointsByIdAsync(ids, ct);
+            var routePointsDto = await _routePointTripService.GetRoutePointsByTripIdsAsync(ids, ct);
 
             return Ok(routePointsDto);
+        });
+
+    [HttpGet]
+    public Task<ActionResult> GetRoutePointsTrips(
+        [FromQuery] IEnumerable<string>? tripIds,
+        CancellationToken ct) =>
+        ExecuteSafely(async () =>
+        {
+            var ids = tripIds?.ToList();
+
+            if (ids == null || ids.Count == 0)
+            {
+                return BadRequest("No trip IDs provided for route points.");
+            }
+
+            var routePointsTripsDto = await _routePointTripService.GetRoutePointsTripsAsync(ids, ct);
+
+            return Ok(routePointsTripsDto);
         });
 
     [HttpGet("{id}")]

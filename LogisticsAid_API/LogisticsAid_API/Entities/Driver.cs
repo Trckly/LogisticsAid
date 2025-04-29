@@ -18,15 +18,14 @@ public class Driver
     
     [Required]
     [Column("carrier_company_id")]
-    [MaxLength(100)]
+    [MaxLength(250)]
     public required string CarrierCompanyId { get; set; }
-
     
     // -----Navigation properties-----
     
     [ForeignKey(nameof(ContactId))]
-    public ContactInfo? ContactInfo { get; set; }  
+    public required ContactInfo ContactInfo { get; set; }
     
     [ForeignKey(nameof(CarrierCompanyId))]
-    public CarrierCompany? CarrierCompany { get; set; }
+    public required CarrierCompany CarrierCompany { get; set; }
 }

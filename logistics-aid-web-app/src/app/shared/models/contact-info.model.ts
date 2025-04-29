@@ -8,6 +8,4 @@ export class ContactInfo {
   phone: string;
   email: string;
   birthDate?: Date;
-  customerCompany: CustomerCompany = new CustomerCompany();
-  carrierCompany: CarrierCompany = new CarrierCompany();
 }

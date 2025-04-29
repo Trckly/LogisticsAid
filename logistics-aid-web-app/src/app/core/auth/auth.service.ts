@@ -55,8 +55,6 @@ export class AuthService implements OnInit {
   }
 
   login() {
-    console.log(JSON.stringify(this.formData));
-
     const credentials: Login = {
       email: this.formData.contactInfo.email,
       password: this.formData.password,
@@ -80,7 +78,7 @@ export class AuthService implements OnInit {
             }
           },
           error: (err) => {
-            console.log('Logout error: ', err);
+            console.error('Logout error: ', err);
             reject(err);
           },
         });
@@ -88,17 +86,15 @@ export class AuthService implements OnInit {
   }
 
   getUserWithToken(): Promise<Logistician | null> {
-    console.log('Getting user with token...');
     return new Promise((resolve) => {
       this.http
         .get(this.url + '/GetUser', { withCredentials: true })
         .subscribe({
           next: (data) => {
-            console.log('User retrieved successfully');
             resolve(data as Logistician);
           },
           error: (err) => {
-            console.log('Error getting user with token:', err.status);
+            console.error('Error getting user with token:', err.status);
             if (err.status === 401 && sessionStorage.getItem('user') != null) {
               sessionStorage.removeItem('user');
               // Don't call retrieveUsername here
@@ -111,17 +107,15 @@ export class AuthService implements OnInit {
   }
 
   retrieveUsername() {
-    console.log('Retrieving username...');
     this.getUserWithToken().then((currentUser) => {
       if (currentUser === null) {
         this.username = 'Username';
-        console.log('Failed to get user from token');
+        console.error('Failed to get user from token');
       } else {
         this.username =
           currentUser.contactInfo.firstName +
           ' ' +
           currentUser.contactInfo.lastName;
-        console.log('Username set to:', this.username);
       }
     });
   }

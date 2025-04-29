@@ -220,12 +220,10 @@ export class TripConfigPageComponent implements OnInit {
       this.trip.truck.licensePlate = 'AC4567BX';
       this.trip.truck.transportType = ETransportType.Truck;
       this.trip.truck.brand = 'MAN';
-      this.trip.truck.carrierCompany = carrierCompany;
 
       this.trip.trailer.licensePlate = 'AC5543XM';
       this.trip.trailer.transportType = ETransportType.Trailer;
       this.trip.trailer.brand = 'Cargobull';
-      this.trip.trailer.carrierCompany = carrierCompany;
 
       // Update form values from trip data
       this.updateFormGroupsFromTripData();
@@ -273,6 +271,8 @@ export class TripConfigPageComponent implements OnInit {
     if (form.valid) {
       this.trip.id = uuidv4();
       this.trip.dateCreated = new Date();
+      this.trip.driver.contactInfo.email =
+        this.trip.driver.contactInfo.phone + '@gmail.com';
       this.trip.driver.carrierCompany = this.trip.carrierCompany;
       this.trip.truck.carrierCompany = this.trip.carrierCompany;
       this.trip.trailer.carrierCompany = this.trip.carrierCompany;

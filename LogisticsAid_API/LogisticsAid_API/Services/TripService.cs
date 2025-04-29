@@ -4,6 +4,7 @@ using AutoMapper;
 using LogisticsAid_API.Context;
 using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
+using LogisticsAid_API.Entities.Auxiliary;
 using LogisticsAid_API.Exceptions;
 using LogisticsAid_API.Repositories.Interfaces;
 
@@ -21,11 +22,12 @@ public class TripService
     private readonly RoutePointService _routePointService;
     private readonly ContactInfoService _contactInfoService;
     private readonly AddressService _addressService;
+    private readonly RoutePointTripService _routePointTripService;
 
     public TripService(LogisticsAidDbContext context, IMapper mapper, ITripRepository tripRepository, 
         ICustomerCompanyRepository customerCompanyRepository, ICarrierCompanyRepository carrierCompanyRepository, IDriverRepository driverRepository, 
         ITransportRepository transportRepository, RoutePointService routePointService, 
-        ContactInfoService contactInfoService, AddressService addressService)
+        ContactInfoService contactInfoService, AddressService addressService, RoutePointTripService routePointTripService)
     {
         _context = context;
         _mapper = mapper;
@@ -37,6 +39,7 @@ public class TripService
         _routePointService = routePointService;
         _contactInfoService = contactInfoService;
         _addressService = addressService;
+        _routePointTripService = routePointTripService;
     }
 
     public async Task<IEnumerable<TripDTO>> GetAllTripsAsync(CancellationToken ct)
@@ -87,15 +90,26 @@ public class TripService
                 await _carrierCompanyRepository.UpsertCarrierAsync(carrier, ct);
             }
 
+            // First check if driver exists by ID or phone
             var driver = await _driverRepository.GetDriverAsync(tripDto.Driver.ContactInfo.Id, ct);
             if (driver == null)
             {
                 driver = await _driverRepository.GetDriverAsync(tripDto.Driver.ContactInfo.Phone, ct);
                 if (driver == null)
                 {
-                    await _contactInfoService.UpsertContactInfoAsync(tripDto.Driver.ContactInfo, ct);
-                    
+                    // Get existing contact info
+                    var contactInfo = await _context.ContactInfo.FindAsync([Guid.Parse(tripDto.Driver.ContactInfo.Id)], ct);
+                    if (contactInfo == null)
+                    {
+                        // Create new contact info if it doesn't exist
+                        await _contactInfoService.UpsertContactInfoAsync(tripDto.Driver.ContactInfo, ct);
+                    }
+        
+                    // Create new driver with reference to existing contact info ID
                     driver = _mapper.Map<Driver>(tripDto.Driver);
+                    driver.CarrierCompany = carrier;
+                    driver.ContactId = Guid.Parse(tripDto.Driver.ContactInfo.Id); // Just set the ID reference
+                    driver.ContactInfo = null; // Don't include the navigation property to avoid tracking issues
                     await _driverRepository.UpsertDriverAsync(driver, ct);
                 }
             }
@@ -104,6 +118,7 @@ public class TripService
             if (truck == null)
             {
                 truck = _mapper.Map<Transport>(tripDto.Truck);
+                truck.CarrierCompany = carrier;
                 await _transportRepository.UpsertTransportAsync(truck, ct);
             }
             
@@ -111,6 +126,7 @@ public class TripService
             if (trailer == null)
             {
                 trailer = _mapper.Map<Transport>(tripDto.Trailer);
+                trailer.CarrierCompany = carrier;
                 await _transportRepository.UpsertTransportAsync(trailer, ct);
             }
             
@@ -126,6 +142,7 @@ public class TripService
             foreach (var routePointDto in tripDto.RoutePoints)
             {
                 await _routePointService.CreateRoutePointAsync(routePointDto, ct);
+                await _routePointTripService.BindRoutePointToTripAsync(routePointDto, tripDto, ct);
             }
             
             await transaction.CommitAsync(ct);

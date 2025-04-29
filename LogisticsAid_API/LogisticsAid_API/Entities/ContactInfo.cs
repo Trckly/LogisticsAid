@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LogisticsAid_API.Entities.Auxiliary;
 using LogisticsAid_API.Entities.Enums;
 
 namespace LogisticsAid_API.Entities;
@@ -36,22 +37,13 @@ public class ContactInfo
     
     // -----Optional-----
     
-    [Column("customer_company_id")]
-    [MaxLength(50)]
-    public string? CustomerCompanyId { get; set; }
-    
-    [Column("carrier_company_id")]
-    [MaxLength(50)]
-    public string? CarrierCompanyId { get; set; }
-    
     [Column("birth_date")]
     public DateTime? BirthDate { get; set; }
     
     // Navigation properties
-    [ForeignKey(nameof(CustomerCompanyId))]
-    public CustomerCompany? CustomerCompany { get; set; }
+    public required ICollection<CustomerCompany> CustomerCompanies { get; set; } = new List<CustomerCompany>();
+    public required ICollection<ContactInfoCustomerCompany> ContactInfoCustomerCompany { get; set; } = new List<ContactInfoCustomerCompany>();
     
-    [ForeignKey(nameof(CarrierCompanyId))]
-    public CarrierCompany? CarrierCompany { get; set; }
-    
+    public required ICollection<CarrierCompany> CarrierCompanies { get; set; } = new List<CarrierCompany>();
+    public required ICollection<ContactInfoCarrierCompany> ContactInfoCarrierCompany { get; set; } = new List<ContactInfoCarrierCompany>();
 }

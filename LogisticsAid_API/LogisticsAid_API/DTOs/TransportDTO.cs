@@ -1,3 +1,4 @@
+using LogisticsAid_API.Entities;
 using LogisticsAid_API.Entities.Enums;
 
 namespace LogisticsAid_API.DTOs;

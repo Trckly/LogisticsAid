@@ -6,6 +6,7 @@ namespace LogisticsAid_API.Repositories.Interfaces;
 public interface IRoutePointRepository
 {
     public Task<RoutePoint?> GetRoutePointAsync(Guid tripId, Guid addressId, CancellationToken ct);
+    public Task<RoutePoint?> GetRoutePointAsync(RoutePoint routePoint, CancellationToken ct);
     public IEnumerable<RoutePoint> GetRoutePointsByTrip(Guid tripId, CancellationToken ct);
     public Task<IEnumerable<RoutePoint>> GetRoutePointsByTypeAsync(ERoutePointType type, CancellationToken ct);
     public Task<IEnumerable<RoutePoint>> GetAllRoutePointsAsync(CancellationToken ct);

@@ -82,8 +82,7 @@ public class Trip
     
     // -----Navigation properties-----
 
-    [ForeignKey(nameof(LogisticianId))] 
-    public required Logistician Logistician { get; set; }
+    [ForeignKey(nameof(LogisticianId))] public required Logistician Logistician { get; set; }
 
     [ForeignKey(nameof(CarrierCompanyId))]
     public required CarrierCompany CarrierCompany { get; set; }

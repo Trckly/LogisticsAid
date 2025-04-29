@@ -23,6 +23,15 @@ public class RoutePointRepository : IRoutePointRepository
             .FirstOrDefaultAsync(ct);
     }
 
+    public async Task<RoutePoint?> GetRoutePointAsync(RoutePoint routePoint, CancellationToken ct)
+    {
+        return await _context.RoutePoints.FirstOrDefaultAsync(rp => rp.Type == routePoint.Type &&
+                                                                    rp.AddressId == routePoint.AddressId && 
+                                                                    rp.Sequence == routePoint.Sequence && 
+                                                                    rp.CompanyName == routePoint.CompanyName && 
+                                                                    rp.AdditionalInfo == routePoint.AdditionalInfo, ct);
+    }
+
     public IEnumerable<RoutePoint> GetRoutePointsByTrip(Guid tripId, CancellationToken ct)
     {
         return _context.RoutePoints

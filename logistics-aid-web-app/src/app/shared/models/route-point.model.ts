@@ -1,6 +1,5 @@
 import { ERoutePointType } from '../enums/route-point-type';
 import { Address } from './address.model';
-import { ContactInfo } from './contact-info.model';
 import { Trip } from './trip.model';
 
 export class RoutePoint {
@@ -10,5 +9,5 @@ export class RoutePoint {
   companyName?: string;
   additionalInfo?: string;
   address: Address = new Address();
-  trips?: Trip[] = [];
+  trips: Trip[] = [];
 }

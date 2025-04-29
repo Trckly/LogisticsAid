@@ -14,13 +14,13 @@ public class Transport
     public required string LicensePlate { get; set; }
     
     [Required]
-    [Column("carrier_company_id")]
-    [MaxLength(100)]
-    public required string CarrierCompanyId { get; set; }
-    
-    [Required]
     [Column("type")]
     public required ETransportType TransportType { get; set; }
+    
+    [Required]
+    [Column("carrier_company_id")]
+    [MaxLength(250)]
+    public required string CarrierCompanyId { get; set; }
     
     // -----Optional-----
     
@@ -30,5 +30,5 @@ public class Transport
     
     // -----Navigation properties-----
     [ForeignKey(nameof(CarrierCompanyId))]
-    public CarrierCompany? CarrierCompany { get; set; }
+    public required CarrierCompany CarrierCompany { get; set; }
 }

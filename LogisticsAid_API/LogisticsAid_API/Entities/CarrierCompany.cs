@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using LogisticsAid_API.Entities.Auxiliary;
 
 namespace LogisticsAid_API.Entities;
 
@@ -14,6 +16,5 @@ public class CarrierCompany
     
     // -----Navigation properties-----
     public required ICollection<ContactInfo> Contacts { get; set; } = new List<ContactInfo>();
-    public required ICollection<Driver> Drivers { get; set; } = new List<Driver>();
-    public required ICollection<Transport> Transport { get; set; } = new List<Transport>();
+    public required ICollection<ContactInfoCarrierCompany> ContactInfoCarrierCompany { get; set; } = new List<ContactInfoCarrierCompany>();
 }

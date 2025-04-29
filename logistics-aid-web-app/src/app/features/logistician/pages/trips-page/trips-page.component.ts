@@ -36,6 +36,8 @@ import { Transport } from '../../../../shared/models/transport.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SuccessPopupService } from '../../../../shared/services/success-popup.service';
 import { SeparatedNumberPipe } from '../../../../shared/pipes/separated-number.pipe';
+import { RoutePointTrip } from '../../../../shared/models/route-point-trip';
+import { routes } from '../../../../app.routes';
 
 class TableData {
   trip: Trip = new Trip();
@@ -145,15 +147,44 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
             )
           );
         }),
+        switchMap((tripsAndRoutePoints) => {
+          if (tripsAndRoutePoints.routePoints === null) {
+            return observableOf({
+              trips: null,
+              routePoints: [],
+              routePointsTrips: [],
+            });
+          }
+
+          const tripIds: string[] = tripsAndRoutePoints.trips.items.map(
+            (trip) => trip.id
+          );
+          return this.tripService.getRoutePointTrips(tripIds).pipe(
+            map((routePointsTrips) => {
+              return {
+                trips: tripsAndRoutePoints.trips,
+                routePoints: tripsAndRoutePoints.routePoints,
+                routePointsTrips: routePointsTrips,
+              };
+            }),
+            catchError(() =>
+              observableOf({
+                trips: tripsAndRoutePoints.trips,
+                routePoints: tripsAndRoutePoints.routePoints,
+                routePointsTrips: [],
+              })
+            )
+          );
+        }),
         map((result) => {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
 
-          const { trips, routePoints } = result;
+          const { trips, routePoints, routePointsTrips } = result;
           this.isRateLimitReached = trips === null;
 
           if (trips === null) {
-            return { tripItems: [], routePointItems: [] };
+            return { tripItems: [], routePointItems: [], routePointsTrips: [] };
           }
 
           // Update results length for pagination
@@ -162,12 +193,15 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
           return {
             tripItems: trips.items,
             routePointItems: routePoints,
+            routePointsTrips: routePointsTrips,
           };
         })
       )
       .subscribe((data) => {
         this.paginatedTrips.items = data.tripItems;
         this.routePoints = data.routePointItems;
+        const routePointsTrips: RoutePointTrip[] =
+          data.routePointsTrips as RoutePointTrip[];
 
         this.tableData = [];
 
@@ -177,15 +211,23 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
         });
 
         this.paginatedTrips.items.forEach((item) => {
+          // 1. Find all routePointId values associated with this trip
+          const relatedRoutePointIds = routePointsTrips
+            .filter((rpt) => rpt.tripId === item.id)
+            .map((rpt) => rpt.routePointId);
+
+          // 2. Filter routePoints based on the IDs we found in the junction table
+          const relatedRoutePoints = this.routePoints.filter((rp) =>
+            relatedRoutePointIds.includes(rp.id)
+          );
+
           this.tableData.push({
             trip: item,
-            routePoints: this.routePoints.filter((rp) =>
-              rp.trips.some((trip) => trip.id === item.id)
-            ),
+            routePoints: relatedRoutePoints,
           });
         });
 
-        console.log(this.tableData);
+        console.log('After filter: ', this.tableData);
       });
   }
 

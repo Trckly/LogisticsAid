@@ -29,11 +29,6 @@ public class DriverRepository : IDriverRepository
         return await _context.Drivers.FirstOrDefaultAsync(d => d.License == license, ct);
     }
 
-    public async Task<IEnumerable<Driver>> GetDriversByCompanyNameAsync(string companyName, CancellationToken ct)
-    {
-        return await _context.Drivers.Where(d => d.CarrierCompanyId == companyName).ToListAsync(ct);
-    }
-
     public async Task<IEnumerable<Driver>> GetAllDriversAsync(CancellationToken ct)
     {
         return await _context.Drivers.ToListAsync(ct);

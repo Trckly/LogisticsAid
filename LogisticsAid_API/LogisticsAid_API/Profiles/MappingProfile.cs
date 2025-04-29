@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LogisticsAid_API.DTOs;
 using LogisticsAid_API.Entities;
+using LogisticsAid_API.Entities.Auxiliary;
 using LogisticsAid_API.Entities.Enums;
 
 namespace LogisticsAid_API.Profiles;
@@ -27,8 +28,45 @@ public class MappingProfile : Profile
                     .MapFrom(src => src.HasAdminPrivileges));
         
         // Contact Info
-        CreateMap<ContactInfo, ContactInfoDTO>();
-        CreateMap<ContactInfoDTO, ContactInfo>();
+        CreateMap<ContactInfo, ContactInfoDTO>()
+            .ForMember(dest => dest.Id,
+                opt => opt
+                    .MapFrom(src => src.Id.ToString()))
+            .ForMember(dest => dest.FirstName,
+                opt => opt
+                    .MapFrom(src => src.FirstName))
+            .ForMember(dest => dest.LastName,
+                opt => opt
+                    .MapFrom(src => src.LastName))
+            .ForMember(dest => dest.Phone,
+                opt => opt
+                    .MapFrom(src => src.Phone))
+            .ForMember(dest => dest.Email,
+                opt => opt
+                    .MapFrom(src => src.Email))
+            .ForMember(dest => dest.BirthDate,
+                opt => opt
+                    .MapFrom(src => src.BirthDate));
+        
+        CreateMap<ContactInfoDTO, ContactInfo>()
+            .ForMember(dest => dest.Id,
+                opt => opt
+                    .MapFrom(src => Guid.Parse(src.Id)))
+            .ForMember(dest => dest.FirstName,
+                opt => opt
+                    .MapFrom(src => src.FirstName))
+            .ForMember(dest => dest.LastName,
+                opt => opt
+                    .MapFrom(src => src.LastName))
+            .ForMember(dest => dest.Phone,
+                opt => opt
+                    .MapFrom(src => src.Phone))
+            .ForMember(dest => dest.Email,
+                opt => opt
+                    .MapFrom(src => src.Email))
+            .ForMember(dest => dest.BirthDate,
+                opt => opt
+                    .MapFrom(src => src.BirthDate));
 
         // Trip
         CreateMap<TripDTO, Trip>()
@@ -123,16 +161,10 @@ public class MappingProfile : Profile
         
         // Carrier
         CreateMap<CarrierCompanyDTO, CarrierCompany>()
-            .ForMember(dest => dest.CompanyName, 
+            .ForMember(dest => dest.CompanyName,
                 opt => opt
                     .MapFrom(src => src.CompanyName))
-            .ForMember(dest => dest.Contacts, 
-                opt => opt
-                    .Ignore())
-            .ForMember(dest => dest.Drivers, 
-                opt => opt
-                    .Ignore())
-            .ForMember(dest => dest.Transport, 
+            .ForMember(dest => dest.Contacts,
                 opt => opt
                     .Ignore());
 
@@ -142,69 +174,63 @@ public class MappingProfile : Profile
                     .MapFrom(src => src.CompanyName))
             .ForMember(dest => dest.Contacts,
                 opt => opt
-                    .MapFrom(src => src.Contacts))
-            .ForMember(dest => dest.Drivers,
-                opt => opt
-                    .MapFrom(src => src.Drivers))
-            .ForMember(dest => dest.Transport,
-                opt => opt
-                    .MapFrom(src => src.Transport));
+                    .MapFrom(src => src.Contacts));
         
         // Driver
         CreateMap<DriverDTO, Driver>()
-            .ForMember(dest => dest.ContactId, 
+            .ForMember(dest => dest.ContactId,
                 opt => opt
                     .MapFrom(src => src.ContactInfo.Id))
-            .ForMember(dest => dest.License, 
+            .ForMember(dest => dest.License,
                 opt => opt
-                    .MapFrom(src => src.License)) 
-            .ForMember(dest => dest.CarrierCompanyId, 
-            opt => opt
-                .MapFrom(src => src.CarrierCompany.CompanyName))
-            .ForMember(dest => dest.CarrierCompany, 
-            opt => opt
-                .Ignore()); 
+                    .MapFrom(src => src.License))
+            .ForMember(dest => dest.CarrierCompanyId,
+                opt => opt
+                    .MapFrom(src => src.CarrierCompany.CompanyName))
+            .ForMember(dest => dest.CarrierCompany,
+                opt => opt
+                    .Ignore());
 
         CreateMap<Driver, DriverDTO>()
-            .ForMember(dest => dest.ContactInfo, 
+            .ForMember(dest => dest.ContactInfo,
                 opt => opt
-                    .MapFrom(src => src.ContactInfo)) 
-            .ForMember(dest => dest.License, 
+                    .MapFrom(src => src.ContactInfo))
+            .ForMember(dest => dest.License,
                 opt => opt
-                    .MapFrom(src => src.License)) 
-            .ForMember(dest => dest.CarrierCompany, 
+                    .MapFrom(src => src.License))
+            .ForMember(dest => dest.CarrierCompany,
                 opt => opt
                     .MapFrom(src => src.CarrierCompany));
     
         // Transport
         CreateMap<TransportDTO, Transport>()
-            .ForMember(dest => dest.LicensePlate, 
+            .ForMember(dest => dest.LicensePlate,
                 opt => opt
                     .MapFrom(src => src.LicensePlate))
-            .ForMember(dest => dest.CarrierCompanyId, 
-                opt => opt
-                    .MapFrom(src => src.CarrierCompany.CompanyName))
-            .ForMember(dest => dest.TransportType, 
+            .ForMember(dest => dest.TransportType,
                 opt => opt
                     .MapFrom(src => src.TransportType))
-            .ForMember(dest => dest.Brand, 
-                opt => opt
-                    .MapFrom(src => src.Brand)) 
-            .ForMember(dest => dest.CarrierCompany, 
-                opt => opt
-                    .Ignore());
-
-        CreateMap<Transport, TransportDTO>()
-            .ForMember(dest => dest.LicensePlate, 
-                opt => opt
-                    .MapFrom(src => src.LicensePlate))
-            .ForMember(dest => dest.TransportType, 
-                opt => opt
-                    .MapFrom(src => src.TransportType))
-            .ForMember(dest => dest.Brand, 
+            .ForMember(dest => dest.Brand,
                 opt => opt
                     .MapFrom(src => src.Brand))
-            .ForMember(dest => dest.CarrierCompany, 
+            .ForMember(dest => dest.CarrierCompanyId,
+                opt => opt
+                    .MapFrom(src => src.CarrierCompany.CompanyName))
+            .ForMember(dest => dest.CarrierCompany,
+                opt => opt
+                    .Ignore());;
+
+        CreateMap<Transport, TransportDTO>()
+            .ForMember(dest => dest.LicensePlate,
+                opt => opt
+                    .MapFrom(src => src.LicensePlate))
+            .ForMember(dest => dest.TransportType,
+                opt => opt
+                    .MapFrom(src => src.TransportType))
+            .ForMember(dest => dest.Brand,
+                opt => opt
+                    .MapFrom(src => src.Brand))
+            .ForMember(dest => dest.CarrierCompany,
                 opt => opt
                     .MapFrom(src => src.CarrierCompany));
         
@@ -313,5 +339,28 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Longitude, 
                 opt => opt
                     .MapFrom(src => src.Longitude));
+        
+        // RoutePointTrip
+        CreateMap<RoutePointTripDTO, RoutePointTrip>()
+            .ForMember(dest => dest.RoutePointId,
+                opt => opt
+                    .MapFrom(src => Guid.Parse(src.RoutePointId)))
+            .ForMember(dest => dest.TripId,
+                opt => opt
+                    .MapFrom(src => Guid.Parse(src.TripId)))
+            .ForMember(dest => dest.RoutePoint,
+                opt => opt
+                    .Ignore())
+            .ForMember(dest => dest.Trip,
+                opt => opt
+                    .Ignore());
+
+        CreateMap<RoutePointTrip, RoutePointTripDTO>()
+            .ForMember(dest => dest.RoutePointId,
+                opt => opt
+                    .MapFrom(src => src.RoutePointId.ToString()))
+            .ForMember(dest => dest.TripId,
+                opt => opt
+                    .MapFrom(src => src.TripId.ToString()));
     }
 }

@@ -19,13 +19,6 @@ public class TransportRepository : ITransportRepository
         return await _context.Transport.FindAsync([licencePlate], cancellationToken: ct);
     }
 
-    public async Task<IEnumerable<Transport>> GetTransportByCompanyAsync(string companyName, CancellationToken ct)
-    {
-        return await _context.Transport
-            .Where(t => t.CarrierCompanyId == companyName)
-            .ToListAsync(ct);
-    }
-
     public async Task<IEnumerable<Transport>> GetAllTransportAsync(CancellationToken ct)
     {
         return await _context.Transport.ToListAsync(ct);

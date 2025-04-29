@@ -29,6 +29,7 @@ builder.Services.AddScoped<TripService>();
 builder.Services.AddScoped<ContactInfoService>();
 builder.Services.AddScoped<AddressService>();
 builder.Services.AddScoped<RoutePointService>();
+builder.Services.AddScoped<RoutePointTripService>();
 builder.Services.AddScoped<ICustomerCompanyRepository, CustomerCompanyRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<ICarrierCompanyRepository, CarrierCompanyRepository>();
@@ -44,6 +45,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        // options.JsonSerializerOptions.MaxDepth = 5;
     });
 
 builder.Services.AddCors(options =>
