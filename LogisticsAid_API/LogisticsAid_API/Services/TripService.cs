@@ -141,8 +141,8 @@ public class TripService
             
             foreach (var routePointDto in tripDto.RoutePoints)
             {
-                await _routePointService.CreateRoutePointAsync(routePointDto, ct);
-                await _routePointTripService.BindRoutePointToTripAsync(routePointDto, tripDto, ct);
+                var existingRoutePointDto = await _routePointService.CreateRoutePointAsync(routePointDto, ct);
+                await _routePointTripService.BindRoutePointToTripAsync(existingRoutePointDto, tripDto, ct);
             }
             
             await transaction.CommitAsync(ct);

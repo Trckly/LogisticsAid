@@ -163,7 +163,7 @@ public sealed class LogisticsAidDbContext : DbContext
                         .HasOne<Trip>(rpt => rpt.Trip)
                         .WithMany(rp => rp.RoutePointTrips)
                         .HasForeignKey(rpt => rpt.TripId)
-                        .OnDelete(DeleteBehavior.Restrict),
+                        .OnDelete(DeleteBehavior.Cascade),
                     l => l
                         .HasOne<RoutePoint>(rpt => rpt.RoutePoint)
                         .WithMany(t => t.RoutePointTrips)
@@ -218,7 +218,11 @@ public sealed class LogisticsAidDbContext : DbContext
                         .HasOne<Trip>(rpt => rpt.Trip)
                         .WithMany(t => t.RoutePointTrips)
                         .HasForeignKey(rpt => rpt.TripId)
-                        .OnDelete(DeleteBehavior.Restrict));
+                        .OnDelete(DeleteBehavior.Cascade));
+            
+            entity.ToTable(t => t.HasCheckConstraint(
+                "CK_Trip_DateValidation", 
+                "\"loading_date\" <= \"unloading_date\""));
         });
         
         modelBuilder.Entity<RoutePointTrip>(entity =>
@@ -233,7 +237,7 @@ public sealed class LogisticsAidDbContext : DbContext
             entity.HasOne(rpt => rpt.Trip)
                 .WithMany(t => t.RoutePointTrips)
                 .HasForeignKey(rpt => rpt.TripId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<ContactInfoCustomerCompany>(entity =>

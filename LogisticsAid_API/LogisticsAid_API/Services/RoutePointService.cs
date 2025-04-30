@@ -25,7 +25,7 @@ public class RoutePointService
         _contactInfoService = contactInfoService;
     }
 
-    public async Task CreateRoutePointAsync(RoutePointDTO routePointDto, CancellationToken ct)
+    public async Task<RoutePointDTO> CreateRoutePointAsync(RoutePointDTO routePointDto, CancellationToken ct)
     {
         await _addressService.UpsertAddressAsync(routePointDto.Address, ct);
         var addressDto = await _addressService.GetAddressAsync(routePointDto.Address, ct);
@@ -36,8 +36,11 @@ public class RoutePointService
         var existingRoutePoint = await _routePointRepository.GetRoutePointAsync(routePoint, ct);
         if (existingRoutePoint == null)
         {
-            await _routePointRepository.CreateRoutePointAsync(routePoint, ct);
+            routePoint = await _routePointRepository.CreateRoutePointAsync(routePoint, ct);
+            return _mapper.Map<RoutePointDTO>(routePoint);
         }
+
+        return _mapper.Map<RoutePointDTO>(existingRoutePoint);
     }
 
     public async Task<IEnumerable<RoutePointDTO>> GetRoutePointsByIdAsync(IEnumerable<string> routePointIds,

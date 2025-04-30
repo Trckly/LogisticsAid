@@ -4,6 +4,7 @@ using LogisticsAid_API.Context;
 using LogisticsAid_API.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticsAid_API.Migrations
 {
     [DbContext(typeof(LogisticsAidDbContext))]
-    partial class LogisticsAidDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250430203517_TripCheck")]
+    partial class TripCheck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -480,7 +483,7 @@ namespace LogisticsAid_API.Migrations
                     b.HasOne("LogisticsAid_API.Entities.Trip", "Trip")
                         .WithMany("RoutePointTrips")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("RoutePoint");

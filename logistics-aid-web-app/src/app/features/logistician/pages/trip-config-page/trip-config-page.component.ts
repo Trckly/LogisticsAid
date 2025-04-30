@@ -159,15 +159,16 @@ export class TripConfigPageComponent implements OnInit {
       initialLoadingPoint.routePoint.additionalInfo =
         'Джо Рандомний +380678765634';
 
-      const initialLoadingPoint2: RoutePointExtended = new RoutePointExtended();
-      initialLoadingPoint2.routePoint.id = uuidv4();
-      initialLoadingPoint2.routePoint.sequence = 2;
-      initialLoadingPoint2.routePoint.type = ERoutePointType.Loading;
-      initialLoadingPoint2.routePoint.companyName = 'Метінвест-СМЦ';
-      initialLoadingPoint2.compositeAddress =
-        'Україна, Львівська обл., м. Миколаїв, вул. Окружна, 12';
-      initialLoadingPoint2.routePoint.additionalInfo =
-        'Павло Петращук +380987770044';
+      // const initialLoadingPoint2: RoutePointExtended = new RoutePointExtended();
+      // initialLoadingPoint2.routePoint.id = uuidv4();
+      // initialLoadingPoint2.routePoint.sequence = 2;
+      // initialLoadingPoint2.routePoint.type = ERoutePointType.Loading;
+      // initialLoadingPoint2.routePoint.companyName = 'Метінвест-СМЦ';
+      // initialLoadingPoint2.compositeAddress =
+      //   'Україна, Львівська обл., м. Миколаїв, вул. Окружна, 12';
+      // initialLoadingPoint2.routePoint.additionalInfo =
+      //   'Павло Петращук +380987770044';
+
       const initialUnloadingPoint: RoutePointExtended =
         new RoutePointExtended();
       initialUnloadingPoint.routePoint.id = uuidv4();
@@ -179,22 +180,22 @@ export class TripConfigPageComponent implements OnInit {
       initialUnloadingPoint.routePoint.additionalInfo =
         'Максим Мельник +380673542789';
 
-      const initialUnloadingPoint2: RoutePointExtended =
-        new RoutePointExtended();
-      initialUnloadingPoint2.routePoint.id = uuidv4();
-      initialUnloadingPoint2.routePoint.sequence = 2;
-      initialUnloadingPoint2.routePoint.type = ERoutePointType.Unloading;
-      initialUnloadingPoint2.routePoint.companyName = 'Оболоньсталь';
-      initialUnloadingPoint2.compositeAddress =
-        'Україна, Київська обл., м. Оболонь, вул. Надвірна, 2';
-      initialUnloadingPoint2.routePoint.additionalInfo =
-        'Матвій Первак +380970003322';
+      // const initialUnloadingPoint2: RoutePointExtended =
+      //   new RoutePointExtended();
+      // initialUnloadingPoint2.routePoint.id = uuidv4();
+      // initialUnloadingPoint2.routePoint.sequence = 2;
+      // initialUnloadingPoint2.routePoint.type = ERoutePointType.Unloading;
+      // initialUnloadingPoint2.routePoint.companyName = 'Оболоньсталь';
+      // initialUnloadingPoint2.compositeAddress =
+      //   'Україна, Київська обл., м. Оболонь, вул. Надвірна, 2';
+      // initialUnloadingPoint2.routePoint.additionalInfo =
+      //   'Матвій Первак +380970003322';
 
       this.routePointsExtended.push(
         initialLoadingPoint,
-        initialLoadingPoint2,
-        initialUnloadingPoint,
-        initialUnloadingPoint2
+        // initialLoadingPoint2,
+        initialUnloadingPoint
+        // initialUnloadingPoint2
       );
 
       this.trip.readableId = '1111p';
@@ -204,11 +205,9 @@ export class TripConfigPageComponent implements OnInit {
       this.trip.cargoName = 'метал';
       this.trip.cargoWeight = 22;
 
-      let customerCompany = new CustomerCompany();
-      customerCompany.companyName = 'Андрій Метал';
+      this.trip.customerCompany.companyName = 'Метінвест';
 
-      let carrierCompany = new CarrierCompany();
-      carrierCompany.companyName = 'Вова Транс';
+      this.trip.carrierCompany.companyName = 'ЕпіцентрК';
 
       this.trip.driver.contactInfo = new ContactInfo();
       this.trip.driver.contactInfo.id = uuidv4();

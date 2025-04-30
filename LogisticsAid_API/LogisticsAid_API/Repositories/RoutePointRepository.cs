@@ -70,10 +70,11 @@ public class RoutePointRepository : IRoutePointRepository
         await _context.SaveChangesAsync(ct);
     }
 
-    public async Task CreateRoutePointAsync(RoutePoint routePoint, CancellationToken ct)
+    public async Task<RoutePoint> CreateRoutePointAsync(RoutePoint routePoint, CancellationToken ct)
     {
         await _context.RoutePoints.AddAsync(routePoint, ct);
         await _context.SaveChangesAsync(ct);
+        return routePoint;
     }
 
     public async Task CreateRoutePointRangeAsync(IEnumerable<RoutePoint> routePoints, CancellationToken ct)

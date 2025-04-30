@@ -19,11 +19,11 @@ public class RoutePointTripService
         _mapper = mapper;
     }
 
-    public async Task BindRoutePointToTripAsync(RoutePointDTO routePointDto, TripDTO tripDto, CancellationToken ct)
+    public async Task BindRoutePointToTripAsync(RoutePointDTO existingRoutePointDto, TripDTO tripDto, CancellationToken ct)
     {
         var routePointTrip = new RoutePointTrip
         {
-            RoutePointId = Guid.Parse(routePointDto.Id), TripId = Guid.Parse(tripDto.Id)
+            RoutePointId = Guid.Parse(existingRoutePointDto.Id), TripId = Guid.Parse(tripDto.Id)
         };
         
         var existingRoutePointTrip = await _context.RoutePointTrip

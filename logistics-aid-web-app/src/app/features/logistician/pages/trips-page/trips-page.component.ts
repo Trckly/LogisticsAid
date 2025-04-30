@@ -127,51 +127,53 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
         }),
         switchMap((tripData: PaginatedResponse<Trip> | null) => {
           if (tripData === null) {
-            return observableOf({ trips: null, routePoints: null });
+            return observableOf({ trips: null, routePointsTrips: null });
           }
 
-          // Second query: Get route points using trip IDs
           const tripIds: string[] = tripData.items.map((trip) => trip.id);
-          return this.tripService.getRoutePointsById(tripIds).pipe(
-            map((routePointsData) => {
-              return {
-                trips: tripData,
-                routePoints: routePointsData,
-              };
-            }),
-            catchError(() =>
-              observableOf({
-                trips: tripData,
-                routePoints: [],
-              })
-            )
-          );
-        }),
-        switchMap((tripsAndRoutePoints) => {
-          if (tripsAndRoutePoints.routePoints === null) {
-            return observableOf({
-              trips: null,
-              routePoints: [],
-              routePointsTrips: [],
-            });
-          }
-
-          const tripIds: string[] = tripsAndRoutePoints.trips.items.map(
-            (trip) => trip.id
-          );
           return this.tripService.getRoutePointTrips(tripIds).pipe(
             map((routePointsTrips) => {
               return {
-                trips: tripsAndRoutePoints.trips,
-                routePoints: tripsAndRoutePoints.routePoints,
+                trips: tripData.items,
                 routePointsTrips: routePointsTrips,
               };
             }),
             catchError(() =>
               observableOf({
-                trips: tripsAndRoutePoints.trips,
-                routePoints: tripsAndRoutePoints.routePoints,
+                trips: tripData.items,
                 routePointsTrips: [],
+              })
+            )
+          );
+        }),
+        switchMap((tripsAndRoutePointTrips) => {
+          if (tripsAndRoutePointTrips.routePointsTrips === null) {
+            return observableOf({
+              trips: null,
+              routePointsTrips: [],
+              routePoints: [],
+            });
+          }
+
+          // Second query: Get route points using trip IDs
+          const routePointIds = tripsAndRoutePointTrips.routePointsTrips.map(
+            (rpt) => rpt.routePointId
+          );
+          return this.tripService.getRoutePointsById(routePointIds).pipe(
+            map((routePointsData) => {
+              console.log('Route Points data: ', routePointsData);
+
+              return {
+                trips: tripsAndRoutePointTrips.trips,
+                routePointsTrips: tripsAndRoutePointTrips.routePointsTrips,
+                routePoints: routePointsData,
+              };
+            }),
+            catchError(() =>
+              observableOf({
+                trips: tripsAndRoutePointTrips.trips,
+                routePointsTrips: tripsAndRoutePointTrips.routePointsTrips,
+                routePoints: [],
               })
             )
           );
@@ -180,7 +182,7 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
 
-          const { trips, routePoints, routePointsTrips } = result;
+          const { trips, routePointsTrips, routePoints } = result;
           this.isRateLimitReached = trips === null;
 
           if (trips === null) {
@@ -191,15 +193,17 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
           this.resultsLength = trips.totalCount;
 
           return {
-            tripItems: trips.items,
+            tripItems: trips,
             routePointItems: routePoints,
             routePointsTrips: routePointsTrips,
           };
         })
       )
       .subscribe((data) => {
+        console.log('data', data);
+
         this.paginatedTrips.items = data.tripItems;
-        this.routePoints = data.routePointItems;
+        this.routePoints = data.routePointItems as RoutePoint[];
         const routePointsTrips: RoutePointTrip[] =
           data.routePointsTrips as RoutePointTrip[];
 
@@ -210,10 +214,10 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
           trip.unloadingDate = new Date(trip.unloadingDate);
         });
 
-        this.paginatedTrips.items.forEach((item) => {
+        this.paginatedTrips.items.forEach((trip) => {
           // 1. Find all routePointId values associated with this trip
           const relatedRoutePointIds = routePointsTrips
-            .filter((rpt) => rpt.tripId === item.id)
+            .filter((rpt) => rpt.tripId === trip.id)
             .map((rpt) => rpt.routePointId);
 
           // 2. Filter routePoints based on the IDs we found in the junction table
@@ -221,8 +225,10 @@ export class TripsPageComponent implements OnInit, AfterViewInit {
             relatedRoutePointIds.includes(rp.id)
           );
 
+          console.log('Related route points: ', relatedRoutePoints);
+
           this.tableData.push({
-            trip: item,
+            trip: trip,
             routePoints: relatedRoutePoints,
           });
         });

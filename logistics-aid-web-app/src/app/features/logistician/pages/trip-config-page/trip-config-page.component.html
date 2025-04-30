@@ -672,6 +672,38 @@
                   <strong>Unloading Date:</strong>
                   {{ getReadableDate(trip.unloadingDate) }}
                 </p>
+
+                <h3>Driver & Transport Details</h3>
+                <p>
+                  <strong>Driver:</strong>
+                  {{
+                    trip.driver.contactInfo.firstName +
+                      " " +
+                      trip.driver.contactInfo.lastName
+                  }}
+                </p>
+                <p>
+                  <strong>Truck:</strong>
+                  {{ trip.truck.brand + " " + trip.truck.licensePlate }}
+                </p>
+                <p>
+                  <strong>Trailer:</strong>
+                  {{ trip.trailer.brand + " " + trip.trailer.licensePlate }}
+                </p>
+
+                <h3>Route Points:</h3>
+                @for (routePointExtended of routePointsExtended; track $index) {
+                @if(isLoadingPoint(routePointExtended.routePoint.type)){
+                <p>
+                  <strong>Loading point:</strong>
+                  {{ routePointExtended.compositeAddress }}
+                </p>
+                } @else {
+                <p>
+                  <strong>Unloading point:</strong>
+                  {{ routePointExtended.compositeAddress }}
+                </p>
+                } }
               </div>
 
               <div class="step-actions final-buttons">

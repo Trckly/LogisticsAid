@@ -154,8 +154,8 @@ public class LogisticianService
 
     public async Task UpdateUserAsync(LogisticianDTO logisticianDto,CancellationToken ct)
     {
-        var logistician = await _logisticianRepository.GetLogisticianAsync(logisticianDto.ContactInfo.Id, ct);        
-        var contactInfo =  await _contactInfoRepository.GetContactInfoAsync(logisticianDto.ContactInfo.Id, ct);
+        var logistician = await _logisticianRepository.GetLogisticianAsync(Guid.Parse(logisticianDto.ContactInfo.Id), ct);        
+        var contactInfo =  await _contactInfoRepository.GetContactInfoAsync(Guid.Parse(logisticianDto.ContactInfo.Id), ct);
         if (logistician == null || contactInfo == null)
             throw new NullReferenceException("User not found");
 

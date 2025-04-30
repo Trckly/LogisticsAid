@@ -65,7 +65,7 @@ public class TripController : BaseController
                 return BadRequest("No trip IDs provided for route points.");
             }
 
-            var routePointsDto = await _routePointTripService.GetRoutePointsByTripIdsAsync(ids, ct);
+            var routePointsDto = await _routePointService.GetRoutePointsByIdAsync(ids, ct);
 
             return Ok(routePointsDto);
         });
